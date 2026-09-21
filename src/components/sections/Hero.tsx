@@ -1,8 +1,8 @@
-import { useEffect, useRef, useState, type FC } from 'react';
+import { useEffect, useRef, type FC } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { heroImage, whatsappLink } from '../../data/siteData';
+import { heroImage } from '../../data/siteData';
 import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion';
 
 interface HeroProps {
@@ -17,44 +17,52 @@ interface LeafParticle {
   duration: string;
   delay: string;
   opacity: number;
-  parallaxSpeed: number;
+  speed: number;
   swayAmount: number;
 }
 
+const LEAVES: LeafParticle[] = [
+  { id: 1, left: '8%', top: '15%', size: 28, duration: '7s', delay: '0s', opacity: 0.35, speed: 0.5, swayAmount: 6 },
+  { id: 2, left: '62%', top: '22%', size: 22, duration: '9s', delay: '1.5s', opacity: 0.3, speed: 0.6, swayAmount: 8 },
+  { id: 3, left: '85%', top: '45%', size: 18, duration: '8s', delay: '0.8s', opacity: 0.25, speed: 0.7, swayAmount: 5 },
+  { id: 4, left: '20%', top: '60%', size: 24, duration: '10s', delay: '2s', opacity: 0.3, speed: 0.55, swayAmount: 7 },
+  { id: 5, left: '72%', top: '68%', size: 20, duration: '7.5s', delay: '0.3s', opacity: 0.28, speed: 0.65, swayAmount: 9 },
+  { id: 6, left: '45%', top: '35%', size: 16, duration: '11s', delay: '3s', opacity: 0.2, speed: 0.75, swayAmount: 4 },
+  { id: 7, left: '92%', top: '75%', size: 26, duration: '8.5s', delay: '1.2s', opacity: 0.3, speed: 0.6, swayAmount: 6 },
+  { id: 8, left: '5%', top: '80%', size: 18, duration: '9.5s', delay: '2.5s', opacity: 0.25, speed: 0.7, swayAmount: 8 },
+];
+
 const Hero: FC<HeroProps> = ({ onNavigate }) => {
   const reduced = usePrefersReducedMotion();
-  const [scrollY, setScrollY] = useState(0);
-  const rafRef = useRef<number>(0);
+  const heroRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (reduced) return;
+    let ticking = false;
+    const updateScroll = () => {
+      const top = window.scrollY;
+      if (heroRef.current && top < window.innerHeight * 1.5) {
+        heroRef.current.style.setProperty('--hero-scroll', `${top}px`);
+      }
+      ticking = false;
+    };
+
     const handleScroll = () => {
-      cancelAnimationFrame(rafRef.current);
-      rafRef.current = requestAnimationFrame(() => setScrollY(window.scrollY));
+      if (!ticking) {
+        requestAnimationFrame(updateScroll);
+        ticking = true;
+      }
     };
+
     window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      cancelAnimationFrame(rafRef.current);
-    };
+    updateScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
   }, [reduced]);
-
-  const getOffset = (speed: number) => (reduced ? 0 : scrollY * speed);
-
-  const leaves: LeafParticle[] = [
-    { id: 1, left: '8%', top: '15%', size: 28, duration: '7s', delay: '0s', opacity: 0.35, parallaxSpeed: 0.5, swayAmount: 6 },
-    { id: 2, left: '62%', top: '22%', size: 22, duration: '9s', delay: '1.5s', opacity: 0.3, parallaxSpeed: 0.6, swayAmount: 8 },
-    { id: 3, left: '85%', top: '45%', size: 18, duration: '8s', delay: '0.8s', opacity: 0.25, parallaxSpeed: 0.7, swayAmount: 5 },
-    { id: 4, left: '20%', top: '60%', size: 24, duration: '10s', delay: '2s', opacity: 0.3, parallaxSpeed: 0.55, swayAmount: 7 },
-    { id: 5, left: '72%', top: '68%', size: 20, duration: '7.5s', delay: '0.3s', opacity: 0.28, parallaxSpeed: 0.65, swayAmount: 9 },
-    { id: 6, left: '45%', top: '35%', size: 16, duration: '11s', delay: '3s', opacity: 0.2, parallaxSpeed: 0.75, swayAmount: 4 },
-    { id: 7, left: '92%', top: '75%', size: 26, duration: '8.5s', delay: '1.2s', opacity: 0.3, parallaxSpeed: 0.6, swayAmount: 6 },
-    { id: 8, left: '5%', top: '80%', size: 18, duration: '9.5s', delay: '2.5s', opacity: 0.25, parallaxSpeed: 0.7, swayAmount: 8 },
-  ];
 
   return (
     <Box
       id="hero"
+      ref={heroRef}
       sx={{
         position: 'relative',
         height: '100vh',
@@ -74,7 +82,7 @@ const Hero: FC<HeroProps> = ({ onNavigate }) => {
           width: '100%',
           height: '130%',
           objectFit: 'cover',
-          transform: `translateY(${getOffset(0.12)}px) scale(1.08)`,
+          transform: reduced ? 'none' : 'translate3d(0, calc(var(--hero-scroll, 0px) * 0.12), 0) scale(1.08)',
           filter: 'brightness(0.82) saturate(1.1)',
           willChange: 'transform',
         }}
@@ -87,7 +95,8 @@ const Hero: FC<HeroProps> = ({ onNavigate }) => {
           inset: 0,
           background:
             'linear-gradient(180deg, rgba(23,59,40,0.2) 0%, rgba(23,59,40,0.05) 35%, rgba(23,59,40,0.4) 70%, rgba(23,59,40,0.65) 100%)',
-          transform: `translateY(${getOffset(0.08)}px)`,
+          transform: reduced ? 'none' : 'translate3d(0, calc(var(--hero-scroll, 0px) * 0.08), 0)',
+          willChange: 'transform',
         }}
       />
 
@@ -101,7 +110,8 @@ const Hero: FC<HeroProps> = ({ onNavigate }) => {
           width: { xs: '55%', md: '40%' },
           height: '80%',
           opacity: 0.2,
-          transform: `translateY(${getOffset(0.22)}px)`,
+          transform: reduced ? 'none' : 'translate3d(0, calc(var(--hero-scroll, 0px) * 0.22), 0)',
+          willChange: 'transform',
           pointerEvents: 'none',
         }}
         viewBox="0 0 300 500"
@@ -125,7 +135,8 @@ const Hero: FC<HeroProps> = ({ onNavigate }) => {
           width: { xs: '55%', md: '40%' },
           height: '80%',
           opacity: 0.2,
-          transform: `translateY(${getOffset(0.28)}px)`,
+          transform: reduced ? 'none' : 'translate3d(0, calc(var(--hero-scroll, 0px) * 0.28), 0)',
+          willChange: 'transform',
           pointerEvents: 'none',
         }}
         viewBox="0 0 300 500"
@@ -149,7 +160,8 @@ const Hero: FC<HeroProps> = ({ onNavigate }) => {
           width: '100%',
           height: '35%',
           opacity: 0.3,
-          transform: `translateY(${getOffset(0.38)}px)`,
+          transform: reduced ? 'none' : 'translate3d(0, calc(var(--hero-scroll, 0px) * 0.38), 0)',
+          willChange: 'transform',
           pointerEvents: 'none',
         }}
         viewBox="0 0 1200 200"
@@ -162,7 +174,7 @@ const Hero: FC<HeroProps> = ({ onNavigate }) => {
 
       {/* === LAYER 6: Rustling leaf particles (fastest parallax) === */}
       {!reduced &&
-        leaves.map((leaf) => (
+        LEAVES.map((leaf) => (
           <Box
             key={leaf.id}
             sx={{
@@ -172,7 +184,7 @@ const Hero: FC<HeroProps> = ({ onNavigate }) => {
               width: leaf.size,
               height: leaf.size,
               opacity: leaf.opacity,
-              transform: `translateY(${getOffset(leaf.parallaxSpeed)}px)`,
+              transform: `translate3d(0, calc(var(--hero-scroll, 0px) * ${leaf.speed}), 0)`,
               willChange: 'transform',
               pointerEvents: 'none',
             }}
@@ -194,14 +206,6 @@ const Hero: FC<HeroProps> = ({ onNavigate }) => {
               />
               <path d="M14 28 C14 20 16 12 22 6" stroke="#5B3A24" strokeWidth="0.5" opacity="0.3" fill="none" />
             </Box>
-            <style>{`
-              @keyframes leafRustle-${leaf.id} {
-                0%, 100% { transform: rotate(${leaf.swayAmount * -1}deg) translateY(0px); }
-                25% { transform: rotate(${leaf.swayAmount}deg) translateY(-${leaf.swayAmount * 0.5}px); }
-                50% { transform: rotate(${leaf.swayAmount * 0.5}deg) translateY(-${leaf.swayAmount}px); }
-                75% { transform: rotate(${leaf.swayAmount * -0.5}deg) translateY(-${leaf.swayAmount * 0.3}px); }
-              }
-            `}</style>
           </Box>
         ))}
 
@@ -218,7 +222,8 @@ const Hero: FC<HeroProps> = ({ onNavigate }) => {
               borderRadius: '50%',
               bgcolor: '#D99419',
               opacity: 0.4,
-              transform: `translateY(${getOffset(0.45)}px)`,
+              transform: 'translate3d(0, calc(var(--hero-scroll, 0px) * 0.45), 0)',
+              willChange: 'transform',
               animation: 'lightDrift 12s ease-in-out infinite',
               pointerEvents: 'none',
             }}
@@ -233,7 +238,8 @@ const Hero: FC<HeroProps> = ({ onNavigate }) => {
               borderRadius: '50%',
               bgcolor: '#D99419',
               opacity: 0.3,
-              transform: `translateY(${getOffset(0.55)}px)`,
+              transform: 'translate3d(0, calc(var(--hero-scroll, 0px) * 0.55), 0)',
+              willChange: 'transform',
               animation: 'lightDrift 14s ease-in-out infinite',
               animationDelay: '3s',
               pointerEvents: 'none',
@@ -249,7 +255,8 @@ const Hero: FC<HeroProps> = ({ onNavigate }) => {
               borderRadius: '50%',
               bgcolor: '#D99419',
               opacity: 0.25,
-              transform: `translateY(${getOffset(0.5)}px)`,
+              transform: 'translate3d(0, calc(var(--hero-scroll, 0px) * 0.5), 0)',
+              willChange: 'transform',
               animation: 'lightDrift 16s ease-in-out infinite',
               animationDelay: '6s',
               pointerEvents: 'none',
@@ -270,149 +277,107 @@ const Hero: FC<HeroProps> = ({ onNavigate }) => {
           maxWidth: 1400,
           mx: 'auto',
           px: { xs: 3, md: 6, lg: 8 },
-          transform: `translateY(${getOffset(0.06)}px)`,
+          transform: reduced ? 'none' : 'translate3d(0, calc(var(--hero-scroll, 0px) * 0.06), 0)',
+          willChange: 'transform',
         }}
       >
         <Typography
-          variant="overline"
           sx={{
-            color: '#FFFDF8',
-            opacity: 0.8,
-            fontSize: { xs: '0.7rem', md: '0.8rem' },
+            color: '#D99419',
+            fontFamily: '"Manrope", sans-serif',
+            fontWeight: 700,
+            fontSize: { xs: '0.72rem', md: '0.85rem' },
+            textTransform: 'uppercase',
             letterSpacing: '0.25em',
-            mb: 3,
+            mb: 2.5,
           }}
         >
-          From Our Farm
+          Natural • Fresh • Farm Direct
         </Typography>
         <Typography
           variant="h1"
           sx={{
             color: '#FFFDF8',
-            fontSize: { xs: '2.5rem', sm: '3.5rem', md: '4.5rem', lg: '5rem' },
-            maxWidth: { xs: '100%', md: '70%', lg: '60%' },
-            lineHeight: 1.05,
+            fontSize: { xs: '2.8rem', sm: '3.8rem', md: '4.8rem', lg: '5.4rem' },
+            maxWidth: { xs: '100%', md: '75%', lg: '65%' },
+            lineHeight: 1.04,
+            fontWeight: 600,
+            letterSpacing: '-0.02em',
             mb: 3,
           }}
         >
-          Grown with care.<br />Made for the table.
+          Pure Goodness<br />From Our Farm
         </Typography>
         <Typography
           sx={{
             color: '#FFFDF8',
-            opacity: 0.85,
-            fontSize: { xs: '0.95rem', md: '1.1rem' },
-            maxWidth: { xs: '100%', md: '50%', lg: '42%' },
-            lineHeight: 1.7,
-            mb: 4,
+            opacity: 0.9,
+            fontSize: { xs: '1rem', md: '1.2rem' },
+            maxWidth: { xs: '100%', md: '60%', lg: '52%' },
+            lineHeight: 1.65,
+            mb: 4.5,
             fontFamily: '"Manrope", sans-serif',
+            fontWeight: 400,
           }}
         >
-          Fresh mangoes, farm honey and seasonal jackfruit, grown with care and shared from our farm in Tamil Nadu.
-        </Typography>
-        <Typography
-          sx={{
-            color: '#FFFDF8',
-            opacity: 0.6,
-            fontSize: '0.85rem',
-            fontStyle: 'italic',
-            fontFamily: '"Cormorant Garamond", serif',
-            mb: 4,
-          }}
-        >
-          — Thangapandi, TS Mango Farming
+          Premium mangoes, natural honey and fresh jackfruit delivered from our farm to your home.
         </Typography>
         <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
           <Button
             variant="contained"
-            onClick={() => onNavigate('farm')}
+            onClick={() => onNavigate('mangoes')}
             sx={{
               bgcolor: '#FFFDF8',
               color: '#173B28',
               px: 4,
               py: 1.5,
-              borderRadius: 1,
-              fontSize: '0.8rem',
-              fontWeight: 600,
-              letterSpacing: '0.08em',
-              '&:hover': { bgcolor: '#F6F1E7' },
+              borderRadius: 1.5,
+              fontSize: '0.85rem',
+              fontWeight: 700,
+              letterSpacing: '0.04em',
+              boxShadow: '0 8px 24px rgba(0,0,0,0.18)',
+              '&:hover': { bgcolor: '#F6F1E7', transform: 'translateY(-1px)' },
+              transition: 'all 250ms ease',
             }}
           >
-            Explore the Farm
+            Explore Products
           </Button>
           <Button
             variant="outlined"
-            href={whatsappLink('Hello, I would like to enquire about your products from TS Mango Farming.')}
-            target="_blank"
-            rel="noopener noreferrer"
+            onClick={() => onNavigate('farm')}
             sx={{
               color: '#FFFDF8',
-              borderColor: 'rgba(255,253,248,0.5)',
+              borderColor: 'rgba(255,253,248,0.4)',
               px: 4,
               py: 1.5,
-              borderRadius: 1,
-              fontSize: '0.8rem',
+              borderRadius: 1.5,
+              fontSize: '0.85rem',
               fontWeight: 600,
-              letterSpacing: '0.08em',
+              letterSpacing: '0.04em',
               '&:hover': {
                 borderColor: '#FFFDF8',
-                bgcolor: 'transparent',
+                bgcolor: 'rgba(255,253,248,0.06)',
               },
+              transition: 'all 250ms ease',
             }}
           >
-            Enquire Now
+            Our Farm Story
           </Button>
         </Box>
       </Box>
-
-      {/* Scroll indicator */}
-      <Box
-        sx={{
-          position: 'absolute',
-          bottom: { xs: 20, md: 30 },
-          left: '50%',
-          transform: 'translateX(-50%)',
-          zIndex: 10,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          gap: 1,
-        }}
-      >
-        <Typography
-          sx={{
-            color: '#FFFDF8',
-            opacity: 0.5,
-            fontSize: '0.7rem',
-            letterSpacing: '0.2em',
-            textTransform: 'uppercase',
-            fontFamily: '"Manrope", sans-serif',
-          }}
-        >
-          Scroll
-        </Typography>
-        <Box
-          sx={{
-            width: '1px',
-            height: 40,
-            bgcolor: '#FFFDF8',
-            opacity: 0.3,
-            animation: reduced ? 'none' : 'scrollLine 2s ease-in-out infinite',
-          }}
-        />
-      </Box>
-
       <style>{`
-        @keyframes scrollLine {
-          0% { transform: scaleY(0); transform-origin: top; }
-          50% { transform: scaleY(1); transform-origin: top; }
-          51% { transform: scaleY(1); transform-origin: bottom; }
-          100% { transform: scaleY(0); transform-origin: bottom; }
-        }
         @keyframes lightDrift {
           0%, 100% { transform: translate(0, 0); opacity: 0.2; }
           50% { transform: translate(20px, -15px); opacity: 0.5; }
         }
+        @keyframes leafRustle-1 { 0%, 100% { transform: rotate(-6deg) translateY(0); } 50% { transform: rotate(3deg) translateY(-6px); } }
+        @keyframes leafRustle-2 { 0%, 100% { transform: rotate(-8deg) translateY(0); } 50% { transform: rotate(4deg) translateY(-8px); } }
+        @keyframes leafRustle-3 { 0%, 100% { transform: rotate(-5deg) translateY(0); } 50% { transform: rotate(2.5deg) translateY(-5px); } }
+        @keyframes leafRustle-4 { 0%, 100% { transform: rotate(-7deg) translateY(0); } 50% { transform: rotate(3.5deg) translateY(-7px); } }
+        @keyframes leafRustle-5 { 0%, 100% { transform: rotate(-9deg) translateY(0); } 50% { transform: rotate(4.5deg) translateY(-9px); } }
+        @keyframes leafRustle-6 { 0%, 100% { transform: rotate(-4deg) translateY(0); } 50% { transform: rotate(2deg) translateY(-4px); } }
+        @keyframes leafRustle-7 { 0%, 100% { transform: rotate(-6deg) translateY(0); } 50% { transform: rotate(3deg) translateY(-6px); } }
+        @keyframes leafRustle-8 { 0%, 100% { transform: rotate(-8deg) translateY(0); } 50% { transform: rotate(4deg) translateY(-8px); } }
       `}</style>
     </Box>
   );

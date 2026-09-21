@@ -3,6 +3,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
+import Badge from '@mui/material/Badge';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -11,8 +12,10 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
+import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
 import TSLogo from './TSLogo';
 import { navLinks, whatsappLink } from '../data/siteData';
+import { useCart } from '../context/CartContext';
 
 interface NavbarProps {
   scrolled: boolean;
@@ -23,6 +26,7 @@ const Navbar: FC<NavbarProps> = ({ scrolled, onNavigate }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const { itemCount, setIsCartOpen } = useCart();
 
   const bgColor = scrolled ? '#F6F1E7' : 'transparent';
   const logoColor = scrolled ? '#173B28' : '#FFFDF8';
@@ -96,36 +100,67 @@ const Navbar: FC<NavbarProps> = ({ scrolled, onNavigate }) => {
             </Box>
           )}
 
-          {/* Right: Enquire button or mobile menu */}
-          {!isMobile ? (
-            <Button
-              variant="outlined"
-              onClick={() => handleNav('contact')}
+          {/* Right: Cart Button & Enquire */}
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 1, md: 2 } }}>
+            <IconButton
+              onClick={() => setIsCartOpen(true)}
               sx={{
                 color: logoColor,
-                borderColor: scrolled ? '#173B28' : 'rgba(255,253,248,0.5)',
-                borderWidth: '1px',
-                fontSize: '0.8rem',
-                px: 3,
-                py: 1,
+                p: 1,
+                border: '1px solid',
+                borderColor: scrolled ? 'rgba(23, 59, 40, 0.15)' : 'rgba(255, 253, 248, 0.25)',
+                bgcolor: scrolled ? 'rgba(23, 59, 40, 0.04)' : 'rgba(255, 253, 248, 0.08)',
                 '&:hover': {
-                  borderColor: scrolled ? '#173B28' : '#FFFDF8',
-                  bgcolor: 'transparent',
-                  borderWidth: '1px',
+                  bgcolor: scrolled ? 'rgba(23, 59, 40, 0.08)' : 'rgba(255, 253, 248, 0.15)',
                 },
               }}
+              aria-label="View farm box cart"
             >
-              Enquire
-            </Button>
-          ) : (
-            <IconButton
-              onClick={() => setDrawerOpen(true)}
-              sx={{ color: logoColor }}
-              aria-label="Open menu"
-            >
-              <MenuIcon />
+              <Badge
+                badgeContent={itemCount}
+                sx={{
+                  '& .MuiBadge-badge': {
+                    bgcolor: '#D99419',
+                    color: '#FFFDF8',
+                    fontWeight: 700,
+                    fontSize: '0.72rem',
+                  },
+                }}
+              >
+                <ShoppingBagOutlinedIcon sx={{ fontSize: '1.3rem' }} />
+              </Badge>
             </IconButton>
-          )}
+
+            {!isMobile ? (
+              <Button
+                variant="outlined"
+                onClick={() => handleNav('contact')}
+                sx={{
+                  color: logoColor,
+                  borderColor: scrolled ? '#173B28' : 'rgba(255,253,248,0.5)',
+                  borderWidth: '1px',
+                  fontSize: '0.8rem',
+                  px: 3,
+                  py: 1,
+                  '&:hover': {
+                    borderColor: scrolled ? '#173B28' : '#FFFDF8',
+                    bgcolor: 'transparent',
+                    borderWidth: '1px',
+                  },
+                }}
+              >
+                Enquire
+              </Button>
+            ) : (
+              <IconButton
+                onClick={() => setDrawerOpen(true)}
+                sx={{ color: logoColor }}
+                aria-label="Open menu"
+              >
+                <MenuIcon />
+              </IconButton>
+            )}
+          </Box>
         </Box>
       </Box>
 

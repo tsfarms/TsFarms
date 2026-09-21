@@ -16,6 +16,7 @@ const Footer: FC<FooterProps> = ({ onNavigate }) => {
   return (
     <Box
       component="footer"
+      id="contact"
       sx={{
         bgcolor: '#173B28',
         color: '#FFFDF8',
