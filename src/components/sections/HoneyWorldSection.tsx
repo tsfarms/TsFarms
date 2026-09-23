@@ -141,27 +141,15 @@ const HoneyWorldSection: FC = () => {
                 fontSize: { xs: '2.1rem', sm: '2.6rem', md: '3rem' },
                 color: '#173B28',
                 lineHeight: 1.12,
-                mb: 1.5,
+                mb: { xs: 2, md: 2.5 },
                 fontWeight: 400,
               }}
             >
               Natural Farm Honey
             </Typography>
 
-            <Typography
-              sx={{
-                color: '#5B3A24',
-                fontSize: '0.98rem',
-                lineHeight: 1.7,
-                mb: 2.8,
-                maxWidth: 520,
-              }}
-            >
-              Cold-extracted raw honey collected directly from bee colonies situated in our mango blossoms and orchard flora. Pure and unheated, retaining natural aroma and floral character.
-            </Typography>
-
             {/* Size Selector */}
-            <Box sx={{ mb: 2.8 }}>
+            <Box sx={{ mb: { xs: 2.2, md: 2.8 } }}>
               <Typography sx={{ fontSize: '0.74rem', textTransform: 'uppercase', letterSpacing: '0.12em', color: '#788267', fontWeight: 600, mb: 1.2 }}>
                 Available Glass Jar Sizes
               </Typography>
@@ -234,6 +222,7 @@ const HoneyWorldSection: FC = () => {
                     startIcon={isInCart ? <CheckCircleOutlineIcon /> : <ShoppingBagOutlinedIcon />}
                     sx={{
                       width: { xs: '100%', sm: 'auto' },
+                      minHeight: 44,
                       bgcolor: isInCart ? 'transparent' : '#173B28',
                       color: isInCart ? '#173B28' : '#FFFDF8',
                       px: 3.5,

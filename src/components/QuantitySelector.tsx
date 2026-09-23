@@ -54,7 +54,9 @@ export const QuantitySelector: FC<QuantitySelectorProps> = ({
         disabled={isMinReached}
         sx={{
           color: '#173B28',
-          p: isSmall ? 0.3 : 0.6,
+          p: isSmall ? 0.5 : 0.8,
+          minWidth: isSmall ? 34 : 40,
+          minHeight: isSmall ? 34 : 40,
           '&.Mui-disabled': { opacity: 0.35, color: '#9CA3AF' },
           '&:hover': { bgcolor: 'rgba(23,59,40,0.08)' },
         }}
@@ -65,7 +67,7 @@ export const QuantitySelector: FC<QuantitySelectorProps> = ({
 
       <Typography
         sx={{
-          minWidth: isSmall ? 36 : 48,
+          minWidth: isSmall ? 38 : 48,
           textAlign: 'center',
           fontWeight: 600,
           fontSize: isSmall ? '0.85rem' : '0.95rem',
@@ -81,7 +83,9 @@ export const QuantitySelector: FC<QuantitySelectorProps> = ({
         onClick={handleIncrement}
         sx={{
           color: '#173B28',
-          p: isSmall ? 0.3 : 0.6,
+          p: isSmall ? 0.5 : 0.8,
+          minWidth: isSmall ? 34 : 40,
+          minHeight: isSmall ? 34 : 40,
           '&:hover': { bgcolor: 'rgba(23,59,40,0.08)' },
         }}
         aria-label="Increase quantity"

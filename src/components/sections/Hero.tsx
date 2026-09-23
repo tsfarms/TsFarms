@@ -65,10 +65,13 @@ const Hero: FC<HeroProps> = ({ onNavigate }) => {
       ref={heroRef}
       sx={{
         position: 'relative',
-        height: '100vh',
-        minHeight: { xs: 600, md: 700 },
+        height: { xs: 'auto', md: '100vh' },
+        minHeight: { xs: '100svh', md: 700 },
         overflow: 'hidden',
         bgcolor: '#173B28',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
       }}
     >
       {/* === LAYER 1: Background orchard (slowest parallax) === */}
@@ -276,7 +279,10 @@ const Hero: FC<HeroProps> = ({ onNavigate }) => {
           justifyContent: 'center',
           maxWidth: 1400,
           mx: 'auto',
-          px: { xs: 3, md: 6, lg: 8 },
+          width: '100%',
+          px: { xs: 3, sm: 4, md: 6, lg: 8 },
+          pt: { xs: 11, sm: 10, md: 0 },
+          pb: { xs: 8, sm: 6, md: 0 },
           transform: reduced ? 'none' : 'translate3d(0, calc(var(--hero-scroll, 0px) * 0.06), 0)',
           willChange: 'transform',
         }}
@@ -289,7 +295,7 @@ const Hero: FC<HeroProps> = ({ onNavigate }) => {
             fontSize: { xs: '0.72rem', md: '0.85rem' },
             textTransform: 'uppercase',
             letterSpacing: '0.25em',
-            mb: 2.5,
+            mb: { xs: 1.5, md: 2.5 },
           }}
         >
           Natural • Fresh • Farm Direct
@@ -298,12 +304,12 @@ const Hero: FC<HeroProps> = ({ onNavigate }) => {
           variant="h1"
           sx={{
             color: '#FFFDF8',
-            fontSize: { xs: '2.8rem', sm: '3.8rem', md: '4.8rem', lg: '5.4rem' },
+            fontSize: { xs: '2.3rem', sm: '3.4rem', md: '4.8rem', lg: '5.4rem' },
             maxWidth: { xs: '100%', md: '75%', lg: '65%' },
-            lineHeight: 1.04,
+            lineHeight: { xs: 1.08, md: 1.04 },
             fontWeight: 600,
             letterSpacing: '-0.02em',
-            mb: 3,
+            mb: { xs: 2, md: 3 },
           }}
         >
           Pure Goodness<br />From Our Farm
@@ -312,25 +318,34 @@ const Hero: FC<HeroProps> = ({ onNavigate }) => {
           sx={{
             color: '#FFFDF8',
             opacity: 0.9,
-            fontSize: { xs: '1rem', md: '1.2rem' },
+            fontSize: { xs: '0.92rem', sm: '1.05rem', md: '1.2rem' },
             maxWidth: { xs: '100%', md: '60%', lg: '52%' },
-            lineHeight: 1.65,
-            mb: 4.5,
+            lineHeight: { xs: 1.55, md: 1.65 },
+            mb: { xs: 3.5, md: 4.5 },
             fontFamily: '"Manrope", sans-serif',
             fontWeight: 400,
           }}
         >
           Premium mangoes, natural honey and fresh jackfruit delivered from our farm to your home.
         </Typography>
-        <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: { xs: 'column', sm: 'row' },
+            gap: { xs: 1.5, sm: 2 },
+            width: { xs: '100%', sm: 'auto' },
+            maxWidth: { xs: 360, sm: 'none' },
+          }}
+        >
           <Button
             variant="contained"
             onClick={() => onNavigate('mangoes')}
             sx={{
               bgcolor: '#FFFDF8',
               color: '#173B28',
-              px: 4,
+              px: { xs: 3, sm: 4 },
               py: 1.5,
+              minHeight: 44,
               borderRadius: 1.5,
               fontSize: '0.85rem',
               fontWeight: 700,
@@ -348,8 +363,9 @@ const Hero: FC<HeroProps> = ({ onNavigate }) => {
             sx={{
               color: '#FFFDF8',
               borderColor: 'rgba(255,253,248,0.4)',
-              px: 4,
+              px: { xs: 3, sm: 4 },
               py: 1.5,
+              minHeight: 44,
               borderRadius: 1.5,
               fontSize: '0.85rem',
               fontWeight: 600,

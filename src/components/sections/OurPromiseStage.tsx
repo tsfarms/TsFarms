@@ -39,8 +39,8 @@ const OurPromiseStage: FC = () => {
       id="promise"
       sx={{
         bgcolor: '#FAF6EE',
-        py: { xs: 5.5, md: 7.5 },
-        px: { xs: 3, md: 6, lg: 9 },
+        py: { xs: 5, md: 7.5 },
+        px: { xs: 2.5, sm: 4, md: 6, lg: 9 },
         borderTop: '1px solid rgba(23,59,40,0.06)',
       }}
     >
@@ -52,7 +52,7 @@ const OurPromiseStage: FC = () => {
             textAlign: 'center',
             maxWidth: 720,
             mx: 'auto',
-            mb: { xs: 4, md: 5.5 },
+            mb: { xs: 3.5, md: 5.5 },
             opacity: visible ? 1 : 0,
             transform: visible ? 'translateY(0)' : 'translateY(20px)',
             transition: 'opacity 700ms ease, transform 700ms ease',
@@ -62,7 +62,7 @@ const OurPromiseStage: FC = () => {
           <Typography
             variant="h2"
             sx={{
-              fontSize: { xs: '2.1rem', sm: '2.6rem', md: '3rem' },
+              fontSize: { xs: '1.9rem', sm: '2.5rem', md: '3rem' },
               color: '#173B28',
               lineHeight: 1.15,
               mb: 1.5,

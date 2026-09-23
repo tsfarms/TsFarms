@@ -20,8 +20,8 @@ const Footer: FC<FooterProps> = ({ onNavigate }) => {
       sx={{
         bgcolor: '#173B28',
         color: '#FFFDF8',
-        py: { xs: 6, md: 10 },
-        px: { xs: 3, md: 6, lg: 8 },
+        py: { xs: 5, md: 10 },
+        px: { xs: 2.5, sm: 4, md: 6, lg: 8 },
       }}
     >
       <Box sx={{ maxWidth: 1400, mx: 'auto' }}>
@@ -29,20 +29,20 @@ const Footer: FC<FooterProps> = ({ onNavigate }) => {
           sx={{
             display: 'grid',
             gridTemplateColumns: { xs: '1fr', md: '1.5fr 1fr 1fr' },
-            gap: { xs: 5, md: 8 },
-            mb: 6,
+            gap: { xs: 4, md: 8 },
+            mb: { xs: 4, md: 6 },
           }}
         >
           {/* Brand */}
           <Box>
-            <TSLogo variant="full" color="#FFFDF8" height={36} />
+            <TSLogo variant="full" color="#FFFDF8" height={32} />
             <Typography
               sx={{
-                mt: 2,
+                mt: 1.5,
                 color: 'rgba(255,253,248,0.6)',
                 fontFamily: '"Cormorant Garamond", serif',
                 fontStyle: 'italic',
-                fontSize: '1.1rem',
+                fontSize: '1.05rem',
               }}
             >
               From our farm to your home.
@@ -53,7 +53,7 @@ const Footer: FC<FooterProps> = ({ onNavigate }) => {
           <Box>
             <Typography
               variant="overline"
-              sx={{ color: '#788267', fontSize: '0.7rem', letterSpacing: '0.2em', display: 'block', mb: 3 }}
+              sx={{ color: '#788267', fontSize: '0.7rem', letterSpacing: '0.2em', display: 'block', mb: { xs: 1.8, md: 3 } }}
             >
               Explore
             </Typography>
@@ -68,9 +68,9 @@ const Footer: FC<FooterProps> = ({ onNavigate }) => {
                     border: 'none',
                     cursor: 'pointer',
                     textAlign: 'left',
-                    p: 0,
+                    p: { xs: '4px 0', md: 0 },
                     fontFamily: '"Manrope", sans-serif',
-                    fontSize: '0.9rem',
+                    fontSize: '0.92rem',
                     color: 'rgba(255,253,248,0.75)',
                     '&:hover': { color: '#FFFDF8' },
                   }}

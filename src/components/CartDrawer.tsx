@@ -69,7 +69,7 @@ export const CartDrawer: FC = () => {
               Your Farm Box
             </Typography>
           </Box>
-          <IconButton onClick={() => setIsCartOpen(false)} size="small">
+          <IconButton onClick={() => setIsCartOpen(false)} size="small" sx={{ minWidth: 44, minHeight: 44 }} aria-label="Close cart">
             <CloseIcon />
           </IconButton>
         </Box>
@@ -330,7 +330,7 @@ export const CartDrawer: FC = () => {
                 disabled={!isMangoMinMet}
                 endIcon={<ArrowForwardIcon />}
                 onClick={handleOpenCheckout}
-                sx={{ py: 1.2, fontSize: '0.9rem', fontWeight: 600 }}
+                sx={{ py: 1.2, minHeight: 44, fontSize: '0.9rem', fontWeight: 600 }}
               >
                 Proceed to Checkout
               </Button>

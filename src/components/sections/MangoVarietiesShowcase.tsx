@@ -232,10 +232,14 @@ const MangoVarietiesShowcase: FC<MangoVarietiesShowcaseProps> = () => {
                 key={variety.id}
                 sx={{
                   flex: {
-                    xs: '0 0 min(72vw, 230px)',
-                    sm: '0 0 215px',
+                    xs: '0 0 80vw',
+                    sm: '0 0 250px',
                     md: '0 0 225px',
                     lg: '0 0 235px',
+                  },
+                  maxWidth: {
+                    xs: 330,
+                    sm: 'none',
                   },
                   scrollSnapAlign: 'start',
                   display: 'flex',
@@ -474,9 +478,10 @@ const MangoVarietiesShowcase: FC<MangoVarietiesShowcaseProps> = () => {
                       }
                       sx={{
                         width: '100%',
+                        minHeight: 44,
                         bgcolor: isInCart ? 'transparent' : '#173B28',
                         color: isInCart ? '#173B28' : '#FFFDF8',
-                        py: 0.8,
+                        py: { xs: 1.1, sm: 0.8 },
                         fontWeight: 700,
                         fontSize: '0.78rem',
                         borderRadius: '8px',

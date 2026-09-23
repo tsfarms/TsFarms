@@ -131,23 +131,11 @@ const JackfruitWorldSection: FC = () => {
                 fontSize: { xs: '2.1rem', sm: '2.6rem', md: '3rem' },
                 color: '#173B28',
                 lineHeight: 1.12,
-                mb: 1.5,
+                mb: { xs: 2, md: 2.5 },
                 fontWeight: 400,
               }}
             >
               Sweet Honey Jackfruit
-            </Typography>
-
-            <Typography
-              sx={{
-                color: '#5B3A24',
-                fontSize: '0.98rem',
-                lineHeight: 1.7,
-                mb: 2.8,
-                maxWidth: 520,
-              }}
-            >
-              Naturally tree-ripened Then-Varikkai jackfruit with crunchy, golden bulbs that drip with natural sweetness. Freshly deseeded and packed directly at the grove.
             </Typography>
 
             {/* Packaging Note */}
@@ -157,7 +145,7 @@ const JackfruitWorldSection: FC = () => {
                 p: 2,
                 borderRadius: 2,
                 border: '1px solid rgba(23,59,40,0.1)',
-                mb: 2.8,
+                mb: { xs: 2.2, md: 2.8 },
               }}
             >
               <Typography sx={{ fontSize: '0.82rem', color: '#173B28', fontWeight: 700, mb: 0.3 }}>
@@ -212,6 +200,7 @@ const JackfruitWorldSection: FC = () => {
                     startIcon={isInCart ? <CheckCircleOutlineIcon /> : <ShoppingBagOutlinedIcon />}
                     sx={{
                       width: { xs: '100%', sm: 'auto' },
+                      minHeight: 44,
                       bgcolor: isInCart ? 'transparent' : '#173B28',
                       color: isInCart ? '#173B28' : '#FFFDF8',
                       px: 3.5,

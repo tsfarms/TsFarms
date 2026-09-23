@@ -104,6 +104,8 @@ export const CheckoutModal: FC<CheckoutModalProps> = ({ open, onClose }) => {
           borderRadius: 2.5,
           bgcolor: '#FFFDF8',
           border: '1px solid rgba(23,59,40,0.12)',
+          m: { xs: 1.5, sm: 3 },
+          width: { xs: 'calc(100% - 24px)', sm: 'auto' },
         },
       }}
     >
@@ -113,18 +115,19 @@ export const CheckoutModal: FC<CheckoutModalProps> = ({ open, onClose }) => {
           justifyContent: 'space-between',
           alignItems: 'center',
           pb: 1,
+          px: { xs: 2, sm: 3 },
           borderBottom: '1px solid rgba(23,59,40,0.08)',
         }}
       >
         <Box>
-          <Typography variant="h6" sx={{ color: '#173B28', fontWeight: 700 }}>
+          <Typography variant="h6" sx={{ color: '#173B28', fontWeight: 700, fontSize: { xs: '1.05rem', sm: '1.25rem' } }}>
             Delivery Details
           </Typography>
-          <Typography sx={{ fontSize: '0.8rem', color: '#788267' }}>
+          <Typography sx={{ fontSize: { xs: '0.74rem', sm: '0.8rem' }, color: '#788267' }}>
             Direct farm dispatch to your doorstep across Tamil Nadu & India
           </Typography>
         </Box>
-        <IconButton onClick={onClose} size="small">
+        <IconButton onClick={onClose} size="small" sx={{ minWidth: 44, minHeight: 44 }} aria-label="Close delivery details">
           <CloseIcon />
         </IconButton>
       </DialogTitle>
@@ -259,14 +262,16 @@ export const CheckoutModal: FC<CheckoutModalProps> = ({ open, onClose }) => {
 
         <DialogActions
           sx={{
-            px: 3,
+            px: { xs: 2, sm: 3 },
             py: 2,
             borderTop: '1px solid rgba(23,59,40,0.08)',
             display: 'flex',
+            flexDirection: { xs: 'column-reverse', sm: 'row' },
+            gap: { xs: 1.2, sm: 0 },
             justifyContent: 'space-between',
           }}
         >
-          <Button onClick={onClose} sx={{ color: '#5B3A24' }}>
+          <Button onClick={onClose} sx={{ color: '#5B3A24', width: { xs: '100%', sm: 'auto' }, minHeight: 40 }}>
             Cancel
           </Button>
 
@@ -279,6 +284,8 @@ export const CheckoutModal: FC<CheckoutModalProps> = ({ open, onClose }) => {
             sx={{
               py: 1.2,
               px: 3,
+              minHeight: 44,
+              width: { xs: '100%', sm: 'auto' },
               bgcolor: '#173B28',
               '&:hover': { bgcolor: '#1e4b33' },
             }}
