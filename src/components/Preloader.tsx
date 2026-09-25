@@ -1,15 +1,21 @@
 import { useEffect, useState, type FC } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import { usePrefersReducedMotion } from '../hooks/usePrefersReducedMotion';
 
 interface PreloaderProps {
   onComplete: () => void;
 }
 
 const Preloader: FC<PreloaderProps> = ({ onComplete }) => {
+  const reduced = usePrefersReducedMotion();
   const [phase, setPhase] = useState(0);
 
   useEffect(() => {
+    if (reduced) {
+      onComplete();
+      return;
+    }
     const timers: ReturnType<typeof setTimeout>[] = [];
     timers.push(setTimeout(() => setPhase(1), 300));
     timers.push(setTimeout(() => setPhase(2), 700));
@@ -20,7 +26,9 @@ const Preloader: FC<PreloaderProps> = ({ onComplete }) => {
       onComplete();
     }, 2000));
     return () => timers.forEach(clearTimeout);
-  }, [onComplete]);
+  }, [onComplete, reduced]);
+
+  if (reduced) return null;
 
   return (
     <Box
