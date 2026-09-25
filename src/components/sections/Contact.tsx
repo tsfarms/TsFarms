@@ -12,9 +12,9 @@ import {
   INSTAGRAM_1,
   INSTAGRAM_2,
   WHATSAPP_SECONDARY,
-} from '../../data/siteData';
-import { useReveal } from '../../hooks/useReveal';
-import SectionLabel from '../SectionLabel';
+} from '@/content/site';
+import { useReveal } from '@/hooks/useReveal';
+import SectionLabel from '@/components/layout/SectionLabel';
 
 const Contact: FC = () => {
   const [ref, visible] = useReveal<HTMLDivElement>();

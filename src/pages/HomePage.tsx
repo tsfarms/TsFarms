@@ -1,71 +1,69 @@
 import { useEffect, useState, type FC } from 'react';
-import Preloader from '../components/Preloader';
-import Navbar from '../components/Navbar';
-import FloatingWhatsApp from '../components/FloatingWhatsApp';
-import CartDrawer from '../components/CartDrawer';
-import Hero from '../components/sections/Hero';
-import MangoVarietiesShowcase from '../components/sections/MangoVarietiesShowcase';
-import HoneyWorldSection from '../components/sections/HoneyWorldSection';
-import JackfruitWorldSection from '../components/sections/JackfruitWorldSection';
-import FarmParallaxSection from '../components/sections/FarmParallaxSection';
-import OurPromiseStage from '../components/sections/OurPromiseStage';
-import Footer from '../components/sections/Footer';
+import Preloader from '@/components/layout/Preloader';
+import Navbar from '@/components/layout/Navbar';
+import FloatingWhatsApp from '@/components/layout/FloatingWhatsApp';
+import Footer from '@/components/layout/Footer';
+import Hero from '@/components/sections/Hero';
+import OurFarm from '@/components/sections/OurFarm';
+import WhatWeGrow from '@/components/sections/WhatWeGrow';
+import EveryPart from '@/components/sections/EveryPart';
+import JackfruitParts from '@/components/sections/JackfruitParts';
+import Honey from '@/components/sections/Honey';
+import FarmStory from '@/components/sections/FarmStory';
+import TamilNadu from '@/components/sections/TamilNadu';
+import Gallery from '@/components/sections/Gallery';
+import Testimonials from '@/components/sections/Testimonials';
+import Contact from '@/components/sections/Contact';
+import OrderSection from '@/components/sections/OrderSection';
+import OrderSheet from '@/features/cart/OrderSheet';
+import { useSmoothNavigate } from '@/hooks/useSmoothNavigate';
+
+const PRELOADER_SEEN_KEY = 'ts_mango_preloader_seen';
 
 const HomePage: FC = () => {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(() => !localStorage.getItem(PRELOADER_SEEN_KEY));
   const [scrolled, setScrolled] = useState(false);
+  const handleNavigate = useSmoothNavigate();
 
   useEffect(() => {
-    const skipKey = 'ts_mango_preloader_seen';
-    if (localStorage.getItem(skipKey)) {
-      setLoading(false);
-    } else {
-      localStorage.setItem(skipKey, '1');
-    }
+    localStorage.setItem(PRELOADER_SEEN_KEY, '1');
   }, []);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 80);
+    let ticking = false;
+    const handleScroll = () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        const next = window.scrollY > 80;
+        setScrolled((prev) => (prev === next ? prev : next));
+        ticking = false;
+      });
+    };
     window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
-  const handleNavigate = (target: string) => {
-    if (target === 'hero') {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-      return;
-    }
-    const resolvedId =
-      target === 'mangoes' || target === 'products'
-        ? 'mangoes'
-        : target === 'honey'
-        ? 'honey'
-        : target === 'jackfruit'
-        ? 'jackfruit'
-        : target === 'gallery'
-        ? 'farm'
-        : target;
-
-    const el = document.getElementById(resolvedId);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
 
   return (
     <>
       {loading && <Preloader onComplete={() => setLoading(false)} />}
       <Navbar scrolled={scrolled} onNavigate={handleNavigate} />
       <Hero onNavigate={handleNavigate} />
-      <MangoVarietiesShowcase onNavigate={handleNavigate} />
-      <HoneyWorldSection />
-      <JackfruitWorldSection />
-      <FarmParallaxSection />
-      <OurPromiseStage />
+      <OrderSection />
+      <OurFarm />
+      <WhatWeGrow />
+      <EveryPart />
+      <JackfruitParts />
+      <Honey />
+      <FarmStory />
+      <TamilNadu />
+      <Gallery />
+      <Testimonials />
+      <Contact />
       <Footer onNavigate={handleNavigate} />
       <FloatingWhatsApp />
-      <CartDrawer />
+      <OrderSheet />
     </>
   );
 };

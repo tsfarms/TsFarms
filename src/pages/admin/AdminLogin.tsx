@@ -6,8 +6,9 @@ import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Alert from '@mui/material/Alert';
-import TSLogo from '../../components/TSLogo';
-import { supabase } from '../../lib/supabase';
+import TSLogo from '@/components/layout/TSLogo';
+import { onAuthStateChanged, signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '@/services/firebase';
 
 const AdminLogin: FC = () => {
   const navigate = useNavigate();
@@ -17,25 +18,24 @@ const AdminLogin: FC = () => {
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    (async () => {
-      const { data } = await supabase.auth.getSession();
-      if (data.session) navigate('/admin', { replace: true });
-    })();
+    if (!auth) return;
+    const unsub = onAuthStateChanged(auth, (user) => {
+      if (user) navigate('/admin', { replace: true });
+    });
+    return unsub;
   }, [navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setLoading(true);
-    const { error: signInError } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    if (signInError) {
-      setError(signInError.message);
+    try {
+      if (!auth) throw new Error('missing auth');
+      await signInWithEmailAndPassword(auth, email, password);
+      navigate('/admin');
+    } catch {
+      setError('Invalid email or password');
       setLoading(false);
-    } else {
-      navigate('/admin', { replace: true });
     }
   };
 

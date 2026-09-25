@@ -1,5 +1,5 @@
 {
-  "name": "template",
+  "name": "ts-mango-farming",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -12,10 +12,9 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
-    "@fontsource/roboto": "^5.2.10",
     "@mui/icons-material": "^7.3.9",
     "@mui/material": "^7.3.9",
-    "@supabase/supabase-js": "^2.112.4",
+    "firebase": "^12.19.0",
     "react": "^19.2.4",
     "react-dom": "^19.2.4",
     "react-router-dom": "^7.18.2"

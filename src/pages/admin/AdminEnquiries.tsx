@@ -10,7 +10,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import { supabase } from '../../lib/supabase';
+import { getEnquiries, updateEnquiryStatus } from '@/services/firebase';
 
 interface Enquiry {
   id: string;
@@ -27,17 +27,17 @@ const AdminEnquiries: FC = () => {
   const [loading, setLoading] = useState(true);
 
   const fetchEnquiries = async () => {
-    const { data } = await supabase.from('enquiries').select('*').order('created_at', { ascending: false });
-    setEnquiries((data ?? []) as Enquiry[]);
+    const data = await getEnquiries();
+    setEnquiries(data);
     setLoading(false);
   };
 
   useEffect(() => {
-    fetchEnquiries();
+    getEnquiries().then(setEnquiries).finally(() => setLoading(false));
   }, []);
 
   const updateStatus = async (id: string, status: string) => {
-    await supabase.from('enquiries').update({ status }).eq('id', id);
+    await updateEnquiryStatus(id, status);
     fetchEnquiries();
   };
 

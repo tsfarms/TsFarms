@@ -2,9 +2,9 @@ import { type FC, useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
-import { testimonials } from '../../data/siteData';
-import { useReveal } from '../../hooks/useReveal';
-import SectionLabel from '../SectionLabel';
+import { testimonials } from '@/content/site';
+import { useReveal } from '@/hooks/useReveal';
+import SectionLabel from '@/components/layout/SectionLabel';
 
 const Testimonials: FC = () => {
   const [index, setIndex] = useState(0);
@@ -19,6 +19,7 @@ const Testimonials: FC = () => {
 
   return (
     <Box
+      id="testimonials"
       ref={ref}
       sx={{
         bgcolor: '#173B28',

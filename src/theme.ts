@@ -102,13 +102,51 @@ const theme = createTheme({
         'html, body': {
           overflowX: 'hidden',
           maxWidth: '100vw',
+          scrollBehavior: 'auto',
+        },
+        html: {
+          scrollPaddingTop: 88,
         },
         body: {
           scrollbarColor: '#788267 transparent',
+          WebkitFontSmoothing: 'antialiased',
+          MozOsxFontSmoothing: 'grayscale',
+          textRendering: 'optimizeLegibility',
+        },
+        img: {
+          backfaceVisibility: 'hidden',
+        },
+        '#order': {
+          contentVisibility: 'auto',
+          containIntrinsicSize: '0 1400px',
+        },
+        '#farm, #grow, #mangoes, #jackfruit': {
+          contentVisibility: 'auto',
+          containIntrinsicSize: '0 900px',
+        },
+        '#honey, #farm-story, #tamil-nadu': {
+          contentVisibility: 'auto',
+          containIntrinsicSize: '0 720px',
+        },
+        '#gallery': {
+          contentVisibility: 'auto',
+          containIntrinsicSize: '0 1000px',
+        },
+        '#testimonials, #contact': {
+          contentVisibility: 'auto',
+          containIntrinsicSize: '0 640px',
         },
         '::selection': {
           backgroundColor: '#D99419',
           color: '#FFFDF8',
+        },
+        '@media (prefers-reduced-motion: reduce)': {
+          '*, *::before, *::after': {
+            animationDuration: '0.01ms !important',
+            animationIterationCount: '1 !important',
+            transitionDuration: '0.01ms !important',
+            scrollBehavior: 'auto !important',
+          },
         },
       },
     },

@@ -1,7 +1,6 @@
 import { type FC, useState, useEffect } from 'react';
 import { useNavigate, useLocation, Outlet } from 'react-router-dom';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -18,8 +17,9 @@ import EmailIcon from '@mui/icons-material/Email';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
-import TSLogo from '../../components/TSLogo';
-import { supabase } from '../../lib/supabase';
+import TSLogo from '@/components/layout/TSLogo';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { auth } from '@/services/firebase';
 
 const drawerWidth = 240;
 
@@ -37,120 +37,32 @@ const AdminLayout: FC = () => {
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [authed, setAuthed] = useState<boolean | null>(null);
-  const [authorized, setAuthorized] = useState<boolean | null>(null);
-  const [userEmail, setUserEmail] = useState<string>('');
-
-  const checkUserAuthorization = async (userId: string, email: string, appMetadataRole?: string) => {
-    setUserEmail(email);
-    // 1. Direct role check in app_metadata
-    if (appMetadataRole === 'admin') {
-      setAuthorized(true);
-      return;
-    }
-
-    try {
-      // 2. Call server-side check_is_admin RPC
-      const { data: rpcIsAdmin, error: rpcError } = await supabase.rpc('check_is_admin');
-      if (!rpcError && typeof rpcIsAdmin === 'boolean') {
-        setAuthorized(rpcIsAdmin);
-        return;
-      }
-
-      // 3. Fallback: Query admin_users allowlist directly
-      const { data, error } = await supabase
-        .from('admin_users')
-        .select('user_id')
-        .eq('user_id', userId)
-        .maybeSingle();
-
-      if (!error && data) {
-        setAuthorized(true);
-        return;
-      }
-
-      setAuthorized(false);
-    } catch {
-      setAuthorized(false);
-    }
-  };
 
   useEffect(() => {
-    const checkAuth = async () => {
-      const { data } = await supabase.auth.getSession();
-      if (!data.session) {
+    if (!auth) {
+      navigate('/admin/login', { replace: true });
+      return;
+    }
+    const unsub = onAuthStateChanged(auth, (user) => {
+      if (!user) {
+        setAuthed(false);
         navigate('/admin/login', { replace: true });
         return;
       }
       setAuthed(true);
-      const user = data.session.user;
-      await checkUserAuthorization(
-        user.id,
-        user.email || '',
-        (user.app_metadata as Record<string, unknown>)?.role as string | undefined,
-      );
-    };
-    checkAuth();
-
-    const { data: sub } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      if (!session) {
-        navigate('/admin/login', { replace: true });
-      } else {
-        setAuthed(true);
-        const user = session.user;
-        await checkUserAuthorization(
-          user.id,
-          user.email || '',
-          (user.app_metadata as Record<string, unknown>)?.role as string | undefined,
-        );
-      }
     });
-
-    return () => sub.subscription.unsubscribe();
+    return unsub;
   }, [navigate]);
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    navigate('/admin/login', { replace: true });
+  const handleLogout = () => {
+    if (!auth) {
+      navigate('/admin/login');
+      return;
+    }
+    signOut(auth).then(() => navigate('/admin/login'));
   };
 
-  if (authed === null || authorized === null) {
-    return (
-      <Box sx={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', bgcolor: '#f5f5f0' }}>
-        <Typography sx={{ color: '#788267', fontSize: '0.9rem' }}>Verifying administrator credentials...</Typography>
-      </Box>
-    );
-  }
-
-  if (authorized === false) {
-    return (
-      <Box sx={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', bgcolor: '#f5f5f0', p: 3 }}>
-        <Box
-          sx={{
-            p: 4,
-            borderRadius: 2,
-            border: '1px solid rgba(23,59,40,0.12)',
-            maxWidth: 480,
-            textAlign: 'center',
-            bgcolor: '#FFFDF8',
-            boxShadow: '0 8px 30px rgba(0,0,0,0.05)',
-          }}
-        >
-          <Typography variant="h5" sx={{ color: '#991B1B', fontWeight: 700, mb: 1.5, fontFamily: '"Cormorant Garamond", serif' }}>
-            Access Denied
-          </Typography>
-          <Typography sx={{ color: '#5B3A24', fontSize: '0.9rem', mb: 1 }}>
-            Signed in as <strong>{userEmail || 'authenticated user'}</strong>.
-          </Typography>
-          <Typography sx={{ color: '#788267', fontSize: '0.82rem', mb: 3, lineHeight: 1.6 }}>
-            This account does not have administrator authorization. Farm orders, stock levels, and customer records require verified administrative privileges.
-          </Typography>
-          <Button variant="contained" color="primary" onClick={handleLogout} sx={{ bgcolor: '#173B28' }}>
-            Sign Out
-          </Button>
-        </Box>
-      </Box>
-    );
-  }
+  if (authed === null) return null;
 
   const drawer = (
     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', bgcolor: '#173B28' }}>

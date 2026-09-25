@@ -15,15 +15,12 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
-import { supabase } from '../../lib/supabase';
+import { createProduct, getAllProducts, updateProduct } from '@/services/firebase';
 
 interface Product {
   id: string;
-  product_code?: string | null;
   name: string;
   category: string;
-  price: number;
-  unit: string;
   description: string | null;
   is_active: boolean;
   stock_status: string;
@@ -35,28 +32,24 @@ const AdminProducts: FC = () => {
   const [editing, setEditing] = useState<Product | null>(null);
   const [name, setName] = useState('');
   const [category, setCategory] = useState('mango');
-  const [price, setPrice] = useState<number | string>(0);
-  const [unit, setUnit] = useState('Per KG');
   const [description, setDescription] = useState('');
   const [stockStatus, setStockStatus] = useState('in_stock');
   const [isActive, setIsActive] = useState(true);
 
   const fetchProducts = async () => {
-    const { data } = await supabase.from('products').select('*').order('name');
-    setProducts((data ?? []) as Product[]);
+    const data = await getAllProducts();
+    setProducts(data);
     setLoading(false);
   };
 
   useEffect(() => {
-    fetchProducts();
+    getAllProducts().then(setProducts).finally(() => setLoading(false));
   }, []);
 
   const startEdit = (p: Product) => {
     setEditing(p);
     setName(p.name);
     setCategory(p.category);
-    setPrice(p.price ?? 0);
-    setUnit(p.unit ?? 'Per KG');
     setDescription(p.description ?? '');
     setStockStatus(p.stock_status);
     setIsActive(p.is_active);
@@ -64,39 +57,21 @@ const AdminProducts: FC = () => {
 
   const handleSave = async () => {
     if (!editing) return;
-    await supabase
-      .from('products')
-      .update({
-        name,
-        category,
-        price: Number(price) || 0,
-        unit,
-        description,
-        stock_status: stockStatus,
-        is_active: isActive,
-        updated_at: new Date().toISOString(),
-      })
-      .eq('id', editing.id);
+    await updateProduct(editing.id, { name, category, description, stock_status: stockStatus, is_active: isActive });
     setEditing(null);
     fetchProducts();
   };
 
   const handleAdd = async () => {
-    await supabase
-      .from('products')
-      .insert({
-        name,
-        category,
-        price: Number(price) || 0,
-        unit,
-        description,
-        stock_status: stockStatus,
-        is_active: isActive,
-      });
+    await createProduct({
+      name,
+      category,
+      description,
+      stock_status: stockStatus,
+      is_active: isActive,
+    });
     setName('');
     setDescription('');
-    setPrice(0);
-    setUnit('Per KG');
     fetchProducts();
   };
 
@@ -123,7 +98,7 @@ const AdminProducts: FC = () => {
         </Typography>
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, alignItems: 'flex-start' }}>
           <TextField label="Name" value={name} onChange={(e) => setName(e.target.value)} size="small" sx={{ minWidth: 200 }} />
-          <FormControl size="small" sx={{ minWidth: 130 }}>
+          <FormControl size="small" sx={{ minWidth: 140 }}>
             <InputLabel>Category</InputLabel>
             <Select value={category} label="Category" onChange={(e) => setCategory(e.target.value)}>
               <MenuItem value="mango">Mango</MenuItem>
@@ -131,21 +106,6 @@ const AdminProducts: FC = () => {
               <MenuItem value="jackfruit">Jackfruit</MenuItem>
             </Select>
           </FormControl>
-          <TextField
-            label="Price (₹)"
-            type="number"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-            size="small"
-            sx={{ width: 110 }}
-          />
-          <TextField
-            label="Unit"
-            value={unit}
-            onChange={(e) => setUnit(e.target.value)}
-            size="small"
-            sx={{ width: 140 }}
-          />
           <FormControl size="small" sx={{ minWidth: 140 }}>
             <InputLabel>Stock Status</InputLabel>
             <Select value={stockStatus} label="Stock Status" onChange={(e) => setStockStatus(e.target.value)}>
@@ -154,14 +114,14 @@ const AdminProducts: FC = () => {
               <MenuItem value="out_of_stock">Out of Stock</MenuItem>
             </Select>
           </FormControl>
-          <FormControl size="small" sx={{ minWidth: 110 }}>
+          <FormControl size="small" sx={{ minWidth: 120 }}>
             <InputLabel>Active</InputLabel>
             <Select value={isActive ? 'yes' : 'no'} label="Active" onChange={(e) => setIsActive(e.target.value === 'yes')}>
               <MenuItem value="yes">Yes</MenuItem>
               <MenuItem value="no">No</MenuItem>
             </Select>
           </FormControl>
-          <TextField label="Description" value={description} onChange={(e) => setDescription(e.target.value)} size="small" sx={{ minWidth: 260 }} />
+          <TextField label="Description" value={description} onChange={(e) => setDescription(e.target.value)} size="small" sx={{ minWidth: 300 }} />
           {editing ? (
             <>
               <Button variant="contained" color="primary" onClick={handleSave} sx={{ py: 1 }}>Save</Button>
@@ -179,8 +139,6 @@ const AdminProducts: FC = () => {
             <TableRow sx={{ bgcolor: '#f5f5f0' }}>
               <TableCell sx={{ fontWeight: 600, color: '#173B28' }}>Name</TableCell>
               <TableCell sx={{ fontWeight: 600, color: '#173B28' }}>Category</TableCell>
-              <TableCell sx={{ fontWeight: 600, color: '#173B28' }}>Price</TableCell>
-              <TableCell sx={{ fontWeight: 600, color: '#173B28' }}>Unit</TableCell>
               <TableCell sx={{ fontWeight: 600, color: '#173B28' }}>Stock</TableCell>
               <TableCell sx={{ fontWeight: 600, color: '#173B28' }}>Active</TableCell>
               <TableCell sx={{ fontWeight: 600, color: '#173B28' }}>Actions</TableCell>
@@ -189,10 +147,8 @@ const AdminProducts: FC = () => {
           <TableBody>
             {products.map((p) => (
               <TableRow key={p.id} hover>
-                <TableCell sx={{ fontWeight: 600 }}>{p.name}</TableCell>
+                <TableCell>{p.name}</TableCell>
                 <TableCell sx={{ textTransform: 'capitalize' }}>{p.category}</TableCell>
-                <TableCell sx={{ fontWeight: 700, color: '#173B28' }}>₹{p.price}</TableCell>
-                <TableCell sx={{ color: '#788267' }}>{p.unit}</TableCell>
                 <TableCell><Chip label={p.stock_status.replace('_', ' ')} size="small" color={stockColor(p.stock_status)} /></TableCell>
                 <TableCell>{p.is_active ? 'Yes' : 'No'}</TableCell>
                 <TableCell>

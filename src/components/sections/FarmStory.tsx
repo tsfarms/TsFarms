@@ -2,8 +2,8 @@ import { type FC } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { farmStoryImage } from '../../data/siteData';
-import { useReveal } from '../../hooks/useReveal';
+import { farmStoryImage } from '@/content/site';
+import { useReveal } from '@/hooks/useReveal';
 
 interface FarmStoryProps {
   onNavigate?: (target: string) => void;
@@ -14,6 +14,7 @@ const FarmStory: FC<FarmStoryProps> = ({ onNavigate }) => {
 
   return (
     <Box
+      id="farm-story"
       ref={ref}
       sx={{
         position: 'relative',
@@ -21,12 +22,14 @@ const FarmStory: FC<FarmStoryProps> = ({ onNavigate }) => {
         overflow: 'hidden',
       }}
     >
-      <Box
-        component="img"
+      <img
         src={farmStoryImage}
         alt="Where every mango begins — our family farm in Tamil Nadu"
+        width={1600}
+        height={900}
         loading="lazy"
-        sx={{
+        decoding="async"
+        style={{
           position: 'absolute',
           inset: 0,
           width: '100%',

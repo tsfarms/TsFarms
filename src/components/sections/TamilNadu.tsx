@@ -1,8 +1,8 @@
 import { type FC, useEffect, useRef, useState } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { useReveal } from '../../hooks/useReveal';
-import SectionLabel from '../SectionLabel';
+import { useReveal } from '@/hooks/useReveal';
+import SectionLabel from '@/components/layout/SectionLabel';
 
 const TamilNadu: FC = () => {
   const [ref, visible] = useReveal<HTMLDivElement>({ threshold: 0.3 });
@@ -28,6 +28,7 @@ const TamilNadu: FC = () => {
 
   return (
     <Box
+      id="tamil-nadu"
       ref={ref}
       sx={{
         bgcolor: '#FFFDF8',

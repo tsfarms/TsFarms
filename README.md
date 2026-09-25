@@ -1,73 +1,59 @@
-# React + TypeScript + Vite
+# TS Mango Farming
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Farm website: customers search products, build a cart, and send the order on WhatsApp.
+An admin panel at `/admin` manages products, orders and enquiries through Firebase.
 
-Currently, two official plugins are available:
+## Folder structure
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+src/
+  main.tsx                 React entry
+  App.tsx                  Routes (public home + lazy-loaded admin)
+  theme.ts                 MUI theme
+  content/site.ts          Products, prices, images, contact numbers
+  components/
+    layout/                Navbar, Footer, Preloader, floating buttons, shared bits
+    sections/              Homepage sections (Hero, Order, Farm, Gallery, ...)
+  features/
+    cart/                  Cart state, order sheet, WhatsApp message builder
+  hooks/                   Shared UI hooks
+  pages/
+    HomePage.tsx
+    admin/                 Admin screens (need Firebase + login)
+  services/
+    firebase/
+      config.ts            Reads VITE_FIREBASE_* env vars
+      client.ts            app, auth, db, functions instances
+      firestore.ts         All Firestore reads/writes
+      index.ts             Import everything from '@/services/firebase'
+functions/                 Cloud Functions (WhatsApp webhook, delivery confirmation)
+firebase.json              Hosting + Firestore config
+firestore.rules            Security rules
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+All backend access goes through `@/services/firebase`. The public homepage does not import it, so the Firebase SDK only loads on `/admin`.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Run locally
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
 ```
+npm install
+npm run dev
+```
+
+The shop and WhatsApp ordering work without Firebase.
+
+## Connect Firebase
+
+1. Firebase Console > Project settings > Your apps > add a Web app.
+2. Copy `.env.example` to `.env.local` and paste the config values.
+3. Enable Authentication > Email/Password and create an admin user.
+4. Restart `npm run dev`, then sign in at `/admin/login`.
+
+## Deploy
+
+```
+npm run build
+npx firebase deploy --only hosting,firestore:rules
+```
+
+Cloud Functions: `cd functions && npm install && npm run build && npx firebase deploy --only functions`.

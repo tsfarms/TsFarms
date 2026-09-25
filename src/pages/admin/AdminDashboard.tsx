@@ -10,66 +10,52 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Chip from '@mui/material/Chip';
-import { supabase } from '../../lib/supabase';
-
-interface Enquiry {
-  id: string;
-  customer_name: string | null;
-  phone: string | null;
-  product_interest: string | null;
-  status: string;
-  created_at: string;
-}
-
-interface Product {
-  id: string;
-  name: string;
-  category: string;
-  stock_status: string;
-  is_active: boolean;
-}
+import {
+  getAllProducts,
+  getDashboardCounts,
+  getEnquiries,
+  getOrders,
+  type Enquiry,
+  type Order,
+  type Product,
+} from '@/services/firebase';
 
 const AdminDashboard: FC = () => {
   const [totalEnquiries, setTotalEnquiries] = useState(0);
   const [todayEnquiries, setTodayEnquiries] = useState(0);
   const [activeProducts, setActiveProducts] = useState(0);
+  const [totalOrders, setTotalOrders] = useState(0);
+  const [pendingOrders, setPendingOrders] = useState(0);
   const [lowStock, setLowStock] = useState(0);
   const [recentEnquiries, setRecentEnquiries] = useState<Enquiry[]>([]);
+  const [recentOrders, setRecentOrders] = useState<Order[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
-      const { count: total } = await supabase
-        .from('enquiries')
-        .select('*', { count: 'exact', head: true });
-      setTotalEnquiries(total ?? 0);
-
-      const today = new Date().toISOString().split('T')[0];
-      const { count: todayCount } = await supabase
-        .from('enquiries')
-        .select('*', { count: 'exact', head: true })
-        .gte('created_at', `${today}T00:00:00`);
-      setTodayEnquiries(todayCount ?? 0);
-
-      const { data: prodData } = await supabase.from('products').select('*');
-      const prods = (prodData ?? []) as Product[];
+      const [counts, enquiries, orders, prods] = await Promise.all([
+        getDashboardCounts(),
+        getEnquiries(),
+        getOrders(),
+        getAllProducts(),
+      ]);
+      setTotalEnquiries(counts.totalEnquiries);
+      setTodayEnquiries(counts.todayEnquiries);
+      setActiveProducts(counts.activeProducts);
+      setTotalOrders(counts.totalOrders);
+      setPendingOrders(counts.pendingOrders);
+      setRecentEnquiries(enquiries.slice(0, 5));
+      setRecentOrders(orders.slice(0, 5));
       setProducts(prods);
-      setActiveProducts(prods.filter((p) => p.is_active).length);
       setLowStock(prods.filter((p) => p.stock_status === 'low_stock').length);
-
-      const { data: enqData } = await supabase
-        .from('enquiries')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(5);
-      setRecentEnquiries((enqData ?? []) as Enquiry[]);
-
       setLoading(false);
     })();
   }, []);
 
   const metrics = [
+    { label: 'Total Orders', value: totalOrders },
+    { label: 'Pending Orders', value: pendingOrders },
     { label: 'Total Enquiries', value: totalEnquiries },
     { label: "Today's Enquiries", value: todayEnquiries },
     { label: 'Active Products', value: activeProducts },
@@ -79,8 +65,12 @@ const AdminDashboard: FC = () => {
   const statusColor = (status: string): 'default' | 'warning' | 'success' | 'error' => {
     switch (status) {
       case 'new': return 'warning';
+      case 'pending': return 'warning';
       case 'contacted': return 'success';
+      case 'confirmed': return 'success';
       case 'closed': return 'default';
+      case 'delivered': return 'success';
+      case 'cancelled': return 'error';
       default: return 'default';
     }
   };
@@ -106,7 +96,7 @@ const AdminDashboard: FC = () => {
 
       <Grid container spacing={3} sx={{ mb: 4 }}>
         {metrics.map((m) => (
-          <Grid size={{ xs: 6, md: 3 }} key={m.label}>
+          <Grid size={{ xs: 6, md: 4 }} key={m.label}>
             <Paper elevation={0} sx={{ p: 3, borderRadius: 2, border: '1px solid rgba(23,59,40,0.08)' }}>
               <Typography sx={{ color: '#788267', fontSize: '0.75rem', fontWeight: 600, letterSpacing: '0.05em', textTransform: 'uppercase', mb: 1 }}>
                 {m.label}
@@ -119,7 +109,7 @@ const AdminDashboard: FC = () => {
         ))}
       </Grid>
 
-      <Grid container spacing={3}>
+      <Grid container spacing={3} sx={{ mb: 3 }}>
         <Grid size={{ xs: 12, md: 7 }}>
           <Typography sx={{ color: '#173B28', fontWeight: 600, fontSize: '1rem', mb: 2 }}>
             Recent Enquiries
@@ -188,6 +178,46 @@ const AdminDashboard: FC = () => {
           </TableContainer>
         </Grid>
       </Grid>
+
+      <Typography sx={{ color: '#173B28', fontWeight: 600, fontSize: '1rem', mb: 2 }}>
+        Recent Orders
+      </Typography>
+      <TableContainer component={Paper} elevation={0} sx={{ borderRadius: 2, border: '1px solid rgba(23,59,40,0.08)' }}>
+        <Table size="small">
+          <TableHead>
+            <TableRow sx={{ bgcolor: '#f5f5f0' }}>
+              <TableCell sx={{ fontWeight: 600, color: '#173B28' }}>Customer</TableCell>
+              <TableCell sx={{ fontWeight: 600, color: '#173B28' }}>Item</TableCell>
+              <TableCell sx={{ fontWeight: 600, color: '#173B28' }}>Total</TableCell>
+              <TableCell sx={{ fontWeight: 600, color: '#173B28' }}>Status</TableCell>
+              <TableCell sx={{ fontWeight: 600, color: '#173B28' }}>Date</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {recentOrders.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={5} sx={{ textAlign: 'center', color: '#788267', py: 3 }}>
+                  No orders yet
+                </TableCell>
+              </TableRow>
+            ) : (
+              recentOrders.map((o) => (
+                <TableRow key={o.id} hover>
+                  <TableCell>{o.customer_name ?? '—'}</TableCell>
+                  <TableCell>{o.items[0]?.productName ?? '—'}</TableCell>
+                  <TableCell>{o.total_amount}</TableCell>
+                  <TableCell>
+                    <Chip label={o.status} size="small" color={statusColor(o.status)} />
+                  </TableCell>
+                  <TableCell sx={{ fontSize: '0.8rem', color: '#788267' }}>
+                    {o.created_at ? new Date(o.created_at).toLocaleDateString() : '—'}
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </Box>
   );
 };

@@ -2,8 +2,8 @@ import { useEffect, useRef, type FC } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { heroImage } from '../../data/siteData';
-import { usePrefersReducedMotion } from '../../hooks/usePrefersReducedMotion';
+import { heroImage } from '@/content/site';
+import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 
 interface HeroProps {
   onNavigate: (target: string) => void;
@@ -40,9 +40,14 @@ const Hero: FC<HeroProps> = ({ onNavigate }) => {
     if (reduced) return;
     let ticking = false;
     const updateScroll = () => {
+      const el = heroRef.current;
+      if (!el) {
+        ticking = false;
+        return;
+      }
       const top = window.scrollY;
-      if (heroRef.current && top < window.innerHeight * 1.5) {
-        heroRef.current.style.setProperty('--hero-scroll', `${top}px`);
+      if (top < window.innerHeight) {
+        el.style.setProperty('--hero-scroll', `${top}px`);
       }
       ticking = false;
     };
@@ -75,19 +80,21 @@ const Hero: FC<HeroProps> = ({ onNavigate }) => {
       }}
     >
       {/* === LAYER 1: Background orchard (slowest parallax) === */}
-      <Box
-        component="img"
+      <img
         src={heroImage}
         alt="Mango orchard at golden hour"
-        sx={{
+        width={1920}
+        height={1080}
+        decoding="async"
+        style={{
           position: 'absolute',
           inset: 0,
           width: '100%',
           height: '130%',
           objectFit: 'cover',
-          transform: reduced ? 'none' : 'translate3d(0, calc(var(--hero-scroll, 0px) * 0.12), 0) scale(1.08)',
+          transform: reduced ? 'none' : 'translate3d(0, calc(var(--hero-scroll, 0px) * 0.1), 0) scale(1.06)',
+          willChange: reduced ? 'auto' : 'transform',
           filter: 'brightness(0.82) saturate(1.1)',
-          willChange: 'transform',
         }}
       />
 
@@ -98,8 +105,6 @@ const Hero: FC<HeroProps> = ({ onNavigate }) => {
           inset: 0,
           background:
             'linear-gradient(180deg, rgba(23,59,40,0.2) 0%, rgba(23,59,40,0.05) 35%, rgba(23,59,40,0.4) 70%, rgba(23,59,40,0.65) 100%)',
-          transform: reduced ? 'none' : 'translate3d(0, calc(var(--hero-scroll, 0px) * 0.08), 0)',
-          willChange: 'transform',
         }}
       />
 
@@ -113,8 +118,6 @@ const Hero: FC<HeroProps> = ({ onNavigate }) => {
           width: { xs: '55%', md: '40%' },
           height: '80%',
           opacity: 0.2,
-          transform: reduced ? 'none' : 'translate3d(0, calc(var(--hero-scroll, 0px) * 0.22), 0)',
-          willChange: 'transform',
           pointerEvents: 'none',
         }}
         viewBox="0 0 300 500"
@@ -138,8 +141,6 @@ const Hero: FC<HeroProps> = ({ onNavigate }) => {
           width: { xs: '55%', md: '40%' },
           height: '80%',
           opacity: 0.2,
-          transform: reduced ? 'none' : 'translate3d(0, calc(var(--hero-scroll, 0px) * 0.28), 0)',
-          willChange: 'transform',
           pointerEvents: 'none',
         }}
         viewBox="0 0 300 500"
@@ -163,8 +164,6 @@ const Hero: FC<HeroProps> = ({ onNavigate }) => {
           width: '100%',
           height: '35%',
           opacity: 0.3,
-          transform: reduced ? 'none' : 'translate3d(0, calc(var(--hero-scroll, 0px) * 0.38), 0)',
-          willChange: 'transform',
           pointerEvents: 'none',
         }}
         viewBox="0 0 1200 200"
@@ -187,8 +186,6 @@ const Hero: FC<HeroProps> = ({ onNavigate }) => {
               width: leaf.size,
               height: leaf.size,
               opacity: leaf.opacity,
-              transform: `translate3d(0, calc(var(--hero-scroll, 0px) * ${leaf.speed}), 0)`,
-              willChange: 'transform',
               pointerEvents: 'none',
             }}
           >
@@ -225,8 +222,6 @@ const Hero: FC<HeroProps> = ({ onNavigate }) => {
               borderRadius: '50%',
               bgcolor: '#D99419',
               opacity: 0.4,
-              transform: 'translate3d(0, calc(var(--hero-scroll, 0px) * 0.45), 0)',
-              willChange: 'transform',
               animation: 'lightDrift 12s ease-in-out infinite',
               pointerEvents: 'none',
             }}
@@ -241,8 +236,6 @@ const Hero: FC<HeroProps> = ({ onNavigate }) => {
               borderRadius: '50%',
               bgcolor: '#D99419',
               opacity: 0.3,
-              transform: 'translate3d(0, calc(var(--hero-scroll, 0px) * 0.55), 0)',
-              willChange: 'transform',
               animation: 'lightDrift 14s ease-in-out infinite',
               animationDelay: '3s',
               pointerEvents: 'none',
@@ -258,8 +251,6 @@ const Hero: FC<HeroProps> = ({ onNavigate }) => {
               borderRadius: '50%',
               bgcolor: '#D99419',
               opacity: 0.25,
-              transform: 'translate3d(0, calc(var(--hero-scroll, 0px) * 0.5), 0)',
-              willChange: 'transform',
               animation: 'lightDrift 16s ease-in-out infinite',
               animationDelay: '6s',
               pointerEvents: 'none',
@@ -283,8 +274,6 @@ const Hero: FC<HeroProps> = ({ onNavigate }) => {
           px: { xs: 3, sm: 4, md: 6, lg: 8 },
           pt: { xs: 11, sm: 10, md: 0 },
           pb: { xs: 8, sm: 6, md: 0 },
-          transform: reduced ? 'none' : 'translate3d(0, calc(var(--hero-scroll, 0px) * 0.06), 0)',
-          willChange: 'transform',
         }}
       >
         <Typography
@@ -339,7 +328,7 @@ const Hero: FC<HeroProps> = ({ onNavigate }) => {
         >
           <Button
             variant="contained"
-            onClick={() => onNavigate('mangoes')}
+            onClick={() => onNavigate('order')}
             sx={{
               bgcolor: '#FFFDF8',
               color: '#173B28',
@@ -350,12 +339,13 @@ const Hero: FC<HeroProps> = ({ onNavigate }) => {
               fontSize: '0.85rem',
               fontWeight: 700,
               letterSpacing: '0.04em',
-              boxShadow: '0 8px 24px rgba(0,0,0,0.18)',
+              boxShadow: 'none',
+              filter: 'drop-shadow(0 8px 16px rgba(0,0,0,0.18))',
               '&:hover': { bgcolor: '#F6F1E7', transform: 'translateY(-1px)' },
               transition: 'all 250ms ease',
             }}
           >
-            Explore Products
+            Order now
           </Button>
           <Button
             variant="outlined"

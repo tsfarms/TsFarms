@@ -1,9 +1,9 @@
 import { type FC } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { farmImage } from '../../data/siteData';
-import { useReveal } from '../../hooks/useReveal';
-import SectionLabel from '../SectionLabel';
+import { farmImage } from '@/content/site';
+import { useReveal } from '@/hooks/useReveal';
+import SectionLabel from '@/components/layout/SectionLabel';
 
 const OurFarm: FC = () => {
   const [imgRef, imgVisible] = useReveal<HTMLDivElement>();
@@ -41,11 +41,14 @@ const OurFarm: FC = () => {
             transition: 'opacity 1000ms ease, transform 1200ms ease',
           }}
         >
-          <Box
-            component="img"
+          <img
             src={farmImage}
             alt="TS Mango Farming — the farm"
-            sx={{
+            width={1200}
+            height={900}
+            loading="lazy"
+            decoding="async"
+            style={{
               width: '100%',
               height: '100%',
               objectFit: 'cover',

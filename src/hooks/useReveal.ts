@@ -9,7 +9,7 @@ interface RevealOptions {
 export function useReveal<T extends HTMLElement = HTMLDivElement>(
   options: RevealOptions = {},
 ): [React.RefObject<T | null>, boolean] {
-  const { threshold = 0.15, rootMargin = '0px 0px -10% 0px', once = true } = options;
+  const { threshold = 0.12, rootMargin = '0px 0px -6% 0px', once = true } = options;
   const ref = useRef<T>(null);
   const [visible, setVisible] = useState(false);
 

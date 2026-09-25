@@ -1,12 +1,12 @@
 import { type FC } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { productImages } from '../../data/siteData';
-import { useReveal } from '../../hooks/useReveal';
-import SectionLabel from '../SectionLabel';
+import { productImages } from '@/content/site';
+import { useReveal } from '@/hooks/useReveal';
+import SectionLabel from '@/components/layout/SectionLabel';
 
 const products = [
-  { name: 'Mangoes', image: productImages.mangoes, label: 'Seven varieties' },
+  { name: 'Mangoes', image: productImages.mangoes, label: 'Seasonal harvest' },
   { name: 'Honey', image: productImages.honey, label: 'Pure and natural' },
   { name: 'Jackfruit', image: productImages.jackfruit, label: 'Seasonal fresh' },
 ];
@@ -16,6 +16,7 @@ const WhatWeGrow: FC = () => {
 
   return (
     <Box
+      id="grow"
       sx={{
         bgcolor: '#173B28',
         py: { xs: 8, md: 14 },
@@ -33,7 +34,7 @@ const WhatWeGrow: FC = () => {
               color: '#FFFDF8',
               opacity: visible ? 1 : 0,
               transform: visible ? 'translateY(0)' : 'translateY(16px)',
-              transition: 'opacity 700ms ease, transform 700ms ease',
+              transition: 'opacity 1100ms cubic-bezier(0.22, 1, 0.36, 1), transform 1100ms cubic-bezier(0.22, 1, 0.36, 1)',
             }}
           >
             From the orchard to your home.
@@ -54,7 +55,7 @@ const WhatWeGrow: FC = () => {
               sx={{
                 opacity: visible ? 1 : 0,
                 transform: visible ? 'translateY(0)' : 'translateY(30px)',
-                transition: `opacity 700ms ease ${300 + i * 120}ms, transform 700ms ease ${300 + i * 120}ms`,
+                transition: `opacity 1100ms cubic-bezier(0.22, 1, 0.36, 1) ${300 + i * 120}ms, transform 1100ms cubic-bezier(0.22, 1, 0.36, 1) ${300 + i * 120}ms`,
               }}
             >
               <Box
@@ -67,16 +68,18 @@ const WhatWeGrow: FC = () => {
                   '&:hover img': { transform: 'scale(1.04)' },
                 }}
               >
-                <Box
-                  component="img"
+                <img
                   src={product.image}
                   alt={product.name}
+                  width={800}
+                  height={1067}
                   loading="lazy"
-                  sx={{
+                  decoding="async"
+                  style={{
                     width: '100%',
                     height: '100%',
                     objectFit: 'cover',
-                    transition: 'transform 800ms ease',
+                    transition: 'transform 1.15s cubic-bezier(0.22, 1, 0.36, 1)',
                   }}
                 />
                 <Box
