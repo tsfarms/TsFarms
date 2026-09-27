@@ -5,8 +5,8 @@ import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
-import RemoveIcon from '@mui/icons-material/Remove';
 import SearchIcon from '@mui/icons-material/Search';
+import MinQtyButton from '@/features/cart/MinQtyButton';
 import SectionLabel from '@/components/layout/SectionLabel';
 import { availableShopProducts, formatINR, type ShopProduct } from '@/content/site';
 import { useCart } from '@/features/cart/CartContext';
@@ -170,14 +170,13 @@ const OrderSection: FC = () => {
                   </Typography>
                   <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1 }}>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                      <IconButton
-                        size="small"
-                        aria-label={`Decrease ${product.name}`}
-                        onClick={() => setProductQty(product, qty - 1)}
-                        disabled={atFloor}
-                      >
-                        <RemoveIcon fontSize="small" />
-                      </IconButton>
+                      <MinQtyButton
+                        atFloor={atFloor}
+                        minQty={product.minQty}
+                        unit={product.unit}
+                        label={`Decrease ${product.name}`}
+                        onDecrease={() => setProductQty(product, qty - 1)}
+                      />
                       <Typography sx={{ minWidth: 28, textAlign: 'center', fontWeight: 700 }}>{qty}</Typography>
                       <IconButton
                         size="small"

@@ -9,7 +9,7 @@ import Badge from '@mui/material/Badge';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import CloseIcon from '@mui/icons-material/Close';
 import AddIcon from '@mui/icons-material/Add';
-import RemoveIcon from '@mui/icons-material/Remove';
+import MinQtyButton from '@/features/cart/MinQtyButton';
 import { useCart } from '@/features/cart/CartContext';
 import { buildOrderMessage, openOrderWhatsApp } from '@/features/cart/orderWhatsApp';
 import { formatINR, getUpiId } from '@/content/site';
@@ -121,14 +121,13 @@ const OrderSheet: FC = () => {
                   </Typography>
                 </Box>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                  <IconButton
-                    size="small"
-                    aria-label="Decrease quantity"
-                    disabled={item.qty <= item.minQty}
-                    onClick={() => updateQty(index, item.qty - 1)}
-                  >
-                    <RemoveIcon fontSize="small" />
-                  </IconButton>
+                  <MinQtyButton
+                    atFloor={item.qty <= item.minQty}
+                    minQty={item.minQty}
+                    unit={item.unit}
+                    label="Decrease quantity"
+                    onDecrease={() => updateQty(index, item.qty - 1)}
+                  />
                   <Typography sx={{ minWidth: 20, textAlign: 'center' }}>{item.qty}</Typography>
                   <IconButton size="small" aria-label="Increase quantity" onClick={() => updateQty(index, item.qty + 1)}>
                     <AddIcon fontSize="small" />
