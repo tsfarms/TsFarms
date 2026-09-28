@@ -5,13 +5,15 @@ import Button from '@mui/material/Button';
 import PhoneIcon from '@mui/icons-material/Phone';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import InstagramIcon from '@mui/icons-material/Instagram';
+import EmailIcon from '@mui/icons-material/Email';
 import {
   whatsappLink,
   WHATSAPP_PRIMARY,
   PHONE,
-  INSTAGRAM_1,
-  INSTAGRAM_2,
-  WHATSAPP_SECONDARY,
+  PHONE_SECONDARY,
+  INSTAGRAM_HANDLE,
+  INSTAGRAM_URL,
+  EMAIL,
 } from '@/content/site';
 import { useReveal } from '@/hooks/useReveal';
 import SectionLabel from '@/components/layout/SectionLabel';
@@ -54,7 +56,7 @@ const Contact: FC = () => {
             transition: 'opacity 700ms ease 200ms',
           }}
         >
-          We'd love to hear from you. Reach out on WhatsApp, give us a call, or find us on Instagram.
+          We'd love to hear from you. Reach out on WhatsApp, call, email, or find us on Instagram.
         </Typography>
 
         <Box
@@ -80,7 +82,7 @@ const Contact: FC = () => {
           <Button
             variant="outlined"
             startIcon={<PhoneIcon />}
-            href={`tel:${PHONE}`}
+            href={`tel:+91${PHONE}`}
             sx={{
               color: '#173B28',
               borderColor: '#173B28',
@@ -95,7 +97,7 @@ const Contact: FC = () => {
           <Button
             variant="outlined"
             startIcon={<InstagramIcon />}
-            href={`https://instagram.com/${INSTAGRAM_1}`}
+            href={INSTAGRAM_URL}
             target="_blank"
             rel="noopener noreferrer"
             sx={{
@@ -107,7 +109,22 @@ const Contact: FC = () => {
               '&:hover': { borderWidth: '1px', bgcolor: 'rgba(23,59,40,0.04)' },
             }}
           >
-            Instagram @{INSTAGRAM_1}
+            Instagram @{INSTAGRAM_HANDLE}
+          </Button>
+          <Button
+            variant="outlined"
+            startIcon={<EmailIcon />}
+            href={`mailto:${EMAIL}`}
+            sx={{
+              color: '#173B28',
+              borderColor: '#173B28',
+              borderWidth: '1px',
+              py: 1.5,
+              px: 4,
+              '&:hover': { borderWidth: '1px', bgcolor: 'rgba(23,59,40,0.04)' },
+            }}
+          >
+            {EMAIL}
           </Button>
         </Box>
 
@@ -121,13 +138,9 @@ const Contact: FC = () => {
             fontSize: '0.85rem',
           }}
         >
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-            <WhatsAppIcon sx={{ fontSize: '0.9rem' }} />
-            <span>{WHATSAPP_SECONDARY}</span>
-          </Box>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-            <InstagramIcon sx={{ fontSize: '0.9rem' }} />
-            <span>@{INSTAGRAM_2}</span>
+          <Box component="a" href={`tel:+91${PHONE_SECONDARY}`} sx={{ display: 'flex', alignItems: 'center', gap: 0.5, color: 'inherit', textDecoration: 'none' }}>
+            <PhoneIcon sx={{ fontSize: '0.9rem' }} />
+            <span>{PHONE_SECONDARY}</span>
           </Box>
         </Box>
       </Box>

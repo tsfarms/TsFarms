@@ -62,7 +62,7 @@ const AdminLogin: FC = () => {
       >
         <Box sx={{ textAlign: 'center', mb: 4 }}>
           <Box sx={{ display: 'flex', justifyContent: 'center', mb: 2 }}>
-            <TSLogo variant="monogram" color="#173B28" height={48} />
+            <TSLogo height={72} />
           </Box>
           <Typography variant="h5" sx={{ fontFamily: '"Cormorant Garamond", serif', fontWeight: 600, color: '#173B28', mb: 0.5 }}>
             Admin Login

@@ -1,6 +1,6 @@
-import { formatINR, getUpiId, whatsappLink } from '@/content/site';
+import { formatINR, getUpiId, WHATSAPP_PRIMARY, whatsappLink } from '@/content/site';
 
-export const ORDER_WHATSAPP = '9965053956';
+export const ORDER_WHATSAPP = WHATSAPP_PRIMARY;
 
 export function buildOrderMessage(input: {
   farmName: string;

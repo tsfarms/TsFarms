@@ -152,23 +152,22 @@ const Preloader: FC<PreloaderProps> = ({ onComplete }) => {
           />
         </Box>
         <Box
-          component="svg"
-          viewBox="0 0 64 64"
-          aria-hidden
+          component="img"
+          src="/logo.jpg"
+          alt="TS Farming"
+          width={64}
+          height={64}
           sx={{
             position: 'absolute',
-            inset: 16,
+            inset: 14,
+            width: 64,
+            height: 64,
+            borderRadius: '50%',
+            objectFit: 'cover',
             animation: phase >= 1 ? 'mangoSwing 2.4s ease-in-out infinite' : 'none',
             transformOrigin: '50% 12%',
           }}
-        >
-          <path d="M34 8 C36 4 42 4 44 8" stroke="#788267" strokeWidth="2" fill="none" />
-          <path
-            d="M32 12 C22 16 14 28 14 40 C14 52 22 60 32 60 C42 60 50 52 50 40 C50 28 42 16 32 12 Z"
-            fill="#D99419"
-          />
-          <path d="M32 16 C30 28 30 42 34 56" stroke="#5B3A24" strokeWidth="1" opacity="0.45" fill="none" />
-        </Box>
+        />
       </Box>
 
       <Typography

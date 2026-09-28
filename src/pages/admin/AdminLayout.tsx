@@ -67,7 +67,7 @@ const AdminLayout: FC = () => {
   const drawer = (
     <Box sx={{ height: '100%', display: 'flex', flexDirection: 'column', bgcolor: '#173B28' }}>
       <Box sx={{ p: 2.5, pb: 3 }}>
-        <TSLogo variant="full" color="#FFFDF8" height={28} />
+        <TSLogo height={40} />
       </Box>
       <List sx={{ flex: 1, px: 1.5 }}>
         {navItems.map((item) => {

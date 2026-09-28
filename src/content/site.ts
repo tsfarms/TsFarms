@@ -15,11 +15,12 @@ export interface MangoVariety {
   image: string;
 }
 
-export const WHATSAPP_PRIMARY = '9965053956';
-export const WHATSAPP_SECONDARY = '9344904430';
-export const PHONE = '9442523556';
-export const INSTAGRAM_1 = 'prasanna_6847';
-export const INSTAGRAM_2 = '_gobi_7';
+export const WHATSAPP_PRIMARY = '9344904430';
+export const PHONE = '9843823047';
+export const PHONE_SECONDARY = '9600336404';
+export const INSTAGRAM_HANDLE = 'ts.farming';
+export const INSTAGRAM_URL = 'https://www.instagram.com/ts.farming';
+export const EMAIL = 'ts.farmingts@gmail.com';
 export const UPI_ID = '9965053956@upi';
 
 const readSetting = (keys: string[], fallback: string): string => {
@@ -58,8 +59,8 @@ export const productImages = {
 
 export const mangoVarieties: MangoVariety[] = [
   {
-    id: 'alphonsa',
-    name: 'Alphonsa',
+    id: 'alphonso',
+    name: 'Alphonso',
     tamilName: 'அல்போன்சா',
     tagline: 'Rich • Aromatic • Naturally Sweet',
     description:
@@ -73,9 +74,9 @@ export const mangoVarieties: MangoVariety[] = [
     image: px('https://images.pexels.com/photos/38348330/pexels-photo-38348330.jpeg', 800),
   },
   {
-    id: 'himampasanth',
-    name: 'Himampasanth',
-    tamilName: 'இமாம்பசந்த்',
+    id: 'imam-pasand',
+    name: 'Imam Pasand',
+    tamilName: 'இமாம் பசந்த்',
     tagline: 'Large • Fleshy • Mildly Sweet',
     description:
       'The jewel of South India. Thin skin, melt-in-mouth juicy fibreless pulp, and a regal aroma prized by connoisseurs.',
@@ -103,8 +104,8 @@ export const mangoVarieties: MangoVariety[] = [
     image: px('https://images.pexels.com/photos/17546507/pexels-photo-17546507.jpeg', 800),
   },
   {
-    id: 'sendhuram',
-    name: 'Sendhuram',
+    id: 'senduram',
+    name: 'Senduram',
     tamilName: 'செந்தூரம்',
     tagline: 'Bright Blush • Sweet • Seasonal Favourite',
     description:
@@ -113,37 +114,37 @@ export const mangoVarieties: MangoVariety[] = [
     season: 'April – June',
     unit: 'Per KG',
     pricePerKg: 140,
-    stockStatus: 'low_stock',
+    stockStatus: 'in_stock',
     minOrderKg: 5,
     image: px('https://images.pexels.com/photos/7543212/pexels-photo-7543212.jpeg', 800),
   },
   {
-    id: 'kallamanga',
-    name: 'Kallamanga (Totapuri)',
-    tamilName: 'கல்லாமாங்காய் / கிளிமூக்கு',
-    tagline: 'Traditional • Tangy-Sweet • Deep Flavour',
+    id: 'banganapalli',
+    name: 'Banganapalli',
+    tamilName: 'பங்கனபள்ளி',
+    tagline: 'Large • Fibre-free • Golden Sweet',
     description:
-      'A quintessential Tamil country variety with a crisp bite and distinct beak-shaped curve. Perfect for salads, pickles, and ripe eating.',
+      'A large, golden Andhra favourite also grown in Tamil Nadu. Firm, fibre-free flesh with a mild sweetness that holds well for the table.',
     taste: ['Traditional', 'Crisp', 'Rich Flavour'],
     season: 'May – July',
     unit: 'Per KG',
-    pricePerKg: 110,
+    pricePerKg: 150,
     stockStatus: 'in_stock',
     minOrderKg: 5,
     image: px('https://images.pexels.com/photos/38793235/pexels-photo-38793235.jpeg', 800),
   },
   {
-    id: 'grapes-mango',
-    name: 'Grapes Mango',
-    tamilName: 'திராட்சை மாம்பழம்',
-    tagline: 'Rare Cluster • Intensely Sweet • Unique',
+    id: 'thothapuri',
+    name: 'Thothapuri',
+    tamilName: 'தொத்தபுரி / கிளிமூக்கு',
+    tagline: 'Tangy-Sweet • Firm • Classic Totapuri',
     description:
-      'Grows in tight bountiful bunches like grapes. Small in size with intense concentrated sweetness. A rare heirloom variety.',
-    taste: ['Small Clusters', 'Intense Sweet', 'Rare Heirloom'],
-    season: 'May – June',
+      'Also known as Totapuri. A classic beak-shaped mango with a crisp bite and a tangy-sweet flavour, eaten ripe or used in the kitchen.',
+    taste: ['Tangy-Sweet', 'Firm', 'Classic'],
+    season: 'May – July',
     unit: 'Per KG',
-    pricePerKg: 210,
-    stockStatus: 'low_stock',
+    pricePerKg: 110,
+    stockStatus: 'in_stock',
     minOrderKg: 5,
     image: px('https://images.pexels.com/photos/12303101/pexels-photo-12303101.jpeg', 800),
   },
@@ -158,7 +159,7 @@ export const mangoVarieties: MangoVariety[] = [
     season: 'July – September',
     unit: 'Per KG',
     pricePerKg: 130,
-    stockStatus: 'out_of_stock',
+    stockStatus: 'in_stock',
     minOrderKg: 5,
     image: px('https://images.pexels.com/photos/5629821/pexels-photo-5629821.jpeg', 800),
   },
@@ -195,42 +196,42 @@ export const formatINR = (amount: number) =>
 
 export const otherFarmProducts: OtherFarmProduct[] = [
   {
-    id: 'farm-honey-500g',
-    name: 'Raw Farm Honey (500g)',
-    tamilName: 'இயற்கை தேன் (500 கிராம்)',
+    id: 'stingless-bee-honey',
+    name: 'Stingless Bee Honey',
+    tamilName: 'சிறு தேனீ தேன்',
     category: 'honey',
-    tagline: '100% Pure • Unheated • Single-Origin',
+    tagline: 'Rare • Unheated • Naturally Tangy',
     description:
-      'Cold-extracted raw honey collected directly from bee colonies situated in our mango blossoms and flora. Free of artificial sugar syrups.',
-    unit: '500g Glass Jar',
-    price: 380,
+      'Honey from stingless bees, collected without heating. Thick, slightly tangy, and sold by the kilogram. Minimum order is 1 KG.',
+    unit: 'Per KG',
+    price: 720,
     stockStatus: 'in_stock',
     image: px('https://images.pexels.com/photos/9106164/pexels-photo-9106164.jpeg', 800),
   },
   {
-    id: 'farm-honey-1kg',
-    name: 'Raw Farm Honey (1 KG)',
-    tamilName: 'இயற்கை தேன் (1 கிலோ)',
+    id: 'mountain-honey',
+    name: 'Mountain Honey',
+    tamilName: 'மலை தேன்',
     category: 'honey',
-    tagline: 'Pure Blossom Honey • Rich in Pollen',
+    tagline: 'Wild Flora • Rich • Unprocessed',
     description:
-      'Full 1 KG bottle of thick, golden nectar straight from the farm apiary. Retains all natural pollen, enzymes, and medicinal vitality.',
-    unit: '1 KG Jar',
+      'Honey gathered from mountain flora. Deep in flavour and sold by the kilogram. Minimum order is 1 KG.',
+    unit: 'Per KG',
     price: 720,
     stockStatus: 'in_stock',
     image: px('https://images.pexels.com/photos/33166864/pexels-photo-33166864.jpeg', 800),
   },
   {
-    id: 'fresh-jackfruit-bulb',
-    name: 'Sweet Honey Jackfruit (Palaapazham)',
-    tamilName: 'தேன் பலாப்பழம் (சுளைகள்)',
+    id: 'palur-1',
+    name: 'Palur-1',
+    tamilName: 'பாலூர் 1 பலா',
     category: 'jackfruit',
-    tagline: 'Tree-Ripened • Crisp Honey Bulbs',
+    tagline: 'TNAU Variety • Sweet Bulbs • Seasonal',
     description:
-      'Naturally tree-ripened Then-Varikkai jackfruit with crunchy, golden bulbs that drip with natural sweetness. Freshly deseeded and packed.',
-    unit: '1 KG Fresh Bulbs Box',
+      'Palur-1 jackfruit, a Tamil Nadu variety with sweet, firm bulbs. Sold fresh by the kilogram. Minimum order is 1 KG.',
+    unit: 'Per KG',
     price: 260,
-    stockStatus: 'low_stock',
+    stockStatus: 'in_stock',
     image: px('https://images.pexels.com/photos/6871015/pexels-photo-6871015.jpeg', 800),
   },
 ];
@@ -254,7 +255,7 @@ export const shopProducts: ShopProduct[] = [
     category: product.category,
     tagline: product.tagline,
     unitLabel: product.unit,
-    unit: product.category === 'honey' ? 'jar' : 'KG',
+    unit: 'KG',
     minQty: 1,
     price: product.price,
     image: product.image,

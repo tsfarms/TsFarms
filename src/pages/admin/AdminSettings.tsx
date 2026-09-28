@@ -5,16 +5,16 @@ import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Alert from '@mui/material/Alert';
-import { PHONE, WHATSAPP_PRIMARY, WHATSAPP_SECONDARY, INSTAGRAM_1, INSTAGRAM_2 } from '@/content/site';
+import { EMAIL, INSTAGRAM_HANDLE, PHONE, PHONE_SECONDARY, WHATSAPP_PRIMARY } from '@/content/site';
 import { getSettings, saveSettings } from '@/services/firebase';
 
 const AdminSettings: FC = () => {
   const [farmName, setFarmName] = useState('TS Mango Farming');
   const [phone, setPhone] = useState(PHONE);
+  const [phone2, setPhone2] = useState(PHONE_SECONDARY);
   const [whatsapp1, setWhatsapp1] = useState(WHATSAPP_PRIMARY);
-  const [whatsapp2, setWhatsapp2] = useState(WHATSAPP_SECONDARY);
-  const [instagram1, setInstagram1] = useState(INSTAGRAM_1);
-  const [instagram2, setInstagram2] = useState(INSTAGRAM_2);
+  const [instagram1, setInstagram1] = useState(INSTAGRAM_HANDLE);
+  const [email, setEmail] = useState(EMAIL);
   const [upiId, setUpiId] = useState('');
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState('');
@@ -29,9 +29,9 @@ const AdminSettings: FC = () => {
       if ('farm_name' in settings) setFarmName(settings.farm_name);
       if ('phone' in settings) setPhone(settings.phone);
       if ('whatsapp_primary' in settings) setWhatsapp1(settings.whatsapp_primary);
-      if ('whatsapp_secondary' in settings) setWhatsapp2(settings.whatsapp_secondary);
-      if ('instagram_1' in settings) setInstagram1(settings.instagram_1);
-      if ('instagram_2' in settings) setInstagram2(settings.instagram_2);
+      if ('phone_secondary' in settings) setPhone2(settings.phone_secondary);
+      if ('instagram' in settings) setInstagram1(settings.instagram);
+      if ('email' in settings) setEmail(settings.email);
       if ('upi_id' in settings) setUpiId(settings.upi_id);
       setReady(true);
     })();
@@ -48,10 +48,10 @@ const AdminSettings: FC = () => {
       await saveSettings({
         farm_name: farmName,
         phone,
+        phone_secondary: phone2,
         whatsapp_primary: whatsapp1,
-        whatsapp_secondary: whatsapp2,
-        instagram_1: instagram1,
-        instagram_2: instagram2,
+        instagram: instagram1,
+        email,
         upi_id: upiId,
       });
       setSaved(true);
@@ -86,10 +86,10 @@ const AdminSettings: FC = () => {
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
           <TextField label="Farm name" value={farmName} onChange={(e) => setFarmName(e.target.value)} size="small" fullWidth />
           <TextField label="Phone" value={phone} onChange={(e) => setPhone(e.target.value)} size="small" fullWidth />
-          <TextField label="WhatsApp (Primary)" value={whatsapp1} onChange={(e) => setWhatsapp1(e.target.value)} size="small" fullWidth />
-          <TextField label="WhatsApp (Secondary)" value={whatsapp2} onChange={(e) => setWhatsapp2(e.target.value)} size="small" fullWidth />
-          <TextField label="Instagram (Primary)" value={instagram1} onChange={(e) => setInstagram1(e.target.value)} size="small" fullWidth />
-          <TextField label="Instagram (Secondary)" value={instagram2} onChange={(e) => setInstagram2(e.target.value)} size="small" fullWidth />
+          <TextField label="Phone 2" value={phone2} onChange={(e) => setPhone2(e.target.value)} size="small" fullWidth />
+          <TextField label="WhatsApp" value={whatsapp1} onChange={(e) => setWhatsapp1(e.target.value)} size="small" fullWidth />
+          <TextField label="Instagram" value={instagram1} onChange={(e) => setInstagram1(e.target.value)} size="small" fullWidth />
+          <TextField label="Email" value={email} onChange={(e) => setEmail(e.target.value)} size="small" fullWidth />
           <TextField label="UPI ID" value={upiId} onChange={(e) => setUpiId(e.target.value)} size="small" fullWidth />
           <Button
             variant="contained"

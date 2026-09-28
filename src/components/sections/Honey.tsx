@@ -61,8 +61,8 @@ const Honey: FC = () => {
             Pure sweetness, from the farm.
           </Typography>
           <Typography sx={{ color: '#5B3A24', maxWidth: 480, fontSize: { xs: '0.98rem', md: '1.05rem' } }}>
-            Natural farm honey, harvested with care and available in limited quantities. Add it from the order
-            section when it is in season.
+            Stingless bee honey and mountain honey, harvested with care. Both are sold by the kilogram, with a
+            minimum order of 1 KG.
           </Typography>
         </Box>
       </Box>

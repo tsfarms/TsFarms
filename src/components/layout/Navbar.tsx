@@ -67,9 +67,9 @@ const Navbar: FC<NavbarProps> = ({ scrolled, onNavigate }) => {
           {/* Logo */}
           <Box
             onClick={() => handleNav('hero')}
-            sx={{ cursor: 'pointer', display: 'flex', alignItems: 'center', '& svg text': { fill: logoColor } }}
+            sx={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}
           >
-            <TSLogo variant="full" color={logoColor} height={isMobile ? 28 : 34} />
+            <TSLogo height={isMobile ? 44 : 52} />
           </Box>
 
           {/* Desktop nav links */}
@@ -190,7 +190,7 @@ const Navbar: FC<NavbarProps> = ({ scrolled, onNavigate }) => {
         }}
       >
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2, pb: 1.5, borderBottom: '1px solid rgba(23,59,40,0.1)' }}>
-          <TSLogo variant="monogram" color="#173B28" height={32} />
+          <TSLogo height={40} />
           <IconButton
             onClick={() => setDrawerOpen(false)}
             sx={{ color: '#173B28', minWidth: 44, minHeight: 44 }}

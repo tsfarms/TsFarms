@@ -4,9 +4,10 @@ import Typography from '@mui/material/Typography';
 import PhoneIcon from '@mui/icons-material/Phone';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import InstagramIcon from '@mui/icons-material/Instagram';
+import EmailIcon from '@mui/icons-material/Email';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import TSLogo from '@/components/layout/TSLogo';
-import { navLinks, PHONE, WHATSAPP_PRIMARY, WHATSAPP_SECONDARY, INSTAGRAM_1, INSTAGRAM_2 } from '@/content/site';
+import { navLinks, PHONE, PHONE_SECONDARY, WHATSAPP_PRIMARY, INSTAGRAM_HANDLE, INSTAGRAM_URL, EMAIL } from '@/content/site';
 
 interface FooterProps {
   onNavigate: (target: string) => void;
@@ -35,7 +36,7 @@ const Footer: FC<FooterProps> = ({ onNavigate }) => {
         >
           {/* Brand */}
           <Box>
-            <TSLogo variant="full" color="#FFFDF8" height={32} />
+            <TSLogo height={56} />
             <Typography
               sx={{
                 mt: 1.5,
@@ -90,17 +91,20 @@ const Footer: FC<FooterProps> = ({ onNavigate }) => {
               Contact
             </Typography>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5, fontSize: '0.9rem' }}>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'rgba(255,253,248,0.75)' }}>
+              <Box component="a" href={`tel:${PHONE}`} sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'rgba(255,253,248,0.75)', textDecoration: 'none' }}>
                 <PhoneIcon sx={{ fontSize: '0.9rem' }} /> {PHONE}
               </Box>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'rgba(255,253,248,0.75)' }}>
+              <Box component="a" href={`tel:${PHONE_SECONDARY}`} sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'rgba(255,253,248,0.75)', textDecoration: 'none' }}>
+                <PhoneIcon sx={{ fontSize: '0.9rem' }} /> {PHONE_SECONDARY}
+              </Box>
+              <Box component="a" href={`https://wa.me/91${WHATSAPP_PRIMARY}`} target="_blank" rel="noopener noreferrer" sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'rgba(255,253,248,0.75)', textDecoration: 'none' }}>
                 <WhatsAppIcon sx={{ fontSize: '0.9rem' }} /> {WHATSAPP_PRIMARY}
               </Box>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'rgba(255,253,248,0.75)' }}>
-                <WhatsAppIcon sx={{ fontSize: '0.9rem' }} /> {WHATSAPP_SECONDARY}
+              <Box component="a" href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'rgba(255,253,248,0.75)', textDecoration: 'none' }}>
+                <InstagramIcon sx={{ fontSize: '0.9rem' }} /> @{INSTAGRAM_HANDLE}
               </Box>
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'rgba(255,253,248,0.75)' }}>
-                <InstagramIcon sx={{ fontSize: '0.9rem' }} /> @{INSTAGRAM_1} | @{INSTAGRAM_2}
+              <Box component="a" href={`mailto:${EMAIL}`} sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'rgba(255,253,248,0.75)', textDecoration: 'none' }}>
+                <EmailIcon sx={{ fontSize: '0.9rem' }} /> {EMAIL}
               </Box>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'rgba(255,253,248,0.75)' }}>
                 <LocationOnIcon sx={{ fontSize: '0.9rem' }} /> All over Tamil Nadu
