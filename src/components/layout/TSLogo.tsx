@@ -7,7 +7,7 @@ interface LogoProps {
 const TSLogo: FC<LogoProps> = ({ height = 48 }) => {
   return (
     <img
-      src="/logo.jpg"
+      src="/logo.png"
       alt="TS Farming"
       width={height}
       height={height}

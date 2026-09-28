@@ -83,7 +83,7 @@ const OurFarm: FC = () => {
               transition: 'opacity 700ms ease 400ms, transform 700ms ease 400ms',
             }}
           >
-            TS Mango Farming is a family-owned farm run by Thangapandi. We grow fresh mangoes, farm honey and seasonal jackfruit, and deliver them across Tamil Nadu.
+            TS Mango Farming is a family-owned farm run by Thangapandi. We grow fresh mangoes, farm honey and seasonal jackfruit, and deliver them all over India.
           </Typography>
           <Typography
             sx={{

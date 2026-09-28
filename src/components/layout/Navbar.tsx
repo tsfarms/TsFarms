@@ -50,7 +50,9 @@ const Navbar: FC<NavbarProps> = ({ scrolled, onNavigate }) => {
           zIndex: 1200,
           bgcolor: bgColor,
           borderBottom: `1px solid ${borderColor}`,
-          transition: 'background-color 700ms cubic-bezier(0.22, 1, 0.36, 1), border-color 700ms cubic-bezier(0.22, 1, 0.36, 1)',
+          transform: scrolled ? 'translateY(-110%)' : 'translateY(0)',
+          pointerEvents: scrolled ? 'none' : 'auto',
+          transition: 'background-color 700ms cubic-bezier(0.22, 1, 0.36, 1), border-color 700ms cubic-bezier(0.22, 1, 0.36, 1), transform 420ms cubic-bezier(0.22, 1, 0.36, 1)',
           px: { xs: 2, md: 4, lg: 6 },
           py: { xs: 1.5, md: 2 },
         }}

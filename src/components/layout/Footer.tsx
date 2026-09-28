@@ -5,7 +5,7 @@ import PhoneIcon from '@mui/icons-material/Phone';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import EmailIcon from '@mui/icons-material/Email';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
+import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined';
 import TSLogo from '@/components/layout/TSLogo';
 import { navLinks, PHONE, PHONE_SECONDARY, WHATSAPP_PRIMARY, INSTAGRAM_HANDLE, INSTAGRAM_URL, EMAIL } from '@/content/site';
 
@@ -107,7 +107,7 @@ const Footer: FC<FooterProps> = ({ onNavigate }) => {
                 <EmailIcon sx={{ fontSize: '0.9rem' }} /> {EMAIL}
               </Box>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'rgba(255,253,248,0.75)' }}>
-                <LocationOnIcon sx={{ fontSize: '0.9rem' }} /> All over Tamil Nadu
+                <LocalShippingOutlinedIcon sx={{ fontSize: '1rem' }} /> All over India
               </Box>
             </Box>
           </Box>

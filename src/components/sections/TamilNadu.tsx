@@ -57,7 +57,7 @@ const TamilNadu: FC = () => {
               transition: 'opacity 700ms ease, transform 700ms ease',
             }}
           >
-            Fresh produce, delivered across Tamil Nadu.
+            Fresh produce, delivered all over India.
           </Typography>
           <Typography
             sx={{
@@ -68,7 +68,7 @@ const TamilNadu: FC = () => {
               transition: 'opacity 700ms ease 200ms',
             }}
           >
-            From Chennai to Coimbatore, Madurai to Trichy — we deliver our farm-fresh mangoes, honey and jackfruit across the state. Minimum order 5–6 KG.
+            Grown on our farm in Tamil Nadu and delivered all over India. Minimum order 5–6 KG.
           </Typography>
         </Box>
 

@@ -35,7 +35,7 @@ const HomePage: FC = () => {
       if (ticking) return;
       ticking = true;
       requestAnimationFrame(() => {
-        const next = window.scrollY > 80;
+        const next = window.scrollY > 8;
         setScrolled((prev) => (prev === next ? prev : next));
         ticking = false;
       });
