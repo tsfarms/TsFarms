@@ -9,7 +9,7 @@ import { EMAIL, INSTAGRAM_HANDLE, PHONE, PHONE_SECONDARY, WHATSAPP_PRIMARY } fro
 import { getSettings, saveSettings } from '@/services/firebase';
 
 const AdminSettings: FC = () => {
-  const [farmName, setFarmName] = useState('TS Mango Farming');
+  const [farmName, setFarmName] = useState('TS Farms');
   const [phone, setPhone] = useState(PHONE);
   const [phone2, setPhone2] = useState(PHONE_SECONDARY);
   const [whatsapp1, setWhatsapp1] = useState(WHATSAPP_PRIMARY);

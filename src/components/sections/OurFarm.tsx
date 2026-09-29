@@ -43,7 +43,7 @@ const OurFarm: FC = () => {
         >
           <img
             src={farmImage}
-            alt="TS Mango Farming — the farm"
+            alt="TS Farms — the farm"
             width={1200}
             height={900}
             loading="lazy"
@@ -83,7 +83,7 @@ const OurFarm: FC = () => {
               transition: 'opacity 700ms ease 400ms, transform 700ms ease 400ms',
             }}
           >
-            TS Mango Farming is a family-owned farm run by Thangapandi. We grow fresh mangoes, farm honey and seasonal jackfruit, and deliver them all over India.
+            TS Farms is a family-owned farm run by Thangapandi. We grow fresh mangoes, farm honey and seasonal jackfruit, and deliver them all over India.
           </Typography>
           <Typography
             sx={{

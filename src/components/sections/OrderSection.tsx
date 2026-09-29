@@ -122,7 +122,7 @@ const OrderSection: FC = () => {
       sx={{
         bgcolor: '#FFFDF8',
         py: { xs: 8, md: 12 },
-        px: { xs: 3, md: 6, lg: 8 },
+        px: { xs: 2, md: 6, lg: 8 },
         overflowAnchor: 'none',
       }}
     >
@@ -175,8 +175,8 @@ const OrderSection: FC = () => {
         <Box
           sx={{
             display: 'grid',
-            gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr', lg: '1fr 1fr 1fr' },
-            gap: 2.5,
+            gridTemplateColumns: { xs: '1fr 1fr', md: '1fr 1fr 1fr' },
+            gap: { xs: 1, sm: 1.75, md: 2.5 },
             mb: 3,
           }}
         >
@@ -188,31 +188,74 @@ const OrderSection: FC = () => {
               <Box
                 key={product.id}
                 sx={{
-                  border: '1px solid rgba(23,59,40,0.1)',
-                  borderRadius: 1.5,
+                  display: 'flex',
+                  flexDirection: 'column',
+                  border: '1px solid rgba(23,59,40,0.08)',
+                  borderRadius: { xs: '12px', md: '14px' },
                   overflow: 'hidden',
                   bgcolor: '#FFFDF8',
                   contain: 'layout style',
+                  boxShadow: '0 8px 20px rgba(91, 58, 36, 0.06)',
                   '&:hover img': { transform: 'scale(1.04)' },
                 }}
               >
-                <img
+                <Box
+                  component="img"
                   src={product.image}
                   alt={product.name}
                   width={800}
                   height={450}
                   loading="lazy"
                   decoding="async"
-                  style={{ width: '100%', height: 180, objectFit: 'cover', display: 'block', transition: 'transform 1.1s cubic-bezier(0.22, 1, 0.36, 1)' }}
+                  sx={{
+                    width: '100%',
+                    height: { xs: 92, sm: 132, md: 168 },
+                    objectFit: 'cover',
+                    display: 'block',
+                    transition: 'transform 1.1s cubic-bezier(0.22, 1, 0.36, 1)',
+                  }}
                 />
-                <Box sx={{ p: 2 }}>
-                  <Typography sx={{ fontWeight: 700, color: '#173B28' }}>{product.name}</Typography>
-                  <Typography sx={{ color: '#788267', fontSize: '0.82rem', mb: 1.5 }}>{product.tagline}</Typography>
-                  <Typography sx={{ color: '#5B3A24', fontSize: '0.85rem', mb: 1.5, fontWeight: 600 }}>
-                    {formatINR(product.price)} per {product.unit}
+                <Box sx={{ p: { xs: 0.9, sm: 1.4, md: 2 }, display: 'flex', flexDirection: 'column', flex: 1, gap: { xs: 0.35, md: 0 } }}>
+                  <Typography
+                    sx={{
+                      fontWeight: 700,
+                      color: '#173B28',
+                      fontSize: { xs: '0.74rem', sm: '0.9rem', md: '1rem' },
+                      lineHeight: 1.2,
+                      display: '-webkit-box',
+                      WebkitLineClamp: 1,
+                      WebkitBoxOrient: 'vertical',
+                      overflow: 'hidden',
+                    }}
+                  >
+                    {product.name}
                   </Typography>
-                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1 }}>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <Typography
+                    sx={{
+                      display: { xs: 'none', sm: '-webkit-box' },
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: 'vertical',
+                      overflow: 'hidden',
+                      color: '#788267',
+                      fontSize: '0.82rem',
+                      mt: 0.5,
+                      mb: 1,
+                    }}
+                  >
+                    {product.tagline}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      color: '#5B3A24',
+                      fontSize: { xs: '0.62rem', md: '0.85rem' },
+                      mb: { xs: 0.15, md: 1.5 },
+                      fontWeight: 600,
+                    }}
+                  >
+                    {formatINR(product.price)} / {product.unit}
+                  </Typography>
+                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 0.4, mt: 'auto' }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 0, sm: 0.5 } }}>
                       <MinQtyButton
                         atFloor={atFloor}
                         minQty={product.minQty}
@@ -220,26 +263,36 @@ const OrderSection: FC = () => {
                         label={`Decrease ${product.name}`}
                         onDecrease={() => setProductQty(product, qty - 1)}
                       />
-                      <Typography sx={{ minWidth: 28, textAlign: 'center', fontWeight: 700 }}>{qty}</Typography>
+                      <Typography sx={{ minWidth: { xs: 16, md: 28 }, textAlign: 'center', fontWeight: 700, fontSize: { xs: '0.72rem', md: '1rem' } }}>
+                        {qty}
+                      </Typography>
                       <IconButton
                         size="small"
                         aria-label={`Increase ${product.name}`}
                         onClick={() => setProductQty(product, qty + 1)}
+                        sx={{ width: { xs: 26, md: 34 }, height: { xs: 26, md: 34 }, p: { xs: 0.15, md: 0.5 } }}
                       >
-                        <AddIcon fontSize="small" />
+                        <AddIcon sx={{ fontSize: { xs: 16, md: 20 } }} />
                       </IconButton>
                     </Box>
-                    <Typography sx={{ fontWeight: 700, color: '#173B28', fontSize: '1rem', whiteSpace: 'nowrap' }}>
+                    <Typography sx={{ fontWeight: 700, color: '#173B28', fontSize: { xs: '0.68rem', md: '1rem' }, whiteSpace: 'nowrap' }}>
                       {formatINR(product.price * qty)}
                     </Typography>
                   </Box>
                   {inCart ? (
-                    <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 1, mt: 1.5 }}>
+                    <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: { xs: 0.45, md: 1 }, mt: { xs: 0.7, md: 1.5 } }}>
                       <Button
                         variant="outlined"
                         color="primary"
                         onClick={openSheet}
-                        sx={{ py: 0.9 }}
+                        sx={{
+                          minHeight: { xs: 26, md: 40 },
+                          py: { xs: 0.15, md: 0.9 },
+                          px: { xs: 0.4, md: 1.5 },
+                          minWidth: 0,
+                          fontSize: { xs: '0.58rem', md: '0.875rem' },
+                          borderRadius: '8px',
+                        }}
                       >
                         In cart
                       </Button>
@@ -248,7 +301,16 @@ const OrderSection: FC = () => {
                         color="inherit"
                         aria-label={`Remove ${product.name} from cart`}
                         onClick={() => removeProductFromCart(product)}
-                        sx={{ py: 0.9, color: '#5B3A24', borderColor: 'rgba(23,59,40,0.2)' }}
+                        sx={{
+                          minHeight: { xs: 26, md: 40 },
+                          py: { xs: 0.15, md: 0.9 },
+                          px: { xs: 0.4, md: 1.5 },
+                          minWidth: 0,
+                          fontSize: { xs: '0.58rem', md: '0.875rem' },
+                          borderRadius: '8px',
+                          color: '#5B3A24',
+                          borderColor: 'rgba(23,59,40,0.2)',
+                        }}
                       >
                         Remove
                       </Button>
@@ -259,9 +321,17 @@ const OrderSection: FC = () => {
                       variant="contained"
                       color="primary"
                       onClick={() => addProductToCart(product)}
-                      sx={{ mt: 1.5, py: 0.9 }}
+                      sx={{
+                        mt: { xs: 0.7, md: 1.5 },
+                        minHeight: { xs: 26, md: 40 },
+                        py: { xs: 0.15, md: 0.9 },
+                        px: { xs: 0.75, md: 2 },
+                        fontSize: { xs: '0.62rem', md: '0.875rem' },
+                        borderRadius: '8px',
+                      }}
                     >
-                      Add to cart
+                      <Box component="span" sx={{ display: { xs: 'inline', sm: 'none' } }}>Add</Box>
+                      <Box component="span" sx={{ display: { xs: 'none', sm: 'inline' } }}>Add to cart</Box>
                     </Button>
                   )}
                 </Box>

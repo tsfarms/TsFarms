@@ -3,7 +3,7 @@
 // "Himampasanth", "himam pasanth" and "himampasanth" all match those files.
 // The same rule is used for honey and jackfruit.
 
-const bundled = import.meta.glob('../assets/varieties/*.{png,jpg,jpeg,webp,avif}', {
+const bundled = import.meta.glob('../assets/varieties/**/*.{png,jpg,jpeg,webp,avif}', {
   eager: true,
   query: '?url',
   import: 'default',

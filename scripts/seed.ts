@@ -13,7 +13,7 @@ initializeApp({ credential: cert(loadCredential()) })
 const db = getFirestore()
 
 const settings = {
-  farm_name: 'TS Mango Farming',
+  farm_name: 'TS Farms',
   phone: '9843823047',
   phone_secondary: '9600336404',
   whatsapp_primary: '9344904430',

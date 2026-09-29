@@ -259,7 +259,7 @@ const Navbar: FC<NavbarProps> = ({ scrolled, onNavigate }) => {
             fullWidth
             variant="contained"
             color="primary"
-            href={whatsappLink('Hello, I would like to enquire about your products from TS Mango Farming.')}
+            href={whatsappLink('Hello, I would like to enquire about your products from TS Farms.')}
             target="_blank"
             rel="noopener noreferrer"
             sx={{

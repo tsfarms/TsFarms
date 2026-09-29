@@ -37,7 +37,7 @@ const OrderSheet: FC = () => {
     if (Object.keys(next).length > 0 || items.length === 0) return;
 
     const message = buildOrderMessage({
-      farmName: 'TS Mango Farming',
+      farmName: 'TS Farms',
       name: customer.name,
       phone: customer.phone,
       address: customer.address,

@@ -50,7 +50,7 @@ export const sendDeliveryConfirmation = functions.https.onCall(
           to: phone,
           type: 'text',
           text: {
-            body: `✅ Your order from TS Mango Farming has been delivered!\n\nThank you for choosing us. We hope to serve you again soon. 🌿\n\nFor your next order, WhatsApp us anytime.`
+            body: `✅ Your order from TS Farms has been delivered!\n\nThank you for choosing us. We hope to serve you again soon. 🌿\n\nFor your next order, WhatsApp us anytime.`
           },
         }),
       }

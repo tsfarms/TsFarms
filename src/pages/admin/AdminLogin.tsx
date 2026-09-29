@@ -68,7 +68,7 @@ const AdminLogin: FC = () => {
             Admin Login
           </Typography>
           <Typography sx={{ color: '#788267', fontSize: '0.85rem' }}>
-            TS Mango Farming Dashboard
+            TS Farms Dashboard
           </Typography>
         </Box>
 

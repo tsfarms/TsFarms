@@ -132,7 +132,7 @@ const Footer: FC<FooterProps> = ({ onNavigate }) => {
             Thank you for supporting local farming
           </Typography>
           <Typography sx={{ fontSize: '0.8rem', color: 'rgba(255,253,248,0.4)' }}>
-            © 2025 TS Mango Farming. All rights reserved.
+            © 2025 TS Farms. All rights reserved.
           </Typography>
         </Box>
       </Box>

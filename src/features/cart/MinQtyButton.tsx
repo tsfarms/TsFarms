@@ -65,6 +65,9 @@ const MinQtyButton: FC<MinQtyButtonProps> = ({ atFloor, minQty, unit, label, onD
           sx={{
             color: atFloor ? 'rgba(23,59,40,0.38)' : '#173B28',
             cursor: atFloor ? 'not-allowed' : 'pointer',
+            width: { xs: 26, md: 34 },
+            height: { xs: 26, md: 34 },
+            p: { xs: 0.15, md: 0.5 },
           }}
         >
           <RemoveIcon fontSize="small" />

@@ -154,7 +154,7 @@ const Preloader: FC<PreloaderProps> = ({ onComplete }) => {
         <Box
           component="img"
           src="/logo.png"
-          alt="TS Farming"
+          alt="TS Farms"
           width={64}
           height={64}
           sx={{

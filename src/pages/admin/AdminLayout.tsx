@@ -165,7 +165,7 @@ const AdminLayout: FC = () => {
             <MenuIcon />
           </IconButton>
           <Typography sx={{ ml: 2, fontFamily: '"Cormorant Garamond", serif', fontSize: '1.2rem', fontWeight: 600, color: '#173B28' }}>
-            TS Mango Admin
+            TS Farms Admin
           </Typography>
         </Box>
         <Box sx={{ p: { xs: 2, md: 4 } }}>

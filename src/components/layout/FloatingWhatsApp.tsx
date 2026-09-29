@@ -7,7 +7,7 @@ const FloatingWhatsApp: FC = () => {
   return (
     <Box
       component="a"
-      href={whatsappLink('Hello, I would like to enquire about your products from TS Mango Farming.')}
+      href={whatsappLink('Hello, I would like to enquire about your products from TS Farms.')}
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Chat on WhatsApp"
