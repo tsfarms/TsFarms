@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "seed": "ts-node --esm --project tsconfig.scripts.json scripts/seed.ts",
+    "sync": "ts-node --esm --project tsconfig.scripts.json scripts/sync-prices.ts"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -28,7 +30,9 @@
     "eslint": "^9.39.4",
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.5.2",
+    "firebase-admin": "^14.5.0",
     "globals": "^17.4.0",
+    "ts-node": "^10.9.2",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.57.0",
     "vite": "^8.0.1"

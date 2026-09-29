@@ -1,4 +1,22 @@
 {
-  "indexes": [],
+  "indexes": [
+    {
+      "collectionGroup": "varieties",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "category",     "order": "ASCENDING" },
+        { "fieldPath": "is_available", "order": "ASCENDING" },
+        { "fieldPath": "variety_name", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "varieties",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "category",     "order": "ASCENDING" },
+        { "fieldPath": "variety_name", "order": "ASCENDING" }
+      ]
+    }
+  ],
   "fieldOverrides": []
 }

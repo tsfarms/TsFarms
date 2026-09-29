@@ -1,18 +1,15 @@
-import { initializeApp, type FirebaseApp } from 'firebase/app';
 import { getAnalytics, isSupported, type Analytics } from 'firebase/analytics';
-import { getAuth, type Auth } from 'firebase/auth';
-import { getFirestore, type Firestore } from 'firebase/firestore';
 import { getFunctions, type Functions } from 'firebase/functions';
-import { firebaseConfig, functionsRegion, isFirebaseConfigured } from './config';
+import { app, auth, db } from '@/lib/firebase';
+import { firebaseConfig, functionsRegion } from './config';
 
-export const app: FirebaseApp | null = isFirebaseConfigured ? initializeApp(firebaseConfig) : null;
-export const auth: Auth | null = app ? getAuth(app) : null;
-export const db: Firestore | null = app ? getFirestore(app) : null;
-export const functions: Functions | null = app ? getFunctions(app, functionsRegion) : null;
+export { app, auth, db };
+
+export const functions: Functions = getFunctions(app, functionsRegion);
 export let analytics: Analytics | null = null;
 
-if (app && firebaseConfig.measurementId) {
+if (firebaseConfig.measurementId) {
   void isSupported().then((supported) => {
-    if (supported && app) analytics = getAnalytics(app);
+    if (supported) analytics = getAnalytics(app);
   });
 }
