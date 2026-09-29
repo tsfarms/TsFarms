@@ -22,7 +22,7 @@ import { db } from './firebase'
 export interface Variety {
   id:           string
   item_id:      string
-  category:     'Mango' | 'Jackfruit' | 'Honey'
+  category:     string
   variety_name: string
   description:  string
   price:        number
@@ -98,6 +98,16 @@ function toIso(value: unknown): string {
   return ''
 }
 
+function isAvailable(value: unknown): boolean {
+  if (typeof value === 'boolean') return value
+  if (typeof value === 'number') return value === 1
+  if (typeof value === 'string') {
+    const text = value.trim().toLowerCase()
+    return text === 'yes' || text === 'true' || text === '1'
+  }
+  return false
+}
+
 function mapVariety(snap: QueryDocumentSnapshot<DocumentData>): Variety {
   const data = snap.data()
   return {
@@ -108,7 +118,7 @@ function mapVariety(snap: QueryDocumentSnapshot<DocumentData>): Variety {
     description: data.description ?? '',
     price: Number(data.price ?? 0),
     unit: data.unit ?? 'kg',
-    is_available: Boolean(data.is_available),
+    is_available: isAvailable(data.is_available),
     min_order: Number(data.min_order ?? 1),
     updated_at: typeof data.updated_at === 'string' ? data.updated_at : toIso(data.updated_at),
   }
@@ -221,7 +231,7 @@ export async function updateVariety(id: string, data: Partial<Variety>): Promise
 }
 
 export function subscribeToVarietiesByCategory(
-  category: 'Mango' | 'Jackfruit' | 'Honey',
+  category: string,
   callback: (varieties: Variety[]) => void,
 ): () => void {
   const varietiesQuery = query(
@@ -243,9 +253,16 @@ export function subscribeToAllVarieties(
     orderBy('category'),
     orderBy('variety_name'),
   )
-  return onSnapshot(varietiesQuery, (snap) => {
-    callback(groupByCategory(snap.docs.map(mapVariety)))
-  })
+  return onSnapshot(
+    varietiesQuery,
+    (snap) => {
+      callback(groupByCategory(snap.docs.map(mapVariety)))
+    },
+    (err) => {
+      console.error('subscribeToAllVarieties failed', err)
+      callback({})
+    },
+  )
 }
 
 export async function createOrder(order: OrderInsert): Promise<string> {

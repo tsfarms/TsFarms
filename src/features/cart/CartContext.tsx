@@ -42,7 +42,7 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
     customer,
     sheetOpen,
     addItem: (name, category, qty, unit, minQty = 1, price = 0) => {
-      const floor = category === 'mango' ? Math.max(5, minQty) : minQty;
+      const floor = minQty;
       setItems((current) => {
         const existing = current.findIndex(
           (item) => item.productName === name && item.unit === unit,

@@ -12,9 +12,9 @@ function loadCredential(): ServiceAccount {
 initializeApp({ credential: cert(loadCredential()) })
 const db = getFirestore()
 
-const SHEET_ID = process.env.GOOGLE_SHEET_ID!
-const API_KEY  = process.env.GOOGLE_SHEETS_API_KEY!
-const RANGE    = 'Sheet1!A2:H200'
+const SHEET_ID = process.env.GOOGLE_SHEET_ID ?? '1wbAJh2APS5Uy30sgS2wWUffLNcmDkWJwWAsd-z0Tc5w'
+const API_KEY  = process.env.GOOGLE_SHEETS_API_KEY
+const RANGE    = 'Sheet1!A1:H200'
 
 interface SheetRow {
   item_id:      string
@@ -27,49 +27,130 @@ interface SheetRow {
   min_order:    number
 }
 
-async function fetchFromSheet(): Promise<SheetRow[]> {
-  const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}?key=${API_KEY}`
-  const res  = await fetch(url)
+function parseCsv(text: string): string[][] {
+  const rows: string[][] = []
+  let row: string[] = []
+  let cell = ''
+  let quoted = false
 
-  if (!res.ok) {
-    const body = await res.text()
-    throw new Error(`Sheets API ${res.status}: ${body}`)
+  for (let i = 0; i < text.length; i++) {
+    const char = text[i]
+    if (quoted) {
+      if (char === '"') {
+        if (text[i + 1] === '"') {
+          cell += '"'
+          i++
+        } else {
+          quoted = false
+        }
+      } else {
+        cell += char
+      }
+      continue
+    }
+    if (char === '"') {
+      quoted = true
+    } else if (char === ',') {
+      row.push(cell)
+      cell = ''
+    } else if (char === '\n') {
+      row.push(cell)
+      rows.push(row)
+      row = []
+      cell = ''
+    } else if (char !== '\r') {
+      cell += char
+    }
+  }
+  if (cell.length > 0 || row.length > 0) {
+    row.push(cell)
+    rows.push(row)
+  }
+  return rows.filter((entry) => entry.some((value) => value.trim()))
+}
+
+function headerIndex(header: string[], names: string[]): number {
+  return header.findIndex((name) => names.includes(name.trim().toLowerCase()))
+}
+
+function isAvailable(value: string | undefined): boolean {
+  const text = value?.trim().toLowerCase().replace(/[\s-]+/g, '_') ?? ''
+  return text === 'yes' || text === 'true' || text === '1' || text === 'available'
+}
+
+async function fetchGrid(): Promise<string[][]> {
+  if (API_KEY) {
+    const url = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/${RANGE}?key=${API_KEY}`
+    const res = await fetch(url)
+    if (!res.ok) {
+      const body = await res.text()
+      throw new Error(`Sheets API ${res.status}: ${body}`)
+    }
+    const data = await res.json() as { values?: string[][] }
+    return data.values ?? []
   }
 
-  const data = await res.json() as { values?: string[][] }
-  const rows: string[][] = data.values ?? []
+  const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv`
+  const res = await fetch(url)
+  if (!res.ok) {
+    const body = await res.text()
+    throw new Error(`Sheet export ${res.status}: ${body}`)
+  }
+  return parseCsv(await res.text())
+}
 
-  if (rows.length === 0) {
+async function fetchFromSheet(): Promise<SheetRow[]> {
+  const rows = await fetchGrid()
+  if (rows.length < 2) {
     throw new Error('Sheet is empty — aborting to protect existing data')
+  }
+
+  const header = rows[0].map((name) => name.trim().toLowerCase())
+  const itemCol = headerIndex(header, ['item_id'])
+  const categoryCol = headerIndex(header, ['category'])
+  const nameCol = headerIndex(header, ['variety_name', 'variety', 'name'])
+  const descriptionCol = headerIndex(header, ['description'])
+  const priceCol = headerIndex(header, ['price'])
+  const unitCol = headerIndex(header, ['unit'])
+  const availableCol = headerIndex(header, ['is_available', 'available'])
+  const minCol = headerIndex(header, ['min_order', 'minimum_order', 'minium_order'])
+
+  if (itemCol < 0 || categoryCol < 0 || nameCol < 0 || priceCol < 0) {
+    throw new Error('Sheet header must include item_id, category, variety_name, and price')
   }
 
   const parsed: SheetRow[] = []
 
-  for (const [i, row] of rows.entries()) {
-    if (!row[0] || !row[1] || !row[2] || !row[4]) {
-      console.warn(`Row ${i + 2}: missing field — skipped`)
+  for (const [i, row] of rows.slice(1).entries()) {
+    const line = i + 2
+    const itemId = row[itemCol]?.trim()
+    const category = row[categoryCol]?.trim()
+    const varietyName = row[nameCol]?.trim()
+    const priceText = row[priceCol]?.trim()
+    if (!itemId || !category || !varietyName || !priceText) {
+      console.warn(`Row ${line}: missing field — skipped`)
       continue
     }
-    const price = parseFloat(row[4])
+    const price = parseFloat(priceText)
     if (isNaN(price) || price < 0) {
-      console.warn(`Row ${i + 2}: bad price "${row[4]}" — skipped`)
+      console.warn(`Row ${line}: bad price "${priceText}" — skipped`)
       continue
     }
-    const category = row[1].trim()
-    if (!['Mango', 'Jackfruit', 'Honey'].includes(category)) {
-      console.warn(`Row ${i + 2}: unknown category "${category}" — skipped`)
-      continue
-    }
+    const minOrder = minCol >= 0 ? parseFloat(row[minCol]) : 1
     parsed.push({
-      item_id:      row[0].trim(),
+      item_id: itemId,
       category,
-      variety_name: row[2].trim(),
-      description:  row[3]?.trim() ?? '',
+      variety_name: varietyName,
+      description: descriptionCol >= 0 ? row[descriptionCol]?.trim() ?? '' : '',
       price,
-      unit:         row[5]?.trim() ?? 'kg',
-      is_available: row[6]?.trim().toLowerCase() === 'yes',
-      min_order:    parseFloat(row[7]) || 1,
+      unit: unitCol >= 0 && row[unitCol]?.trim() ? row[unitCol].trim() : 'kg',
+      is_available: availableCol >= 0 ? isAvailable(row[availableCol]) : true,
+      min_order: Number.isFinite(minOrder) && minOrder > 0 ? minOrder : 1,
     })
+  }
+
+  if (parsed.length === 0) {
+    throw new Error('No valid rows — aborting to protect existing data')
   }
 
   return parsed

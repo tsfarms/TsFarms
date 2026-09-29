@@ -120,11 +120,11 @@ const theme = createTheme({
           contentVisibility: 'auto',
           containIntrinsicSize: '0 1400px',
         },
-        '#farm, #grow, #mangoes, #jackfruit': {
+        '#farm': {
           contentVisibility: 'auto',
           containIntrinsicSize: '0 900px',
         },
-        '#honey, #farm-story, #tamil-nadu': {
+        '#farm-story': {
           contentVisibility: 'auto',
           containIntrinsicSize: '0 720px',
         },

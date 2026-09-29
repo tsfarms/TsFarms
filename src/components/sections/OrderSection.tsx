@@ -1,4 +1,4 @@
-import { useMemo, useState, type FC } from 'react';
+import { useEffect, useMemo, useState, type FC } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
@@ -8,32 +8,75 @@ import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
 import MinQtyButton from '@/features/cart/MinQtyButton';
 import SectionLabel from '@/components/layout/SectionLabel';
-import { availableShopProducts, formatINR, type ShopProduct } from '@/content/site';
+import { formatINR, type ShopProduct } from '@/content/site';
+import { categoryLabel } from '@/lib/catalog';
+import { loadSheetProducts } from '@/lib/sheetCatalog';
 import { useCart } from '@/features/cart/CartContext';
 import { useReveal } from '@/hooks/useReveal';
 
-const filters: { id: 'all' | ShopProduct['category']; label: string }[] = [
-  { id: 'all', label: 'All' },
-  { id: 'mango', label: 'Mangoes' },
-  { id: 'honey', label: 'Honey' },
-  { id: 'jackfruit', label: 'Jackfruit' },
-];
+const preferredCategories = ['mango', 'honey', 'jackfruit'];
 
 const OrderSection: FC = () => {
   const { items, addItem, updateQty, removeItem, openSheet } = useCart();
   const [query, setQuery] = useState('');
-  const [filter, setFilter] = useState<(typeof filters)[number]['id']>('all');
+  const [filter, setFilter] = useState('all');
   const [draftQty, setDraftQty] = useState<Record<string, number>>({});
+  const [catalog, setCatalog] = useState<ShopProduct[]>([]);
+  const [ready, setReady] = useState(false);
   const [ref, visible] = useReveal<HTMLDivElement>({ threshold: 0.08 });
+
+  useEffect(() => {
+    let active = true;
+    const pull = () => {
+      loadSheetProducts()
+        .then((products) => {
+          if (!active) return;
+          setCatalog(products);
+          setReady(true);
+        })
+        .catch((err: unknown) => {
+          console.error('product sheet failed', err);
+          if (active) setReady(true);
+        });
+    };
+    pull();
+    const timer = window.setInterval(pull, 8000);
+    const onVisible = () => {
+      if (document.visibilityState === 'visible') pull();
+    };
+    window.addEventListener('focus', pull);
+    document.addEventListener('visibilitychange', onVisible);
+    return () => {
+      active = false;
+      window.clearInterval(timer);
+      window.removeEventListener('focus', pull);
+      document.removeEventListener('visibilitychange', onVisible);
+    };
+  }, []);
+
+  const filters = useMemo(() => {
+    const ids = [...new Set(catalog.map((product) => product.category))];
+    ids.sort((a, b) => {
+      const ai = preferredCategories.indexOf(a);
+      const bi = preferredCategories.indexOf(b);
+      if (ai === -1 && bi === -1) return a.localeCompare(b);
+      if (ai === -1) return 1;
+      if (bi === -1) return -1;
+      return ai - bi;
+    });
+    return [{ id: 'all', label: 'All' }, ...ids.map((id) => ({ id, label: categoryLabel(id) }))];
+  }, [catalog]);
+
+  const activeFilter = filter !== 'all' && filters.some((item) => item.id === filter) ? filter : 'all';
 
   const products = useMemo(() => {
     const needle = query.trim().toLowerCase();
-    return availableShopProducts.filter((product) => {
-      if (filter !== 'all' && product.category !== filter) return false;
+    return catalog.filter((product) => {
+      if (activeFilter !== 'all' && product.category !== activeFilter) return false;
       if (!needle) return true;
       return `${product.name} ${product.tagline} ${product.category}`.toLowerCase().includes(needle);
     });
-  }, [filter, query]);
+  }, [activeFilter, catalog, query]);
 
   const cartIndex = (product: ShopProduct) =>
     items.findIndex((item) => item.productName === product.name && item.unit === product.unit);
@@ -120,7 +163,7 @@ const OrderSection: FC = () => {
             <Button
               key={item.id}
               size="small"
-              variant={filter === item.id ? 'contained' : 'outlined'}
+              variant={activeFilter === item.id ? 'contained' : 'outlined'}
               onClick={() => setFilter(item.id)}
               sx={{ borderRadius: 5, px: 2 }}
             >
@@ -227,8 +270,14 @@ const OrderSection: FC = () => {
           })}
         </Box>
 
-        {products.length === 0 && (
-          <Typography sx={{ color: '#5B3A24', mb: 2 }}>No products match that search.</Typography>
+        {!ready && (
+          <Typography sx={{ color: '#5B3A24', mb: 2 }}>Loading varieties…</Typography>
+        )}
+
+        {ready && products.length === 0 && (
+          <Typography sx={{ color: '#5B3A24', mb: 2 }}>
+            {catalog.length === 0 ? 'No varieties are available right now.' : 'No products match that search.'}
+          </Typography>
         )}
 
         {items.length > 0 && (

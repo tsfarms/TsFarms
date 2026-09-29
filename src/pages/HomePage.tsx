@@ -5,12 +5,8 @@ import FloatingWhatsApp from '@/components/layout/FloatingWhatsApp';
 import Footer from '@/components/layout/Footer';
 import Hero from '@/components/sections/Hero';
 import OurFarm from '@/components/sections/OurFarm';
-import WhatWeGrow from '@/components/sections/WhatWeGrow';
-import EveryPart from '@/components/sections/EveryPart';
-import JackfruitParts from '@/components/sections/JackfruitParts';
-import Honey from '@/components/sections/Honey';
+import ProduceBenefits from '@/components/sections/ProduceBenefits';
 import FarmStory from '@/components/sections/FarmStory';
-import TamilNadu from '@/components/sections/TamilNadu';
 import Gallery from '@/components/sections/Gallery';
 import Testimonials from '@/components/sections/Testimonials';
 import Contact from '@/components/sections/Contact';
@@ -52,12 +48,8 @@ const HomePage: FC = () => {
       <Hero onNavigate={handleNavigate} />
       <OrderSection />
       <OurFarm />
-      <WhatWeGrow />
-      <EveryPart />
-      <JackfruitParts />
-      <Honey />
+      <ProduceBenefits />
       <FarmStory />
-      <TamilNadu />
       <Gallery />
       <Testimonials />
       <Contact />

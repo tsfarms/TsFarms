@@ -1,5 +1,9 @@
 export type StockStatus = 'in_stock' | 'low_stock' | 'out_of_stock';
 
+import mangoBenefitImage from '@/assets/benefits/mango.png';
+import honeyBenefitImage from '@/assets/benefits/honey.jpg';
+import jackfruitBenefitImage from '@/assets/benefits/jackfruit.jpg';
+
 export interface MangoVariety {
   id: string;
   name: string;
@@ -50,12 +54,6 @@ const px = (url: string, w = 1200) => `${url.split('?')[0]}?auto=compress&cs=tin
 export const heroImage = px('https://images.pexels.com/photos/28903096/pexels-photo-28903096.jpeg', 1920);
 export const farmImage = px('https://images.pexels.com/photos/16563022/pexels-photo-16563022.jpeg', 1200);
 export const farmStoryImage = px('https://images.pexels.com/photos/4418674/pexels-photo-4418674.jpeg', 1600);
-
-export const productImages = {
-  mangoes: px('https://images.pexels.com/photos/7543169/pexels-photo-7543169.jpeg', 800),
-  honey: px('https://images.pexels.com/photos/33166864/pexels-photo-33166864.jpeg', 800),
-  jackfruit: px('https://images.pexels.com/photos/11669555/pexels-photo-11669555.jpeg', 800),
-};
 
 export const mangoVarieties: MangoVariety[] = [
   {
@@ -181,7 +179,7 @@ export interface OtherFarmProduct {
 export interface ShopProduct {
   id: string;
   name: string;
-  category: 'mango' | 'honey' | 'jackfruit';
+  category: string;
   tagline: string;
   unitLabel: string;
   unit: string;
@@ -265,61 +263,68 @@ export const shopProducts: ShopProduct[] = [
 
 export const availableShopProducts = shopProducts.filter((product) => product.stockStatus !== 'out_of_stock');
 
-export const mangoParts = [
+export type ProduceBenefit = {
+  label: string;
+  x: string;
+  y: string;
+  align: 'left' | 'right' | 'center';
+  arrow: 'ne' | 'nw' | 'se' | 'sw' | 's';
+};
+
+export type ProduceBenefitCard = {
+  id: string;
+  product: string;
+  kicker: string;
+  image: string;
+  imageAlt: string;
+  benefits: ProduceBenefit[];
+};
+
+export const produceBenefits: ProduceBenefitCard[] = [
   {
-    name: 'Mango Flesh',
-    description:
-      'Eaten fresh, in juices, smoothies, desserts and traditional sweets.',
-    image: px('https://images.pexels.com/photos/16724967/pexels-photo-16724967.jpeg', 800),
+    id: 'mangoes',
+    product: 'Mango',
+    kicker: 'For nutrition and health',
+    image: mangoBenefitImage,
+    imageAlt: 'Cubed ripe mango with leaves',
+    benefits: [
+      { label: 'rich in vitamin C', x: '4%', y: '18%', align: 'right', arrow: 'ne' },
+      { label: 'boosts immunity', x: '96%', y: '16%', align: 'left', arrow: 'nw' },
+      { label: 'supports eye health', x: '6%', y: '78%', align: 'right', arrow: 'se' },
+      { label: 'aids digestion', x: '50%', y: '92%', align: 'center', arrow: 's' },
+      { label: 'promotes glowing skin', x: '96%', y: '76%', align: 'left', arrow: 'sw' },
+    ],
   },
   {
-    name: 'Mango Peel',
-    description:
-      'Used in chutneys, pickles and traditional preparations.',
-    image: px('https://images.pexels.com/photos/7812134/pexels-photo-7812134.jpeg', 800),
+    id: 'honey',
+    product: 'Honey',
+    kicker: 'For nutrition and health',
+    image: honeyBenefitImage,
+    imageAlt: 'Honey jar with dipper and honeycomb',
+    benefits: [
+      { label: 'rich in antioxidants', x: '4%', y: '18%', align: 'right', arrow: 'ne' },
+      { label: 'boosts immunity', x: '96%', y: '16%', align: 'left', arrow: 'nw' },
+      { label: 'supports digestive health', x: '6%', y: '78%', align: 'right', arrow: 'se' },
+      { label: 'provides natural energy', x: '50%', y: '92%', align: 'center', arrow: 's' },
+      { label: 'promotes healthy skin', x: '96%', y: '76%', align: 'left', arrow: 'sw' },
+    ],
   },
   {
-    name: 'Mango Seed',
-    description:
-      'The kernel is used in traditional cooking and natural remedies.',
-    image: px('https://images.pexels.com/photos/5750474/pexels-photo-5750474.jpeg', 800),
-  },
-  {
-    name: 'Mango Leaves',
-    description:
-      'Used for herbal tea and in traditional home remedies.',
-    image: px('https://images.pexels.com/photos/4792183/pexels-photo-4792183.jpeg', 800),
+    id: 'jackfruit',
+    product: 'Jackfruit',
+    kicker: 'For nutrition and health',
+    image: jackfruitBenefitImage,
+    imageAlt: 'Whole and cut jackfruit',
+    benefits: [
+      { label: 'rich in vitamins & minerals', x: '4%', y: '18%', align: 'right', arrow: 'ne' },
+      { label: 'boosts immunity', x: '96%', y: '16%', align: 'left', arrow: 'nw' },
+      { label: 'supports heart health', x: '6%', y: '78%', align: 'right', arrow: 'se' },
+      { label: 'aids digestion', x: '50%', y: '92%', align: 'center', arrow: 's' },
+      { label: 'promotes healthy skin', x: '96%', y: '76%', align: 'left', arrow: 'sw' },
+    ],
   },
 ];
 
-export const jackfruitParts = [
-  {
-    name: 'Jackfruit Flesh',
-    description:
-      'Sweet bulbs enjoyed fresh, in curries, desserts and seasonal farm dishes.',
-    image: px('https://images.pexels.com/photos/5620868/pexels-photo-5620868.jpeg', 800),
-  },
-  {
-    name: 'Jackfruit Seed',
-    description:
-      'Boiled or roasted, the seeds are a traditional snack and cooking staple.',
-    image: px('https://images.pexels.com/photos/11669555/pexels-photo-11669555.jpeg', 800),
-  },
-  {
-    name: 'Jackfruit Rind',
-    description:
-      'Used in pickles and rustic preparations so nothing from the fruit is wasted.',
-    image: px('https://images.pexels.com/photos/6871015/pexels-photo-6871015.jpeg', 800),
-  },
-  {
-    name: 'Jackfruit Leaves',
-    description:
-      'Used as natural wrappers and in traditional cooking around the farm.',
-    image: px('https://images.pexels.com/photos/7529893/pexels-photo-7529893.jpeg', 800),
-  },
-];
-
-export const honeyImage = px('https://images.pexels.com/photos/9106164/pexels-photo-9106164.jpeg', 1200);
 export const galleryImages = [
   { src: px('https://images.pexels.com/photos/28903096/pexels-photo-28903096.jpeg', 800), alt: 'Mango orchard at golden hour', span: 'large' as const },
   { src: px('https://images.pexels.com/photos/11911951/pexels-photo-11911951.jpeg', 600), alt: 'Freshly harvested mangoes in a basket', span: 'tall' as const },
