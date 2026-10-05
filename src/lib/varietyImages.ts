@@ -1,9 +1,8 @@
-// Drop variety photos in src/assets/varieties.
-// Name them after the variety, then a number: himampasanth1.jpg, himampasanth2.png.
-// "Himampasanth", "himam pasanth" and "himampasanth" all match those files.
-// The same rule is used for honey and jackfruit.
+// Product photos live in src/assets/mango, src/assets/honey, and src/assets/jackfruit.
+// Name the file after the variety: alphonsa.jpg, mountain-bee-honey.jpg.
+// Optional numbers still work: palur2.jpg.
 
-const bundled = import.meta.glob('../assets/varieties/**/*.{png,jpg,jpeg,webp,avif}', {
+const bundled = import.meta.glob('../assets/{mango,honey,jackfruit}/*.{png,jpg,jpeg,webp,avif}', {
   eager: true,
   query: '?url',
   import: 'default',
@@ -15,6 +14,7 @@ export function varietySlug(name: string): string {
   return name
     .toLowerCase()
     .normalize('NFKD')
+    .replace(/stringless/g, 'stingless')
     .replace(/[^a-z0-9]+/g, '')
 }
 

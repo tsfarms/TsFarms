@@ -83,7 +83,8 @@ const ProduceBenefits: FC = () => {
         position: 'relative',
         bgcolor: '#F6F1E7',
         overflow: 'hidden',
-        py: { xs: 6, md: 9 },
+        pt: { xs: 8, md: 14 },
+        pb: { xs: 10, md: 16 },
       }}
     >
       {produceBenefits.map((card) => (

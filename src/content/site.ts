@@ -3,6 +3,10 @@ export type StockStatus = 'in_stock' | 'low_stock' | 'out_of_stock';
 import mangoBenefitImage from '@/assets/benefits/mango.png';
 import honeyBenefitImage from '@/assets/benefits/honey.jpg';
 import jackfruitBenefitImage from '@/assets/benefits/jackfruit.jpg';
+import stinglessBeeImage from '@/assets/honey/stingless-bee-honey.jpg';
+import mountainBeeImage from '@/assets/honey/mountain-bee-honey.jpg';
+import palurImage from '@/assets/jackfruit/palur.jpg';
+import galleryBeekeepersImage from '@/assets/gallery/beekeepers.jpg';
 
 export interface MangoVariety {
   id: string;
@@ -204,7 +208,7 @@ export const otherFarmProducts: OtherFarmProduct[] = [
     unit: 'Per KG',
     price: 720,
     stockStatus: 'in_stock',
-    image: px('https://images.pexels.com/photos/9106164/pexels-photo-9106164.jpeg', 800),
+    image: stinglessBeeImage,
   },
   {
     id: 'mountain-honey',
@@ -217,7 +221,7 @@ export const otherFarmProducts: OtherFarmProduct[] = [
     unit: 'Per KG',
     price: 720,
     stockStatus: 'in_stock',
-    image: px('https://images.pexels.com/photos/33166864/pexels-photo-33166864.jpeg', 800),
+    image: mountainBeeImage,
   },
   {
     id: 'palur-1',
@@ -230,7 +234,7 @@ export const otherFarmProducts: OtherFarmProduct[] = [
     unit: 'Per KG',
     price: 260,
     stockStatus: 'in_stock',
-    image: px('https://images.pexels.com/photos/6871015/pexels-photo-6871015.jpeg', 800),
+    image: palurImage,
   },
 ];
 
@@ -327,10 +331,10 @@ export const produceBenefits: ProduceBenefitCard[] = [
 
 export const galleryImages = [
   { src: px('https://images.pexels.com/photos/28903096/pexels-photo-28903096.jpeg', 800), alt: 'Mango orchard at golden hour', span: 'large' as const },
+  { src: galleryBeekeepersImage, alt: 'Beekeepers holding a honeycomb frame', span: 'tall' as const },
   { src: px('https://images.pexels.com/photos/11911951/pexels-photo-11911951.jpeg', 600), alt: 'Freshly harvested mangoes in a basket', span: 'tall' as const },
   { src: px('https://images.pexels.com/photos/4418675/pexels-photo-4418675.jpeg', 800), alt: 'Mango tree laden with fruit', span: 'wide' as const },
   { src: px('https://images.pexels.com/photos/12639142/pexels-photo-12639142.jpeg', 600), alt: 'Close-up of ripe mango on tree', span: 'normal' as const },
-  { src: px('https://images.pexels.com/photos/9106164/pexels-photo-9106164.jpeg', 600), alt: 'Farm honey jar on wooden table', span: 'tall' as const },
   { src: px('https://images.pexels.com/photos/6871015/pexels-photo-6871015.jpeg', 800), alt: 'Jackfruit on the tree', span: 'wide' as const },
   { src: px('https://images.pexels.com/photos/7529893/pexels-photo-7529893.jpeg', 600), alt: 'Mango leaves in morning light', span: 'normal' as const },
   { src: px('https://images.pexels.com/photos/24029945/pexels-photo-24029945.jpeg', 800), alt: 'Bright yellow mangoes arranged in a tray', span: 'large' as const },

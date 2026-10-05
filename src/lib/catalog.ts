@@ -1,9 +1,9 @@
-import mangoImage from '@/assets/varieties/alphonsa1.jpg'
-import honeyImage from '@/assets/varieties/honey1.jpg'
-import jackfruitImage from '@/assets/varieties/palur1.jpg'
+import mangoImage from '@/assets/mango/alphonsa.jpg'
+import honeyImage from '@/assets/honey/honey.jpg'
+import jackfruitImage from '@/assets/jackfruit/palur.jpg'
 import type { ShopProduct } from '@/content/site'
 import type { Variety } from './db'
-import { varietyPlaceholder } from './varietyImages'
+import { imagesForVariety, varietyPlaceholder } from './varietyImages'
 
 const categoryLabels: Record<string, string> = {
   mango: 'Mangoes',
@@ -36,6 +36,7 @@ export function varietyToShopProduct(variety: Variety): ShopProduct | null {
   if (!variety.is_available || !variety.variety_name.trim()) return null
   const category = categoryId(variety.category || 'Other')
   const minQty = Number(variety.min_order)
+  const images = imagesForVariety(variety.variety_name, variety.item_id)
   return {
     id: variety.item_id || variety.id,
     name: variety.variety_name.trim(),
@@ -45,7 +46,7 @@ export function varietyToShopProduct(variety: Variety): ShopProduct | null {
     unit: displayUnit(variety.unit || 'kg'),
     minQty: Number.isFinite(minQty) && minQty > 0 ? minQty : 1,
     price: Number(variety.price) || 0,
-    image: categoryImages[category] ?? varietyPlaceholder,
+    image: images[0] ?? categoryImages[category] ?? varietyPlaceholder,
     stockStatus: 'in_stock',
   }
 }
