@@ -1,4 +1,4 @@
-import mangoImage from '@/assets/mango/alphonsa.jpg'
+import mangoImage from '@/assets/mango/alphonsa.png'
 import honeyImage from '@/assets/honey/honey.jpg'
 import jackfruitImage from '@/assets/jackfruit/palur.jpg'
 import type { ShopProduct } from '@/content/site'

@@ -1,5 +1,5 @@
 // Product photos live in src/assets/mango, src/assets/honey, and src/assets/jackfruit.
-// Name the file after the variety: alphonsa.jpg, mountain-bee-honey.jpg.
+// Name the file after the variety: alphonsa.png, mountain-bee-honey.jpg.
 // Optional numbers still work: palur2.jpg.
 
 const bundled = import.meta.glob('../assets/{mango,honey,jackfruit}/*.{png,jpg,jpeg,webp,avif}', {
@@ -15,6 +15,13 @@ export function varietySlug(name: string): string {
     .toLowerCase()
     .normalize('NFKD')
     .replace(/stringless/g, 'stingless')
+    .replace(/alphonso/g, 'alphonsa')
+    .replace(/banganapalli|banganapali/g, 'bangnapali')
+    .replace(/himampasanth|himampasand|imampasand|himprasad/g, 'himprashad')
+    .replace(/thothapuri|totapuri/g, 'thotha')
+    .replace(/senduram/g, 'sendhuram')
+    .replace(/kalla\s*mango/g, 'kallamanga')
+    .replace(/grapes?\s*mango/g, 'grapesmango')
     .replace(/[^a-z0-9]+/g, '')
 }
 

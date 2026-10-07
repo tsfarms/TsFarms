@@ -7,6 +7,13 @@ import stinglessBeeImage from '@/assets/honey/stingless-bee-honey.jpg';
 import mountainBeeImage from '@/assets/honey/mountain-bee-honey.jpg';
 import palurImage from '@/assets/jackfruit/palur.jpg';
 import galleryBeekeepersImage from '@/assets/gallery/beekeepers.jpg';
+import alphonsaImage from '@/assets/mango/alphonsa.png';
+import bangnapaliImage from '@/assets/mango/bangnapali.png';
+import himprashadImage from '@/assets/mango/himprashad.png';
+import mallikaImage from '@/assets/mango/mallika.png';
+import neelamImage from '@/assets/mango/neelam.png';
+import sendhuramImage from '@/assets/mango/sendhuram.png';
+import thothaImage from '@/assets/mango/Thotha.png';
 
 export interface MangoVariety {
   id: string;
@@ -73,7 +80,7 @@ export const mangoVarieties: MangoVariety[] = [
     pricePerKg: 190,
     stockStatus: 'in_stock',
     minOrderKg: 5,
-    image: px('https://images.pexels.com/photos/38348330/pexels-photo-38348330.jpeg', 800),
+    image: alphonsaImage,
   },
   {
     id: 'imam-pasand',
@@ -88,7 +95,7 @@ export const mangoVarieties: MangoVariety[] = [
     pricePerKg: 240,
     stockStatus: 'in_stock',
     minOrderKg: 5,
-    image: px('https://images.pexels.com/photos/30741699/pexels-photo-30741699.jpeg', 800),
+    image: himprashadImage,
   },
   {
     id: 'mallika',
@@ -103,7 +110,7 @@ export const mangoVarieties: MangoVariety[] = [
     pricePerKg: 160,
     stockStatus: 'in_stock',
     minOrderKg: 5,
-    image: px('https://images.pexels.com/photos/17546507/pexels-photo-17546507.jpeg', 800),
+    image: mallikaImage,
   },
   {
     id: 'senduram',
@@ -118,7 +125,7 @@ export const mangoVarieties: MangoVariety[] = [
     pricePerKg: 140,
     stockStatus: 'in_stock',
     minOrderKg: 5,
-    image: px('https://images.pexels.com/photos/7543212/pexels-photo-7543212.jpeg', 800),
+    image: sendhuramImage,
   },
   {
     id: 'banganapalli',
@@ -133,7 +140,7 @@ export const mangoVarieties: MangoVariety[] = [
     pricePerKg: 150,
     stockStatus: 'in_stock',
     minOrderKg: 5,
-    image: px('https://images.pexels.com/photos/38793235/pexels-photo-38793235.jpeg', 800),
+    image: bangnapaliImage,
   },
   {
     id: 'thothapuri',
@@ -148,7 +155,7 @@ export const mangoVarieties: MangoVariety[] = [
     pricePerKg: 110,
     stockStatus: 'in_stock',
     minOrderKg: 5,
-    image: px('https://images.pexels.com/photos/12303101/pexels-photo-12303101.jpeg', 800),
+    image: thothaImage,
   },
   {
     id: 'neelam',
@@ -163,7 +170,7 @@ export const mangoVarieties: MangoVariety[] = [
     pricePerKg: 130,
     stockStatus: 'in_stock',
     minOrderKg: 5,
-    image: px('https://images.pexels.com/photos/5629821/pexels-photo-5629821.jpeg', 800),
+    image: neelamImage,
   },
 ];
 
