@@ -29,6 +29,7 @@ export interface Variety {
   unit:         string
   is_available: boolean
   min_order:    number
+  qty_step:     number
   updated_at:   string
 }
 
@@ -120,6 +121,7 @@ function mapVariety(snap: QueryDocumentSnapshot<DocumentData>): Variety {
     unit: data.unit ?? 'kg',
     is_available: isAvailable(data.is_available),
     min_order: Number(data.min_order ?? 1),
+    qty_step: Number(data.qty_step ?? data.increasing ?? 1),
     updated_at: typeof data.updated_at === 'string' ? data.updated_at : toIso(data.updated_at),
   }
 }

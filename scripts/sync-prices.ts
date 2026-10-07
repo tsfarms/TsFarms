@@ -14,7 +14,7 @@ const db = getFirestore()
 
 const SHEET_ID = process.env.GOOGLE_SHEET_ID ?? '1wbAJh2APS5Uy30sgS2wWUffLNcmDkWJwWAsd-z0Tc5w'
 const API_KEY  = process.env.GOOGLE_SHEETS_API_KEY
-const RANGE    = 'Sheet1!A1:H200'
+const RANGE    = 'Sheet1!A1:Z200'
 
 interface SheetRow {
   item_id:      string
@@ -25,6 +25,7 @@ interface SheetRow {
   unit:         string
   is_available: boolean
   min_order:    number
+  qty_step:     number
 }
 
 function parseCsv(text: string): string[][] {
@@ -114,6 +115,7 @@ async function fetchFromSheet(): Promise<SheetRow[]> {
   const unitCol = headerIndex(header, ['unit'])
   const availableCol = headerIndex(header, ['is_available', 'available'])
   const minCol = headerIndex(header, ['min_order', 'minimum_order', 'minium_order'])
+  const stepCol = headerIndex(header, ['increasing', 'increment', 'qty_step', 'step'])
 
   if (itemCol < 0 || categoryCol < 0 || nameCol < 0 || priceCol < 0) {
     throw new Error('Sheet header must include item_id, category, variety_name, and price')
@@ -137,6 +139,7 @@ async function fetchFromSheet(): Promise<SheetRow[]> {
       continue
     }
     const minOrder = minCol >= 0 ? parseFloat(row[minCol]) : 1
+    const qtyStep = stepCol >= 0 ? parseFloat(row[stepCol]) : 1
     parsed.push({
       item_id: itemId,
       category,
@@ -146,6 +149,7 @@ async function fetchFromSheet(): Promise<SheetRow[]> {
       unit: unitCol >= 0 && row[unitCol]?.trim() ? row[unitCol].trim() : 'kg',
       is_available: availableCol >= 0 ? isAvailable(row[availableCol]) : true,
       min_order: Number.isFinite(minOrder) && minOrder > 0 ? minOrder : 1,
+      qty_step: Number.isFinite(qtyStep) && qtyStep > 0 ? qtyStep : 1,
     })
   }
 

@@ -28,6 +28,11 @@ function headerIndex(labels: string[], names: string[]): number {
   return labels.findIndex((label) => names.includes(label.trim().toLowerCase()))
 }
 
+function parsePositive(value: string, fallback: number): number {
+  const parsed = Number(value)
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback
+}
+
 export function productsFromSheet(payload: SheetPayload): ShopProduct[] {
   const labels = payload.table.cols.map((col) => col.label ?? '')
   const itemCol = headerIndex(labels, ['item_id'])
@@ -38,6 +43,7 @@ export function productsFromSheet(payload: SheetPayload): ShopProduct[] {
   const unitCol = headerIndex(labels, ['unit'])
   const availableCol = headerIndex(labels, ['is_available', 'available'])
   const minCol = headerIndex(labels, ['min_order', 'minimum_order', 'minium_order'])
+  const stepCol = headerIndex(labels, ['increasing', 'increment', 'qty_step', 'step'])
 
   if (itemCol < 0 || categoryCol < 0 || nameCol < 0 || priceCol < 0) return []
 
@@ -49,7 +55,8 @@ export function productsFromSheet(payload: SheetPayload): ShopProduct[] {
     if (!varietyName || !category || !Number.isFinite(price)) return []
     const availableText = availableCol >= 0 ? cellText(cells[availableCol]) : 'Available'
     if (!isAvailable(availableText)) return []
-    const minOrder = minCol >= 0 ? Number(cellText(cells[minCol])) : 1
+    const minOrder = minCol >= 0 ? parsePositive(cellText(cells[minCol]), 1) : 1
+    const qtyStep = stepCol >= 0 ? parsePositive(cellText(cells[stepCol]), 1) : 1
     const variety: Variety = {
       id: cellText(cells[itemCol]) || varietyName,
       item_id: cellText(cells[itemCol]) || varietyName,
@@ -59,7 +66,8 @@ export function productsFromSheet(payload: SheetPayload): ShopProduct[] {
       price,
       unit: unitCol >= 0 && cellText(cells[unitCol]) ? cellText(cells[unitCol]) : 'kg',
       is_available: true,
-      min_order: Number.isFinite(minOrder) && minOrder > 0 ? minOrder : 1,
+      min_order: minOrder,
+      qty_step: qtyStep,
       updated_at: '',
     }
     const product = varietyToShopProduct(variety)

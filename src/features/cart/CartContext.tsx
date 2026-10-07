@@ -6,6 +6,7 @@ export interface CartItem {
   qty: number;
   unit: string;
   minQty: number;
+  qtyStep: number;
   price: number;
 }
 
@@ -19,7 +20,7 @@ interface CartContextValue {
   items: CartItem[];
   customer: CustomerDetails;
   sheetOpen: boolean;
-  addItem: (name: string, category: string, qty: number, unit: string, minQty?: number, price?: number) => void;
+  addItem: (name: string, category: string, qty: number, unit: string, minQty?: number, price?: number, qtyStep?: number) => void;
   removeItem: (index: number) => void;
   updateQty: (index: number, qty: number) => void;
   setCustomer: (field: keyof CustomerDetails, value: string) => void;
@@ -41,20 +42,21 @@ export const CartProvider: FC<{ children: ReactNode }> = ({ children }) => {
     items,
     customer,
     sheetOpen,
-    addItem: (name, category, qty, unit, minQty = 1, price = 0) => {
+    addItem: (name, category, qty, unit, minQty = 1, price = 0, qtyStep = 1) => {
       const floor = minQty;
+      const step = qtyStep > 0 ? qtyStep : 1;
       setItems((current) => {
         const existing = current.findIndex(
           (item) => item.productName === name && item.unit === unit,
         );
         if (existing >= 0) {
           return current.map((item, index) =>
-            index === existing ? { ...item, qty: item.qty + qty, price } : item,
+            index === existing ? { ...item, qty: item.qty + qty, price, qtyStep: step } : item,
           );
         }
         return [
           ...current,
-          { productName: name, category, qty: Math.max(floor, qty), unit, minQty: floor, price },
+          { productName: name, category, qty: Math.max(floor, qty), unit, minQty: floor, qtyStep: step, price },
         ];
       });
     },

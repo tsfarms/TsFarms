@@ -105,7 +105,7 @@ const OrderSection: FC = () => {
       updateQty(index, qty);
       return;
     }
-    addItem(product.name, product.category, qty, product.unit, product.minQty, product.price);
+    addItem(product.name, product.category, qty, product.unit, product.minQty, product.price, product.qtyStep);
   };
 
   const removeProductFromCart = (product: ShopProduct) => {
@@ -261,7 +261,7 @@ const OrderSection: FC = () => {
                         minQty={product.minQty}
                         unit={product.unit}
                         label={`Decrease ${product.name}`}
-                        onDecrease={() => setProductQty(product, qty - 1)}
+                        onDecrease={() => setProductQty(product, qty - product.qtyStep)}
                       />
                       <Typography sx={{ minWidth: { xs: 16, md: 28 }, textAlign: 'center', fontWeight: 700, fontSize: { xs: '0.72rem', md: '1rem' } }}>
                         {qty}
@@ -269,7 +269,7 @@ const OrderSection: FC = () => {
                       <IconButton
                         size="small"
                         aria-label={`Increase ${product.name}`}
-                        onClick={() => setProductQty(product, qty + 1)}
+                        onClick={() => setProductQty(product, qty + product.qtyStep)}
                         sx={{ width: { xs: 26, md: 34 }, height: { xs: 26, md: 34 }, p: { xs: 0.15, md: 0.5 } }}
                       >
                         <AddIcon sx={{ fontSize: { xs: 16, md: 20 } }} />

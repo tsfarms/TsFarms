@@ -195,6 +195,7 @@ export interface ShopProduct {
   unitLabel: string;
   unit: string;
   minQty: number;
+  qtyStep: number;
   price: number;
   image: string;
   stockStatus: StockStatus;
@@ -254,6 +255,7 @@ export const shopProducts: ShopProduct[] = [
     unitLabel: variety.unit,
     unit: 'KG',
     minQty: 5,
+    qtyStep: 1,
     price: variety.pricePerKg,
     image: variety.image,
     stockStatus: variety.stockStatus,
@@ -266,6 +268,7 @@ export const shopProducts: ShopProduct[] = [
     unitLabel: product.unit,
     unit: 'KG',
     minQty: 1,
+    qtyStep: 1,
     price: product.price,
     image: product.image,
     stockStatus: product.stockStatus,

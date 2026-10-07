@@ -126,10 +126,10 @@ const OrderSheet: FC = () => {
                     minQty={item.minQty}
                     unit={item.unit}
                     label="Decrease quantity"
-                    onDecrease={() => updateQty(index, item.qty - 1)}
+                    onDecrease={() => updateQty(index, item.qty - (item.qtyStep || 1))}
                   />
                   <Typography sx={{ minWidth: 20, textAlign: 'center' }}>{item.qty}</Typography>
-                  <IconButton size="small" aria-label="Increase quantity" onClick={() => updateQty(index, item.qty + 1)}>
+                  <IconButton size="small" aria-label="Increase quantity" onClick={() => updateQty(index, item.qty + (item.qtyStep || 1))}>
                     <AddIcon fontSize="small" />
                   </IconButton>
                   <Button size="small" color="inherit" onClick={() => removeItem(index)}>

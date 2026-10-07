@@ -36,6 +36,7 @@ export function varietyToShopProduct(variety: Variety): ShopProduct | null {
   if (!variety.is_available || !variety.variety_name.trim()) return null
   const category = categoryId(variety.category || 'Other')
   const minQty = Number(variety.min_order)
+  const qtyStep = Number(variety.qty_step)
   const images = imagesForVariety(variety.variety_name, variety.item_id)
   return {
     id: variety.item_id || variety.id,
@@ -45,6 +46,7 @@ export function varietyToShopProduct(variety: Variety): ShopProduct | null {
     unitLabel: `Per ${displayUnit(variety.unit || 'kg')}`,
     unit: displayUnit(variety.unit || 'kg'),
     minQty: Number.isFinite(minQty) && minQty > 0 ? minQty : 1,
+    qtyStep: Number.isFinite(qtyStep) && qtyStep > 0 ? qtyStep : 1,
     price: Number(variety.price) || 0,
     image: images[0] ?? categoryImages[category] ?? varietyPlaceholder,
     stockStatus: 'in_stock',
