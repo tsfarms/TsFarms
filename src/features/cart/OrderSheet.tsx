@@ -12,7 +12,7 @@ import AddIcon from '@mui/icons-material/Add';
 import MinQtyButton from '@/features/cart/MinQtyButton';
 import { useCart } from '@/features/cart/CartContext';
 import { buildOrderMessage, openOrderWhatsApp } from '@/features/cart/orderWhatsApp';
-import { formatINR, getUpiId } from '@/content/site';
+import { formatINR, getUpiIds } from '@/content/site';
 
 const OrderSheet: FC = () => {
   const {
@@ -184,9 +184,13 @@ const OrderSheet: FC = () => {
               helperText={errors.address}
             />
             <Typography sx={{ color: '#5B3A24', fontSize: '0.9rem' }}>
-              Pay the full amount via UPI when you send this order on WhatsApp. UPI ID: {getUpiId()}. Share the payment
-              screenshot in the chat.
+              Pay the full amount via UPI and send the payment screenshot in the WhatsApp chat.
             </Typography>
+            {getUpiIds().map((id) => (
+              <Typography key={id} sx={{ color: '#173B28', fontSize: '0.9rem', fontWeight: 600 }}>
+                UPI ID: {id}
+              </Typography>
+            ))}
             <Button
               variant="contained"
               color="primary"

@@ -6,7 +6,7 @@ import { heroImage } from '@/content/site';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 
 interface HeroProps {
-  onNavigate: (target: string) => void;
+  onNavigate: (target: string, options?: { filter?: string }) => void;
 }
 
 interface LeafParticle {
@@ -349,7 +349,7 @@ const Hero: FC<HeroProps> = ({ onNavigate }) => {
           </Button>
           <Button
             variant="outlined"
-            onClick={() => onNavigate('farm')}
+            onClick={() => onNavigate('/our-farm')}
             sx={{
               color: '#FFFDF8',
               borderColor: 'rgba(255,253,248,0.4)',

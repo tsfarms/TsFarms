@@ -19,7 +19,8 @@ const settings = {
   whatsapp_primary: '9344904430',
   instagram: 'ts.farming',
   email: 'ts.farmingts@gmail.com',
-  upi_id: '9965053956@upi',
+  upi_id: '9344904430@ybl',
+  upi_id_2: '9344904430-2@ybl',
 }
 
 const varieties = [

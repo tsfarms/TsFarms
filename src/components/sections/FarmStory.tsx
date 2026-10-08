@@ -6,7 +6,7 @@ import { farmStoryImage } from '@/content/site';
 import { useReveal } from '@/hooks/useReveal';
 
 interface FarmStoryProps {
-  onNavigate?: (target: string) => void;
+  onNavigate?: (target: string, options?: { filter?: string }) => void;
 }
 
 const FarmStory: FC<FarmStoryProps> = ({ onNavigate }) => {
@@ -82,7 +82,7 @@ const FarmStory: FC<FarmStoryProps> = ({ onNavigate }) => {
         </Typography>
         <Button
           variant="outlined"
-          onClick={() => onNavigate?.('farm')}
+          onClick={() => onNavigate?.('/our-farm')}
           sx={{
             color: '#FFFDF8',
             borderColor: 'rgba(255,253,248,0.7)',

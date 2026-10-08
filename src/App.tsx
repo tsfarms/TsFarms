@@ -4,6 +4,7 @@ import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import theme from '@/theme';
 import HomePage from '@/pages/HomePage';
+import OurFarmPage from '@/pages/OurFarmPage';
 import { CartProvider } from '@/features/cart/CartContext';
 
 const AdminLogin = lazy(() => import('@/pages/admin/AdminLogin'));
@@ -24,6 +25,7 @@ function App() {
           <Suspense fallback={null}>
             <Routes>
               <Route path="/" element={<HomePage />} />
+              <Route path="/our-farm" element={<OurFarmPage />} />
               <Route path="/admin/login" element={<AdminLogin />} />
               <Route path="/admin" element={<AdminLayout />}>
                 <Route index element={<AdminDashboard />} />

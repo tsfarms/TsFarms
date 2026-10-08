@@ -5,7 +5,7 @@ import Paper from '@mui/material/Paper';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Alert from '@mui/material/Alert';
-import { EMAIL, INSTAGRAM_HANDLE, PHONE, PHONE_SECONDARY, WHATSAPP_PRIMARY } from '@/content/site';
+import { EMAIL, INSTAGRAM_HANDLE, PHONE, PHONE_SECONDARY, UPI_ID, UPI_ID_SECONDARY, WHATSAPP_PRIMARY } from '@/content/site';
 import { getSettings, saveSettings } from '@/services/firebase';
 
 const AdminSettings: FC = () => {
@@ -15,7 +15,8 @@ const AdminSettings: FC = () => {
   const [whatsapp1, setWhatsapp1] = useState(WHATSAPP_PRIMARY);
   const [instagram1, setInstagram1] = useState(INSTAGRAM_HANDLE);
   const [email, setEmail] = useState(EMAIL);
-  const [upiId, setUpiId] = useState('');
+  const [upiId, setUpiId] = useState(UPI_ID);
+  const [upiId2, setUpiId2] = useState(UPI_ID_SECONDARY);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState('');
   const [ready, setReady] = useState(false);
@@ -32,7 +33,8 @@ const AdminSettings: FC = () => {
       if ('phone_secondary' in settings) setPhone2(settings.phone_secondary);
       if ('instagram' in settings) setInstagram1(settings.instagram);
       if ('email' in settings) setEmail(settings.email);
-      if ('upi_id' in settings) setUpiId(settings.upi_id);
+      if ('upi_id' in settings && settings.upi_id && settings.upi_id !== '9965053956@upi') setUpiId(settings.upi_id);
+      if ('upi_id_2' in settings && settings.upi_id_2) setUpiId2(settings.upi_id_2);
       setReady(true);
     })();
     return () => {
@@ -53,6 +55,7 @@ const AdminSettings: FC = () => {
         instagram: instagram1,
         email,
         upi_id: upiId,
+        upi_id_2: upiId2,
       });
       setSaved(true);
       setTimeout(() => setSaved(false), 3000);
@@ -91,6 +94,7 @@ const AdminSettings: FC = () => {
           <TextField label="Instagram" value={instagram1} onChange={(e) => setInstagram1(e.target.value)} size="small" fullWidth />
           <TextField label="Email" value={email} onChange={(e) => setEmail(e.target.value)} size="small" fullWidth />
           <TextField label="UPI ID" value={upiId} onChange={(e) => setUpiId(e.target.value)} size="small" fullWidth />
+          <TextField label="UPI ID 2" value={upiId2} onChange={(e) => setUpiId2(e.target.value)} size="small" fullWidth />
           <Button
             variant="contained"
             color="primary"

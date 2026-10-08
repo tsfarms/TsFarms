@@ -27,7 +27,12 @@ export function categoryLabel(category: string): string {
   return categoryLabels[id] ?? category.trim()
 }
 
-export function displayUnit(unit: string): string {
+export function displayUnit(unit: string, category?: string): string {
+  if (categoryId(category || '') === 'jackfruit') {
+    const trimmed = unit.trim().toLowerCase()
+    if (!trimmed || trimmed === 'kg' || /^\d+(\.\d+)?$/.test(trimmed)) return 'Qty'
+    return unit.trim()
+  }
   const trimmed = unit.trim()
   return trimmed.toLowerCase() === 'kg' ? 'KG' : trimmed
 }
@@ -43,8 +48,8 @@ export function varietyToShopProduct(variety: Variety): ShopProduct | null {
     name: variety.variety_name.trim(),
     category,
     tagline: variety.description?.trim() || categoryLabel(variety.category),
-    unitLabel: `Per ${displayUnit(variety.unit || 'kg')}`,
-    unit: displayUnit(variety.unit || 'kg'),
+    unitLabel: `Per ${displayUnit(variety.unit || 'kg', category)}`,
+    unit: displayUnit(variety.unit || 'kg', category),
     minQty: Number.isFinite(minQty) && minQty > 0 ? minQty : 1,
     qtyStep: Number.isFinite(qtyStep) && qtyStep > 0 ? qtyStep : 1,
     price: Number(variety.price) || 0,

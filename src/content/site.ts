@@ -36,7 +36,9 @@ export const PHONE_SECONDARY = '9600336404';
 export const INSTAGRAM_HANDLE = 'ts.farming';
 export const INSTAGRAM_URL = 'https://www.instagram.com/ts.farming';
 export const EMAIL = 'ts.farmingts@gmail.com';
-export const UPI_ID = '9965053956@upi';
+export const UPI_ID = '9344904430@ybl';
+export const UPI_ID_SECONDARY = '9344904430-2@ybl';
+const LEGACY_UPI_ID = '9965053956@upi';
 
 const readSetting = (keys: string[], fallback: string): string => {
   try {
@@ -55,7 +57,15 @@ const readSetting = (keys: string[], fallback: string): string => {
 
 export const getPrimaryWhatsApp = (): string => readSetting(['whatsapp1'], WHATSAPP_PRIMARY);
 
-export const getUpiId = (): string => readSetting(['upiId', 'upi_id'], UPI_ID);
+export const getUpiIds = (): string[] => {
+  const storedPrimary = readSetting(['upiId', 'upi_id'], UPI_ID);
+  const storedSecondary = readSetting(['upiId2', 'upi_id_2'], UPI_ID_SECONDARY);
+  const primary = storedPrimary === LEGACY_UPI_ID || !storedPrimary ? UPI_ID : storedPrimary;
+  const secondary = storedSecondary === LEGACY_UPI_ID || !storedSecondary ? UPI_ID_SECONDARY : storedSecondary;
+  return [...new Set([primary, secondary].filter(Boolean))];
+};
+
+export const getUpiId = (): string => getUpiIds()[0] ?? UPI_ID;
 
 export const whatsappLink = (message: string, number: string = getPrimaryWhatsApp()) =>
   `https://api.whatsapp.com/send?phone=91${number}&text=${encodeURIComponent(message)}`;
@@ -239,7 +249,7 @@ export const otherFarmProducts: OtherFarmProduct[] = [
     tagline: 'TNAU Variety • Sweet Bulbs • Seasonal',
     description:
       'Palur-1 jackfruit, a Tamil Nadu variety with sweet, firm bulbs. Sold fresh by the kilogram. Minimum order is 1 KG.',
-    unit: 'Per KG',
+    unit: 'Per Qty',
     price: 260,
     stockStatus: 'in_stock',
     image: palurImage,
@@ -266,7 +276,7 @@ export const shopProducts: ShopProduct[] = [
     category: product.category,
     tagline: product.tagline,
     unitLabel: product.unit,
-    unit: 'KG',
+    unit: product.category === 'jackfruit' ? 'Qty' : 'KG',
     minQty: 1,
     qtyStep: 1,
     price: product.price,
@@ -371,12 +381,17 @@ export const testimonials = [
   },
 ];
 
-export const navLinks = [
-  { label: 'Order', target: 'order' },
-  { label: 'Our Farm', target: 'farm' },
-  { label: 'Mangoes', target: 'mangoes' },
-  { label: 'Honey', target: 'honey' },
-  { label: 'Jackfruit', target: 'jackfruit' },
-  { label: 'Gallery', target: 'gallery' },
+export type NavLink = {
+  label: string;
+  target: string;
+  filter?: string;
+};
+
+export const navLinks: NavLink[] = [
+  { label: 'Our Products', target: 'order' },
+  { label: 'Mangoes', target: 'order', filter: 'mango' },
+  { label: 'Honey', target: 'order', filter: 'honey' },
+  { label: 'Jackfruit', target: 'order', filter: 'jackfruit' },
+  { label: 'Our Farm', target: '/our-farm' },
   { label: 'Contact', target: 'contact' },
 ];

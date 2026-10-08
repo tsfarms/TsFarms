@@ -12,6 +12,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
+import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
 import TSLogo from './TSLogo';
 import { navLinks, whatsappLink } from '@/content/site';
@@ -19,22 +20,24 @@ import { useCart } from '@/features/cart/CartContext';
 
 interface NavbarProps {
   scrolled: boolean;
-  onNavigate: (target: string) => void;
+  persist?: boolean;
+  onNavigate: (target: string, options?: { filter?: string }) => void;
 }
 
-const Navbar: FC<NavbarProps> = ({ scrolled, onNavigate }) => {
+const Navbar: FC<NavbarProps> = ({ scrolled, persist = false, onNavigate }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const [drawerOpen, setDrawerOpen] = useState(false);
   const { items, openSheet } = useCart();
 
-  const bgColor = scrolled ? '#F6F1E7' : 'transparent';
-  const logoColor = scrolled ? '#173B28' : '#FFFDF8';
-  const linkColor = scrolled ? '#1C211C' : '#FFFDF8';
-  const borderColor = scrolled ? 'rgba(23, 59, 40, 0.1)' : 'rgba(255, 253, 248, 0.15)';
+  const solid = persist || scrolled;
+  const bgColor = solid ? '#F6F1E7' : 'transparent';
+  const logoColor = solid ? '#173B28' : '#FFFDF8';
+  const linkColor = solid ? '#1C211C' : '#FFFDF8';
+  const borderColor = solid ? 'rgba(23, 59, 40, 0.1)' : 'rgba(255, 253, 248, 0.15)';
 
-  const handleNav = (target: string) => {
-    onNavigate(target);
+  const handleNav = (target: string, filter?: string) => {
+    onNavigate(target, filter ? { filter } : undefined);
     setDrawerOpen(false);
   };
 
@@ -50,8 +53,8 @@ const Navbar: FC<NavbarProps> = ({ scrolled, onNavigate }) => {
           zIndex: 1200,
           bgcolor: bgColor,
           borderBottom: `1px solid ${borderColor}`,
-          transform: scrolled ? 'translateY(-110%)' : 'translateY(0)',
-          pointerEvents: scrolled ? 'none' : 'auto',
+          transform: persist || !scrolled ? 'translateY(0)' : 'translateY(-110%)',
+          pointerEvents: persist || !scrolled ? 'auto' : 'none',
           transition: 'background-color 700ms cubic-bezier(0.22, 1, 0.36, 1), border-color 700ms cubic-bezier(0.22, 1, 0.36, 1), transform 420ms cubic-bezier(0.22, 1, 0.36, 1)',
           px: { xs: 2, md: 4, lg: 6 },
           py: { xs: 1.5, md: 2 },
@@ -75,13 +78,13 @@ const Navbar: FC<NavbarProps> = ({ scrolled, onNavigate }) => {
           </Box>
 
           {/* Desktop nav links */}
-          {!isMobile && (
+          {!isMobile && !persist && (
             <Box sx={{ display: 'flex', gap: 4 }}>
               {navLinks.map((link) => (
                 <Box
-                  key={link.target}
+                  key={`${link.label}-${link.target}-${link.filter ?? 'all'}`}
                   component="button"
-                  onClick={() => handleNav(link.target)}
+                  onClick={() => handleNav(link.target, link.filter)}
                   sx={{
                     background: 'none',
                     border: 'none',
@@ -103,7 +106,7 @@ const Navbar: FC<NavbarProps> = ({ scrolled, onNavigate }) => {
           )}
 
           {/* Right: Cart Button & Enquire */}
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 0.5, sm: 1, md: 2 } }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 0.5, sm: 1, md: 2 }, ml: 'auto' }}>
             <IconButton
               onClick={() => {
                 if (items.length === 0) return;
@@ -116,11 +119,11 @@ const Navbar: FC<NavbarProps> = ({ scrolled, onNavigate }) => {
                 minWidth: 44,
                 minHeight: 44,
                 border: '1px solid',
-                borderColor: scrolled ? 'rgba(23, 59, 40, 0.15)' : 'rgba(255, 253, 248, 0.25)',
-                bgcolor: scrolled ? 'rgba(23, 59, 40, 0.04)' : 'rgba(255, 253, 248, 0.08)',
+                borderColor: solid ? 'rgba(23, 59, 40, 0.15)' : 'rgba(255, 253, 248, 0.25)',
+                bgcolor: solid ? 'rgba(23, 59, 40, 0.04)' : 'rgba(255, 253, 248, 0.08)',
                 opacity: items.length === 0 ? 0.45 : 1,
                 '&:hover': {
-                  bgcolor: scrolled ? 'rgba(23, 59, 40, 0.08)' : 'rgba(255, 253, 248, 0.15)',
+                  bgcolor: solid ? 'rgba(23, 59, 40, 0.08)' : 'rgba(255, 253, 248, 0.15)',
                 },
               }}
               aria-label={items.length === 0 ? 'Cart is empty' : 'Enter order details'}
@@ -140,7 +143,32 @@ const Navbar: FC<NavbarProps> = ({ scrolled, onNavigate }) => {
               </Badge>
             </IconButton>
 
-            {!isMobile ? (
+            {persist ? (
+              <Button
+                variant="text"
+                color="primary"
+                onClick={() => handleNav('hero')}
+                startIcon={<HomeOutlinedIcon sx={{ fontSize: '1.2rem' }} />}
+                aria-label="Home"
+                sx={{
+                  color: '#173B28',
+                  border: 'none',
+                  bgcolor: 'transparent',
+                  fontSize: '0.8rem',
+                  fontWeight: 600,
+                  letterSpacing: '0.04em',
+                  px: { xs: 1.75, sm: 2.25 },
+                  py: 1,
+                  minHeight: 44,
+                  '&:hover': {
+                    border: 'none',
+                    bgcolor: 'rgba(23, 59, 40, 0.06)',
+                  },
+                }}
+              >
+                Home
+              </Button>
+            ) : !isMobile ? (
               <Button
                 variant="outlined"
                 onClick={() => handleNav('order')}
@@ -203,9 +231,9 @@ const Navbar: FC<NavbarProps> = ({ scrolled, onNavigate }) => {
         </Box>
         <List sx={{ py: 0 }}>
           {navLinks.map((link) => (
-            <ListItem key={link.target} disablePadding>
+            <ListItem key={`${link.label}-${link.target}-${link.filter ?? 'all'}`} disablePadding>
               <ListItemButton
-                onClick={() => handleNav(link.target)}
+                onClick={() => handleNav(link.target, link.filter)}
                 sx={{
                   py: 1.4,
                   px: 1.5,
@@ -228,31 +256,6 @@ const Navbar: FC<NavbarProps> = ({ scrolled, onNavigate }) => {
               </ListItemButton>
             </ListItem>
           ))}
-          {/* Enquire navigation item */}
-          <ListItem disablePadding>
-            <ListItemButton
-              onClick={() => handleNav('order')}
-              sx={{
-                py: 1.4,
-                px: 1.5,
-                minHeight: 48,
-                borderRadius: 1.5,
-                '&:hover': { bgcolor: 'rgba(23,59,40,0.06)' },
-              }}
-            >
-              <ListItemText
-                primary="Order"
-                primaryTypographyProps={{
-                  sx: {
-                    fontFamily: '"Cormorant Garamond", serif',
-                    fontSize: '1.35rem',
-                    fontWeight: 600,
-                    color: '#D99419',
-                  },
-                }}
-              />
-            </ListItemButton>
-          </ListItem>
         </List>
         <Box sx={{ mt: 'auto', pt: 3 }}>
           <Button

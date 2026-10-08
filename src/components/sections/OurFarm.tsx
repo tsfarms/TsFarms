@@ -14,7 +14,8 @@ const OurFarm: FC = () => {
       id="farm"
       sx={{
         bgcolor: '#F6F1E7',
-        py: { xs: 8, md: 14 },
+        pt: { xs: 12, md: 16 },
+        pb: { xs: 8, md: 14 },
         px: { xs: 3, md: 6, lg: 8 },
       }}
     >

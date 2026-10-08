@@ -10,7 +10,7 @@ import TSLogo from '@/components/layout/TSLogo';
 import { navLinks, PHONE, PHONE_SECONDARY, WHATSAPP_PRIMARY, INSTAGRAM_HANDLE, INSTAGRAM_URL, EMAIL } from '@/content/site';
 
 interface FooterProps {
-  onNavigate: (target: string) => void;
+  onNavigate: (target: string, options?: { filter?: string }) => void;
 }
 
 const Footer: FC<FooterProps> = ({ onNavigate }) => {
@@ -61,9 +61,9 @@ const Footer: FC<FooterProps> = ({ onNavigate }) => {
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
               {navLinks.map((link) => (
                 <Box
-                  key={link.target}
+                  key={`${link.label}-${link.target}-${link.filter ?? 'all'}`}
                   component="button"
-                  onClick={() => onNavigate(link.target)}
+                  onClick={() => onNavigate(link.target, link.filter ? { filter: link.filter } : undefined)}
                   sx={{
                     background: 'none',
                     border: 'none',
