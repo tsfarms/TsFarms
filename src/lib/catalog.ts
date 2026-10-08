@@ -28,13 +28,23 @@ export function categoryLabel(category: string): string {
 }
 
 export function displayUnit(unit: string, category?: string): string {
-  if (categoryId(category || '') === 'jackfruit') {
-    const trimmed = unit.trim().toLowerCase()
-    if (!trimmed || trimmed === 'kg' || /^\d+(\.\d+)?$/.test(trimmed)) return 'Qty'
-    return unit.trim()
-  }
+  const categoryKey = categoryId(category || '')
   const trimmed = unit.trim()
-  return trimmed.toLowerCase() === 'kg' ? 'KG' : trimmed
+  const lower = trimmed.toLowerCase()
+
+  if (categoryKey === 'jackfruit') {
+    if (!trimmed || lower === 'kg' || /^\d+(\.\d+)?$/.test(trimmed)) return 'Qty'
+    return trimmed
+  }
+
+  if (categoryKey === 'honey') {
+    if (!trimmed || lower === 'kg' || /^\d+(\.\d+)?$/.test(trimmed) || lower === 'ltr' || lower === 'lt' || lower === 'l' || lower === 'liter' || lower === 'litre' || lower === 'liters' || lower === 'litres') {
+      return 'Ltr'
+    }
+    return trimmed
+  }
+
+  return lower === 'kg' ? 'KG' : trimmed
 }
 
 export function varietyToShopProduct(variety: Variety): ShopProduct | null {
