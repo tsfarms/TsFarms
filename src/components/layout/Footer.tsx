@@ -54,7 +54,14 @@ const Footer: FC<FooterProps> = ({ onNavigate }) => {
           <Box>
             <Typography
               variant="overline"
-              sx={{ color: '#788267', fontSize: '0.7rem', letterSpacing: '0.2em', display: 'block', mb: { xs: 1.8, md: 3 } }}
+              sx={{
+                color: '#D99419',
+                fontSize: '0.78rem',
+                fontWeight: 800,
+                letterSpacing: '0.2em',
+                display: 'block',
+                mb: { xs: 1.8, md: 3 },
+              }}
             >
               Explore
             </Typography>
@@ -86,7 +93,14 @@ const Footer: FC<FooterProps> = ({ onNavigate }) => {
           <Box>
             <Typography
               variant="overline"
-              sx={{ color: '#788267', fontSize: '0.7rem', letterSpacing: '0.2em', display: 'block', mb: 3 }}
+              sx={{
+                color: '#D99419',
+                fontSize: '0.78rem',
+                fontWeight: 800,
+                letterSpacing: '0.2em',
+                display: 'block',
+                mb: 3,
+              }}
             >
               Contact
             </Typography>

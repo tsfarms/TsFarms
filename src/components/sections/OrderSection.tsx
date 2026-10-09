@@ -128,6 +128,24 @@ const OrderSection: FC = () => {
     setDraftQty((current) => ({ ...current, [product.id]: clamped }));
   };
 
+  const increaseProduct = (product: ShopProduct) => {
+    const next = qtyFor(product) + product.qtyStep;
+    const index = cartIndex(product);
+    if (index >= 0) {
+      updateQty(index, next);
+      return;
+    }
+    addItem(
+      product.name,
+      product.category,
+      next,
+      product.unit,
+      product.minQty,
+      product.price,
+      product.qtyStep,
+    );
+  };
+
   const addProductToCart = (product: ShopProduct) => {
     const qty = qtyFor(product);
     const index = cartIndex(product);
@@ -230,7 +248,7 @@ const OrderSection: FC = () => {
                   qty={qtyFor(product)}
                   inCart={cartIndex(product) >= 0}
                   onDecrease={() => setProductQty(product, qtyFor(product) - product.qtyStep)}
-                  onIncrease={() => setProductQty(product, qtyFor(product) + product.qtyStep)}
+                  onIncrease={() => increaseProduct(product)}
                   onAdd={() => addProductToCart(product)}
                   onRemove={() => removeProductFromCart(product)}
                   onOpenCart={openSheet}

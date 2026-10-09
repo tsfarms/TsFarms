@@ -81,19 +81,21 @@ const BenefitCard: FC<{
 
   return (
     <Box
-      aria-hidden={!isCenter}
+      aria-hidden={isCoverHidden(slot)}
       role="button"
-      tabIndex={isCenter ? 0 : -1}
+      tabIndex={isCoverHidden(slot) ? -1 : 0}
       onClick={() => {
+        if (isCenter) {
+          onOpen();
+          return;
+        }
         onSelect();
-        onOpen();
       }}
       onKeyDown={(event) => {
-        if (!isCenter) return;
-        if (event.key === 'Enter' || event.key === ' ') {
-          event.preventDefault();
-          onOpen();
-        }
+        if (event.key !== 'Enter' && event.key !== ' ') return;
+        event.preventDefault();
+        if (isCenter) onOpen();
+        else onSelect();
       }}
       sx={{
         position: 'absolute',

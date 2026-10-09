@@ -94,7 +94,7 @@ const Hero: FC<HeroProps> = ({ onNavigate }) => {
           objectFit: 'cover',
           transform: reduced ? 'none' : 'translate3d(0, calc(var(--hero-scroll, 0px) * 0.1), 0) scale(1.06)',
           willChange: reduced ? 'auto' : 'transform',
-          filter: 'brightness(0.82) saturate(1.1)',
+          filter: 'brightness(0.72) saturate(1.1)',
         }}
       />
 
@@ -103,8 +103,10 @@ const Hero: FC<HeroProps> = ({ onNavigate }) => {
         sx={{
           position: 'absolute',
           inset: 0,
-          background:
-            'linear-gradient(180deg, rgba(23,59,40,0.2) 0%, rgba(23,59,40,0.05) 35%, rgba(23,59,40,0.4) 70%, rgba(23,59,40,0.65) 100%)',
+          background: [
+            'linear-gradient(90deg, rgba(23,59,40,0.42) 0%, rgba(23,59,40,0.22) 48%, rgba(23,59,40,0.08) 100%)',
+            'linear-gradient(180deg, rgba(23,59,40,0.38) 0%, rgba(23,59,40,0.26) 40%, rgba(23,59,40,0.48) 75%, rgba(23,59,40,0.7) 100%)',
+          ].join(', '),
         }}
       />
 
@@ -278,13 +280,20 @@ const Hero: FC<HeroProps> = ({ onNavigate }) => {
       >
         <Typography
           sx={{
-            color: '#D99419',
+            display: 'inline-block',
+            width: 'fit-content',
+            color: '#FFFDF8',
+            bgcolor: 'rgba(23, 59, 40, 0.15)',
             fontFamily: '"Manrope", sans-serif',
             fontWeight: 700,
             fontSize: { xs: '0.72rem', md: '0.85rem' },
             textTransform: 'uppercase',
-            letterSpacing: '0.25em',
+            letterSpacing: '0.18em',
             mb: { xs: 1.5, md: 2.5 },
+            px: { xs: 1.2, md: 1.6 },
+            py: { xs: 0.55, md: 0.7 },
+            borderRadius: 1,
+            textShadow: '0 1px 8px rgba(0, 0, 0, 0.45)',
           }}
         >
           Natural • Fresh • Farm Direct
