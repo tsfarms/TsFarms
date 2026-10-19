@@ -3,7 +3,6 @@ export type StockStatus = 'in_stock' | 'low_stock' | 'out_of_stock';
 import mangoBenefitImage from '@/assets/benefits/mango.png';
 import honeyBenefitImage from '@/assets/benefits/honey.jpg';
 import jackfruitBenefitImage from '@/assets/benefits/jackfruit.jpg';
-import stinglessBeeImage from '@/assets/honey/stingless-bee-honey.jpg';
 import mountainBeeImage from '@/assets/honey/mountain-bee-honey.jpg';
 import palurImage from '@/assets/jackfruit/palur.jpg';
 import galleryBeekeepersImage from '@/assets/gallery/beekeepers.jpg';
@@ -36,6 +35,13 @@ export const PHONE_SECONDARY = '9600336404';
 export const INSTAGRAM_HANDLE = 'ts.farming';
 export const INSTAGRAM_URL = 'https://www.instagram.com/ts.farming';
 export const EMAIL = 'ts.farmingts@gmail.com';
+export const FARM_LOCATION = {
+  label: 'Devadanapatti, Theni, Tamil Nadu',
+  mapsUrl: 'https://maps.app.goo.gl/9d1PFej72rKR4qJ18',
+  lat: 10.1836667,
+  lng: 77.6263056,
+};
+export const farmMapEmbedUrl = `https://maps.google.com/maps?q=${FARM_LOCATION.lat},${FARM_LOCATION.lng}&z=15&output=embed`;
 export const UPI_ID = '9344904430@ybl';
 export const UPI_ID_SECONDARY = '9344904430-2@ybl';
 const LEGACY_UPI_ID = '9965053956@upi';
@@ -69,6 +75,20 @@ export const getUpiId = (): string => getUpiIds()[0] ?? UPI_ID;
 
 export const whatsappLink = (message: string, number: string = getPrimaryWhatsApp()) =>
   `https://api.whatsapp.com/send?phone=91${number}&text=${encodeURIComponent(message)}`;
+
+const EMAIL_SUBJECT = 'Enquiry from TS Farms website';
+
+export const isMobileDevice = (): boolean =>
+  typeof navigator !== 'undefined' && /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+
+// Desktop browsers often have no mail app registered, so mailto: silently does nothing there.
+export const emailLink = (): { href: string; external: boolean } =>
+  isMobileDevice()
+    ? { href: `mailto:${EMAIL}?subject=${encodeURIComponent(EMAIL_SUBJECT)}`, external: false }
+    : {
+        href: `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(EMAIL)}&su=${encodeURIComponent(EMAIL_SUBJECT)}`,
+        external: true,
+      };
 
 const px = (url: string, w = 1200) => `${url.split('?')[0]}?auto=compress&cs=tinysrgb&w=${w}`;
 
@@ -226,7 +246,7 @@ export const otherFarmProducts: OtherFarmProduct[] = [
     unit: 'Per Ltr',
     price: 720,
     stockStatus: 'in_stock',
-    image: stinglessBeeImage,
+    image: mountainBeeImage,
   },
   {
     id: 'mountain-honey',

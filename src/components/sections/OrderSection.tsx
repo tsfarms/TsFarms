@@ -101,10 +101,12 @@ const OrderSection: FC = () => {
 
   const groups = useMemo(() => {
     const ids = sortCategoryIds([...new Set(products.map((product) => product.category))]);
+    const outOfStockLast = (a: ShopProduct, b: ShopProduct) =>
+      Number(a.stockStatus === 'out_of_stock') - Number(b.stockStatus === 'out_of_stock');
     return ids.map((id) => ({
       id,
       label: categoryLabel(id),
-      items: products.filter((product) => product.category === id),
+      items: products.filter((product) => product.category === id).sort(outOfStockLast),
     }));
   }, [products]);
 
@@ -289,6 +291,7 @@ const ProductCard: FC<{
   onOpenCart: () => void;
 }> = ({ product, qty, inCart, onDecrease, onIncrease, onAdd, onRemove, onOpenCart }) => {
   const atFloor = qty <= product.minQty;
+  const soldOut = product.stockStatus === 'out_of_stock';
 
   return (
     <Box
@@ -301,25 +304,51 @@ const ProductCard: FC<{
         bgcolor: '#FFFDF8',
         contain: 'layout style',
         boxShadow: '0 8px 20px rgba(91, 58, 36, 0.06)',
-        '&:hover img': { transform: 'scale(1.04)' },
+        '&:hover img': { transform: soldOut ? 'none' : 'scale(1.04)' },
       }}
     >
-      <Box
-        component="img"
-        src={product.image}
-        alt={product.name}
-        width={800}
-        height={450}
-        loading="lazy"
-        decoding="async"
-        sx={{
-          width: '100%',
-          height: { xs: 92, sm: 132, md: 168 },
-          objectFit: 'cover',
-          display: 'block',
-          transition: 'transform 1.1s cubic-bezier(0.22, 1, 0.36, 1)',
-        }}
-      />
+      <Box sx={{ position: 'relative', overflow: 'hidden' }}>
+        <Box
+          component="img"
+          src={product.image}
+          alt={product.name}
+          width={800}
+          height={450}
+          loading="lazy"
+          decoding="async"
+          sx={{
+            width: '100%',
+            height: { xs: 92, sm: 132, md: 168 },
+            objectFit: 'cover',
+            display: 'block',
+            filter: soldOut ? 'grayscale(0.85)' : 'none',
+            opacity: soldOut ? 0.7 : 1,
+            transition: 'transform 1.1s cubic-bezier(0.22, 1, 0.36, 1)',
+          }}
+        />
+        {soldOut && (
+          <Box
+            component="span"
+            sx={{
+              position: 'absolute',
+              top: { xs: 6, md: 10 },
+              left: { xs: 6, md: 10 },
+              px: { xs: 0.8, md: 1.2 },
+              py: { xs: 0.25, md: 0.4 },
+              borderRadius: '6px',
+              bgcolor: '#8B2E1F',
+              color: '#FFFDF8',
+              fontFamily: '"Manrope", sans-serif',
+              fontWeight: 700,
+              fontSize: { xs: '0.56rem', md: '0.72rem' },
+              letterSpacing: '0.06em',
+              textTransform: 'uppercase',
+            }}
+          >
+            Out of stock
+          </Box>
+        )}
+      </Box>
       <Box sx={{ p: { xs: 0.9, sm: 1.4, md: 2 }, display: 'flex', flexDirection: 'column', flex: 1, gap: { xs: 0.35, md: 0 } }}>
         <Typography
           sx={{
@@ -359,37 +388,12 @@ const ProductCard: FC<{
         >
           {formatINR(product.price)} / {product.unit}
         </Typography>
-        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 0.4, mt: 'auto' }}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 0, sm: 0.5 } }}>
-            <MinQtyButton
-              atFloor={atFloor}
-              minQty={product.minQty}
-              unit={product.unit}
-              label={`Decrease ${product.name}`}
-              onDecrease={onDecrease}
-            />
-            <Typography sx={{ minWidth: { xs: 16, md: 28 }, textAlign: 'center', fontWeight: 700, fontSize: { xs: '0.72rem', md: '1rem' } }}>
-              {qty}
-            </Typography>
-            <IconButton
-              size="small"
-              aria-label={`Increase ${product.name}`}
-              onClick={onIncrease}
-              sx={{ width: { xs: 26, md: 34 }, height: { xs: 26, md: 34 }, p: { xs: 0.15, md: 0.5 } }}
-            >
-              <AddIcon sx={{ fontSize: { xs: 16, md: 20 } }} />
-            </IconButton>
-          </Box>
-          <Typography sx={{ fontWeight: 700, color: '#173B28', fontSize: { xs: '0.68rem', md: '1rem' }, whiteSpace: 'nowrap' }}>
-            {formatINR(product.price * qty)}
-          </Typography>
-        </Box>
-        {inCart ? (
-          <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: { xs: 0.45, md: 1 }, mt: { xs: 0.7, md: 1.5 } }}>
+        {soldOut ? (
+          <Box sx={{ display: 'grid', gridTemplateColumns: inCart ? '1fr 1fr' : '1fr', gap: { xs: 0.45, md: 1 }, mt: 'auto', pt: { xs: 0.7, md: 1.5 } }}>
             <Button
+              fullWidth
               variant="outlined"
-              color="primary"
-              onClick={onOpenCart}
+              disabled
               sx={{
                 minHeight: { xs: 26, md: 40 },
                 py: { xs: 0.15, md: 0.9 },
@@ -399,45 +403,112 @@ const ProductCard: FC<{
                 borderRadius: '8px',
               }}
             >
-              In cart
+              Out of stock
             </Button>
-            <Button
-              variant="outlined"
-              color="inherit"
-              aria-label={`Remove ${product.name} from cart`}
-              onClick={onRemove}
-              sx={{
-                minHeight: { xs: 26, md: 40 },
-                py: { xs: 0.15, md: 0.9 },
-                px: { xs: 0.4, md: 1.5 },
-                minWidth: 0,
-                fontSize: { xs: '0.58rem', md: '0.875rem' },
-                borderRadius: '8px',
-                color: '#5B3A24',
-                borderColor: 'rgba(23,59,40,0.2)',
-              }}
-            >
-              Remove
-            </Button>
+            {inCart && (
+              <Button
+                variant="outlined"
+                color="inherit"
+                aria-label={`Remove ${product.name} from cart`}
+                onClick={onRemove}
+                sx={{
+                  minHeight: { xs: 26, md: 40 },
+                  py: { xs: 0.15, md: 0.9 },
+                  px: { xs: 0.4, md: 1.5 },
+                  minWidth: 0,
+                  fontSize: { xs: '0.58rem', md: '0.875rem' },
+                  borderRadius: '8px',
+                  color: '#5B3A24',
+                  borderColor: 'rgba(23,59,40,0.2)',
+                }}
+              >
+                Remove
+              </Button>
+            )}
           </Box>
         ) : (
-          <Button
-            fullWidth
-            variant="contained"
-            color="primary"
-            onClick={onAdd}
-            sx={{
-              mt: { xs: 0.7, md: 1.5 },
-              minHeight: { xs: 26, md: 40 },
-              py: { xs: 0.15, md: 0.9 },
-              px: { xs: 0.75, md: 2 },
-              fontSize: { xs: '0.62rem', md: '0.875rem' },
-              borderRadius: '8px',
-            }}
-          >
-            <Box component="span" sx={{ display: { xs: 'inline', sm: 'none' } }}>Add</Box>
-            <Box component="span" sx={{ display: { xs: 'none', sm: 'inline' } }}>Add to cart</Box>
-          </Button>
+          <>
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 0.4, mt: 'auto' }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 0, sm: 0.5 } }}>
+                <MinQtyButton
+                  atFloor={atFloor}
+                  minQty={product.minQty}
+                  unit={product.unit}
+                  label={`Decrease ${product.name}`}
+                  onDecrease={onDecrease}
+                />
+                <Typography sx={{ minWidth: { xs: 16, md: 28 }, textAlign: 'center', fontWeight: 700, fontSize: { xs: '0.72rem', md: '1rem' } }}>
+                  {qty}
+                </Typography>
+                <IconButton
+                  size="small"
+                  aria-label={`Increase ${product.name}`}
+                  onClick={onIncrease}
+                  sx={{ width: { xs: 26, md: 34 }, height: { xs: 26, md: 34 }, p: { xs: 0.15, md: 0.5 } }}
+                >
+                  <AddIcon sx={{ fontSize: { xs: 16, md: 20 } }} />
+                </IconButton>
+              </Box>
+              <Typography sx={{ fontWeight: 700, color: '#173B28', fontSize: { xs: '0.68rem', md: '1rem' }, whiteSpace: 'nowrap' }}>
+                {formatINR(product.price * qty)}
+              </Typography>
+            </Box>
+            {inCart ? (
+              <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: { xs: 0.45, md: 1 }, mt: { xs: 0.7, md: 1.5 } }}>
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  onClick={onOpenCart}
+                  sx={{
+                    minHeight: { xs: 26, md: 40 },
+                    py: { xs: 0.15, md: 0.9 },
+                    px: { xs: 0.4, md: 1.5 },
+                    minWidth: 0,
+                    fontSize: { xs: '0.58rem', md: '0.875rem' },
+                    borderRadius: '8px',
+                  }}
+                >
+                  In cart
+                </Button>
+                <Button
+                  variant="outlined"
+                  color="inherit"
+                  aria-label={`Remove ${product.name} from cart`}
+                  onClick={onRemove}
+                  sx={{
+                    minHeight: { xs: 26, md: 40 },
+                    py: { xs: 0.15, md: 0.9 },
+                    px: { xs: 0.4, md: 1.5 },
+                    minWidth: 0,
+                    fontSize: { xs: '0.58rem', md: '0.875rem' },
+                    borderRadius: '8px',
+                    color: '#5B3A24',
+                    borderColor: 'rgba(23,59,40,0.2)',
+                  }}
+                >
+                  Remove
+                </Button>
+              </Box>
+            ) : (
+              <Button
+                fullWidth
+                variant="contained"
+                color="primary"
+                onClick={onAdd}
+                sx={{
+                  mt: { xs: 0.7, md: 1.5 },
+                  minHeight: { xs: 26, md: 40 },
+                  py: { xs: 0.15, md: 0.9 },
+                  px: { xs: 0.75, md: 2 },
+                  fontSize: { xs: '0.62rem', md: '0.875rem' },
+                  borderRadius: '8px',
+                }}
+              >
+                <Box component="span" sx={{ display: { xs: 'inline', sm: 'none' } }}>Add</Box>
+                <Box component="span" sx={{ display: { xs: 'none', sm: 'inline' } }}>Add to cart</Box>
+              </Button>
+            )}
+          </>
         )}
       </Box>
     </Box>

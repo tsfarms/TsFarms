@@ -3,10 +3,67 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/png" href="/logo.png" />
+    <link rel="apple-touch-icon" href="/logo.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="theme-color" content="#173B28" />
     <meta name="viewport" content="initial-scale=1, width=device-width" />
     <meta name="description" content="Fresh farm-grown mangoes, farm honey and seasonal jackfruit from TS Farms. Delivered all over India." />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="TS Farms" />
+    <meta property="og:title" content="TS Farms" />
+    <meta property="og:description" content="Fresh farm-grown mangoes, farm honey and seasonal jackfruit from TS Farms. Delivered all over India." />
+    <meta property="og:url" content="https://www.tsfarm.in/" />
+    <meta property="og:image" content="https://www.tsfarm.in/logo.png" />
+    <meta property="og:image:width" content="1024" />
+    <meta property="og:image:height" content="1024" />
     <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
     <link rel="canonical" href="https://www.tsfarm.in/" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "Organization",
+            "@id": "https://www.tsfarm.in/#organization",
+            "name": "TS Farms",
+            "url": "https://www.tsfarm.in/",
+            "logo": {
+              "@type": "ImageObject",
+              "url": "https://www.tsfarm.in/logo.png",
+              "width": 1024,
+              "height": 1024
+            },
+            "email": "ts.farmingts@gmail.com",
+            "telephone": "+91-9843823047",
+            "sameAs": ["https://www.instagram.com/ts.farming"]
+          },
+          {
+            "@type": "LocalBusiness",
+            "@id": "https://www.tsfarm.in/#farm",
+            "name": "TS Farms",
+            "url": "https://www.tsfarm.in/",
+            "image": "https://www.tsfarm.in/logo.png",
+            "telephone": "+91-9843823047",
+            "parentOrganization": { "@id": "https://www.tsfarm.in/#organization" },
+            "address": {
+              "@type": "PostalAddress",
+              "addressLocality": "Devadanapatti",
+              "addressRegion": "Tamil Nadu",
+              "addressCountry": "IN"
+            },
+            "geo": { "@type": "GeoCoordinates", "latitude": 10.1836667, "longitude": 77.6263056 },
+            "hasMap": "https://maps.app.goo.gl/9d1PFej72rKR4qJ18"
+          },
+          {
+            "@type": "WebSite",
+            "@id": "https://www.tsfarm.in/#website",
+            "name": "TS Farms",
+            "url": "https://www.tsfarm.in/",
+            "publisher": { "@id": "https://www.tsfarm.in/#organization" }
+          }
+        ]
+      }
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet" />

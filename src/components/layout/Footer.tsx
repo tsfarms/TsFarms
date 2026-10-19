@@ -6,14 +6,17 @@ import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import EmailIcon from '@mui/icons-material/Email';
 import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined';
+import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined';
 import TSLogo from '@/components/layout/TSLogo';
-import { navLinks, PHONE, PHONE_SECONDARY, WHATSAPP_PRIMARY, INSTAGRAM_HANDLE, INSTAGRAM_URL, EMAIL } from '@/content/site';
+import { navLinks, PHONE, PHONE_SECONDARY, WHATSAPP_PRIMARY, INSTAGRAM_HANDLE, INSTAGRAM_URL, EMAIL, emailLink, FARM_LOCATION } from '@/content/site';
 
 interface FooterProps {
   onNavigate: (target: string, options?: { filter?: string }) => void;
 }
 
 const Footer: FC<FooterProps> = ({ onNavigate }) => {
+  const mail = emailLink();
+
   return (
     <Box
       component="footer"
@@ -117,8 +120,17 @@ const Footer: FC<FooterProps> = ({ onNavigate }) => {
               <Box component="a" href={INSTAGRAM_URL} target="_blank" rel="noopener noreferrer" sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'rgba(255,253,248,0.75)', textDecoration: 'none' }}>
                 <InstagramIcon sx={{ fontSize: '0.9rem' }} /> @{INSTAGRAM_HANDLE}
               </Box>
-              <Box component="a" href={`mailto:${EMAIL}`} sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'rgba(255,253,248,0.75)', textDecoration: 'none' }}>
+              <Box
+                component="a"
+                href={mail.href}
+                target={mail.external ? '_blank' : undefined}
+                rel={mail.external ? 'noopener noreferrer' : undefined}
+                sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'rgba(255,253,248,0.75)', textDecoration: 'none' }}
+              >
                 <EmailIcon sx={{ fontSize: '0.9rem' }} /> {EMAIL}
+              </Box>
+              <Box component="a" href={FARM_LOCATION.mapsUrl} target="_blank" rel="noopener noreferrer" sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'rgba(255,253,248,0.75)', textDecoration: 'none' }}>
+                <PlaceOutlinedIcon sx={{ fontSize: '1rem' }} /> {FARM_LOCATION.label}
               </Box>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: 'rgba(255,253,248,0.75)' }}>
                 <LocalShippingOutlinedIcon sx={{ fontSize: '1rem' }} /> All over India

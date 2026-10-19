@@ -6,7 +6,8 @@ import PhoneIcon from '@mui/icons-material/Phone';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import InstagramIcon from '@mui/icons-material/Instagram';
 import EmailIcon from '@mui/icons-material/Email';
-import { whatsappLink, PHONE, INSTAGRAM_URL, EMAIL } from '@/content/site';
+import PlaceIcon from '@mui/icons-material/Place';
+import { whatsappLink, PHONE, INSTAGRAM_URL, emailLink, FARM_LOCATION } from '@/content/site';
 import { useReveal } from '@/hooks/useReveal';
 import SectionLabel from '@/components/layout/SectionLabel';
 
@@ -31,9 +32,14 @@ const channels = [
   },
   {
     label: 'Email',
-    href: `mailto:${EMAIL}`,
+    ...emailLink(),
     icon: EmailIcon,
-    external: false,
+  },
+  {
+    label: 'Farm location',
+    href: FARM_LOCATION.mapsUrl,
+    icon: PlaceIcon,
+    external: true,
   },
 ];
 
@@ -74,12 +80,13 @@ const Contact: FC = () => {
             transition: 'opacity 700ms ease 200ms',
           }}
         >
-          We'd love to hear from you. Reach out on WhatsApp, call, email, or find us on Instagram.
+          We'd love to hear from you. Reach out on WhatsApp, call, email, find us on Instagram, or visit the farm.
         </Typography>
 
         <Box
           sx={{
             display: 'flex',
+            flexWrap: 'wrap',
             justifyContent: 'center',
             alignItems: 'center',
             gap: { xs: 2, md: 3 },

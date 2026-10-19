@@ -48,7 +48,7 @@ export function displayUnit(unit: string, category?: string): string {
 }
 
 export function varietyToShopProduct(variety: Variety): ShopProduct | null {
-  if (!variety.is_available || !variety.variety_name.trim()) return null
+  if (!variety.variety_name.trim()) return null
   const category = categoryId(variety.category || 'Other')
   const minQty = Number(variety.min_order)
   const qtyStep = Number(variety.qty_step)
@@ -64,6 +64,6 @@ export function varietyToShopProduct(variety: Variety): ShopProduct | null {
     qtyStep: Number.isFinite(qtyStep) && qtyStep > 0 ? qtyStep : 1,
     price: Number(variety.price) || 0,
     image: images[0] ?? categoryImages[category] ?? varietyPlaceholder,
-    stockStatus: 'in_stock',
+    stockStatus: variety.is_available ? 'in_stock' : 'out_of_stock',
   }
 }

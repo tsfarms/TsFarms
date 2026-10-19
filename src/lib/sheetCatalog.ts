@@ -54,7 +54,6 @@ export function productsFromSheet(payload: SheetPayload): ShopProduct[] {
     const price = Number(cellText(cells[priceCol]))
     if (!varietyName || !category || !Number.isFinite(price)) return []
     const availableText = availableCol >= 0 ? cellText(cells[availableCol]) : 'Available'
-    if (!isAvailable(availableText)) return []
     const minOrder = minCol >= 0 ? parsePositive(cellText(cells[minCol]), 1) : 1
     const qtyStep = stepCol >= 0 ? parsePositive(cellText(cells[stepCol]), 1) : 1
     const variety: Variety = {
@@ -65,7 +64,7 @@ export function productsFromSheet(payload: SheetPayload): ShopProduct[] {
       description: descriptionCol >= 0 ? cellText(cells[descriptionCol]) : '',
       price,
       unit: unitCol >= 0 && cellText(cells[unitCol]) ? cellText(cells[unitCol]) : 'kg',
-      is_available: true,
+      is_available: isAvailable(availableText),
       min_order: minOrder,
       qty_step: qtyStep,
       updated_at: '',

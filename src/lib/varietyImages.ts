@@ -25,6 +25,11 @@ export function varietySlug(name: string): string {
     .replace(/[^a-z0-9]+/g, '')
 }
 
+const fileAliases: Record<string, string> = {
+  stinglessbeehoney: 'mountainbeehoney',
+  stringlessbeehoney: 'mountainbeehoney',
+};
+
 function imageIndex(fileBase: string, slug: string): number | null {
   if (fileBase === slug) return 0
   if (!fileBase.startsWith(slug)) return null
@@ -34,7 +39,12 @@ function imageIndex(fileBase: string, slug: string): number | null {
 }
 
 export function imagesForVariety(...names: string[]): string[] {
-  const slugs = names.map(varietySlug).filter(Boolean)
+  const slugs = [...new Set(names.flatMap((name) => {
+    const slug = varietySlug(name)
+    if (!slug) return []
+    const alias = fileAliases[slug]
+    return alias && alias !== slug ? [slug, alias] : [slug]
+  }))]
   const found: { index: number; url: string }[] = []
 
   for (const [path, url] of Object.entries(bundled)) {

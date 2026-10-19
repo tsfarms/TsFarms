@@ -2,7 +2,6 @@ import { useEffect, useRef, type FC } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-import { heroImage } from '@/content/site';
 import { usePrefersReducedMotion } from '@/hooks/usePrefersReducedMotion';
 
 interface HeroProps {
@@ -35,6 +34,14 @@ const LEAVES: LeafParticle[] = [
 const Hero: FC<HeroProps> = ({ onNavigate }) => {
   const reduced = usePrefersReducedMotion();
   const heroRef = useRef<HTMLDivElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const v = videoRef.current;
+    if (v) {
+      v.play().catch(() => {});
+    }
+  }, []);
 
   useEffect(() => {
     if (reduced) return;
@@ -79,13 +86,15 @@ const Hero: FC<HeroProps> = ({ onNavigate }) => {
         justifyContent: 'center',
       }}
     >
-      {/* === LAYER 1: Background orchard (slowest parallax) === */}
-      <img
-        src={heroImage}
-        alt="Mango orchard at golden hour"
-        width={1920}
-        height={1080}
-        decoding="async"
+      {/* === LAYER 1: Background orchard looping video === */}
+      <video
+        ref={videoRef}
+        autoPlay
+        loop
+        muted
+        playsInline
+        preload="auto"
+        poster="/Homebg_poster.webp"
         style={{
           position: 'absolute',
           inset: 0,
@@ -96,7 +105,9 @@ const Hero: FC<HeroProps> = ({ onNavigate }) => {
           willChange: reduced ? 'auto' : 'transform',
           filter: 'brightness(0.72) saturate(1.1)',
         }}
-      />
+      >
+        <source src="/Homebg.mp4" type="video/mp4" />
+      </video>
 
       {/* === LAYER 2: Atmospheric gradient wash === */}
       <Box

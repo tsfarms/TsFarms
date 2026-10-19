@@ -4,6 +4,7 @@ import FloatingWhatsApp from '@/components/layout/FloatingWhatsApp';
 import Footer from '@/components/layout/Footer';
 import OurFarm from '@/components/sections/OurFarm';
 import Gallery from '@/components/sections/Gallery';
+import FarmLocation from '@/components/sections/FarmLocation';
 import OrderSheet from '@/features/cart/OrderSheet';
 import { useSmoothNavigate } from '@/hooks/useSmoothNavigate';
 
@@ -23,6 +24,7 @@ const OurFarmPage: FC = () => {
       <Navbar scrolled={false} persist onNavigate={handleNavigate} />
       <OurFarm />
       <Gallery />
+      <FarmLocation />
       <Footer onNavigate={handleNavigate} />
       <FloatingWhatsApp />
       <OrderSheet />

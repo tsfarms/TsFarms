@@ -1,7 +1,6 @@
 import { type FC } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { farmImage } from '@/content/site';
 import { useReveal } from '@/hooks/useReveal';
 import SectionLabel from '@/components/layout/SectionLabel';
 
@@ -43,8 +42,8 @@ const OurFarm: FC = () => {
           }}
         >
           <img
-            src={farmImage}
-            alt="TS Farms — the farm"
+            src="/farm-gallery/IMG_2612.webp"
+            alt="TS Farms — Real Farm Vista in Devadanapatti, Theni"
             width={1200}
             height={900}
             loading="lazy"
