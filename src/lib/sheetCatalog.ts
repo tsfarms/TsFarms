@@ -1,6 +1,5 @@
 import type { ShopProduct } from '@/content/site'
-import { varietyToShopProduct } from './catalog'
-import type { Variety } from './db'
+import { varietyToShopProduct, type Variety } from './catalog'
 
 const SHEET_ID = '1wbAJh2APS5Uy30sgS2wWUffLNcmDkWJwWAsd-z0Tc5w'
 

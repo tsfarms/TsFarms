@@ -2,7 +2,19 @@ import mangoImage from '@/assets/mango/alphonsa.png'
 import honeyImage from '@/assets/honey/honey.jpg'
 import jackfruitImage from '@/assets/jackfruit/palur.jpg'
 import type { ShopProduct } from '@/content/site'
-import type { Variety } from './db'
+export interface Variety {
+  id:           string
+  item_id:      string
+  category:     string
+  variety_name: string
+  description:  string
+  price:        number
+  unit:         string
+  is_available: boolean
+  min_order:    number
+  qty_step:     number
+  updated_at:   string
+}
 import { imagesForVariety, varietyPlaceholder } from './varietyImages'
 
 const categoryLabels: Record<string, string> = {

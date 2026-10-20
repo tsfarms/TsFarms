@@ -5,7 +5,6 @@ import honeyBenefitImage from '@/assets/benefits/honey.jpg';
 import jackfruitBenefitImage from '@/assets/benefits/jackfruit.jpg';
 import mountainBeeImage from '@/assets/honey/mountain-bee-honey.jpg';
 import palurImage from '@/assets/jackfruit/palur.jpg';
-import galleryBeekeepersImage from '@/assets/gallery/beekeepers.jpg';
 import alphonsaImage from '@/assets/mango/alphonsa.png';
 import bangnapaliImage from '@/assets/mango/bangnapali.png';
 import himprashadImage from '@/assets/mango/himprashad.png';
@@ -92,8 +91,6 @@ export const emailLink = (): { href: string; external: boolean } =>
 
 const px = (url: string, w = 1200) => `${url.split('?')[0]}?auto=compress&cs=tinysrgb&w=${w}`;
 
-export const heroImage = px('https://images.pexels.com/photos/28903096/pexels-photo-28903096.jpeg', 1920);
-export const farmImage = px('https://images.pexels.com/photos/16563022/pexels-photo-16563022.jpeg', 1200);
 export const farmStoryImage = px('https://images.pexels.com/photos/4418674/pexels-photo-4418674.jpeg', 1600);
 
 export const mangoVarieties: MangoVariety[] = [
@@ -326,20 +323,6 @@ export type ProduceBenefitCard = {
 
 export const produceBenefits: ProduceBenefitCard[] = [
   {
-    id: 'mangoes',
-    product: 'Mango',
-    kicker: 'For nutrition and health',
-    image: mangoBenefitImage,
-    imageAlt: 'Cubed ripe mango with leaves',
-    benefits: [
-      { label: 'rich in vitamin C', x: '4%', y: '18%', align: 'right', arrow: 'ne' },
-      { label: 'boosts immunity', x: '96%', y: '16%', align: 'left', arrow: 'nw' },
-      { label: 'supports eye health', x: '6%', y: '78%', align: 'right', arrow: 'se' },
-      { label: 'aids digestion', x: '50%', y: '92%', align: 'center', arrow: 's' },
-      { label: 'promotes glowing skin', x: '96%', y: '76%', align: 'left', arrow: 'sw' },
-    ],
-  },
-  {
     id: 'honey',
     product: 'Honey',
     kicker: 'For nutrition and health',
@@ -351,6 +334,20 @@ export const produceBenefits: ProduceBenefitCard[] = [
       { label: 'supports digestive health', x: '6%', y: '78%', align: 'right', arrow: 'se' },
       { label: 'provides natural energy', x: '50%', y: '92%', align: 'center', arrow: 's' },
       { label: 'promotes healthy skin', x: '96%', y: '76%', align: 'left', arrow: 'sw' },
+    ],
+  },
+  {
+    id: 'mangoes',
+    product: 'Mango',
+    kicker: 'For nutrition and health',
+    image: mangoBenefitImage,
+    imageAlt: 'Cubed ripe mango with leaves',
+    benefits: [
+      { label: 'rich in vitamin C', x: '4%', y: '18%', align: 'right', arrow: 'ne' },
+      { label: 'boosts immunity', x: '96%', y: '16%', align: 'left', arrow: 'nw' },
+      { label: 'supports eye health', x: '6%', y: '78%', align: 'right', arrow: 'se' },
+      { label: 'aids digestion', x: '50%', y: '92%', align: 'center', arrow: 's' },
+      { label: 'promotes glowing skin', x: '96%', y: '76%', align: 'left', arrow: 'sw' },
     ],
   },
   {
@@ -367,17 +364,6 @@ export const produceBenefits: ProduceBenefitCard[] = [
       { label: 'promotes healthy skin', x: '96%', y: '76%', align: 'left', arrow: 'sw' },
     ],
   },
-];
-
-export const galleryImages = [
-  { src: px('https://images.pexels.com/photos/28903096/pexels-photo-28903096.jpeg', 800), alt: 'Mango orchard at golden hour', span: 'large' as const },
-  { src: galleryBeekeepersImage, alt: 'Beekeepers holding a honeycomb frame', span: 'tall' as const },
-  { src: px('https://images.pexels.com/photos/11911951/pexels-photo-11911951.jpeg', 600), alt: 'Freshly harvested mangoes in a basket', span: 'tall' as const },
-  { src: px('https://images.pexels.com/photos/4418675/pexels-photo-4418675.jpeg', 800), alt: 'Mango tree laden with fruit', span: 'wide' as const },
-  { src: px('https://images.pexels.com/photos/12639142/pexels-photo-12639142.jpeg', 600), alt: 'Close-up of ripe mango on tree', span: 'normal' as const },
-  { src: px('https://images.pexels.com/photos/6871015/pexels-photo-6871015.jpeg', 800), alt: 'Jackfruit on the tree', span: 'wide' as const },
-  { src: px('https://images.pexels.com/photos/7529893/pexels-photo-7529893.jpeg', 600), alt: 'Mango leaves in morning light', span: 'normal' as const },
-  { src: px('https://images.pexels.com/photos/24029945/pexels-photo-24029945.jpeg', 800), alt: 'Bright yellow mangoes arranged in a tray', span: 'large' as const },
 ];
 
 export const testimonials = [
@@ -409,8 +395,8 @@ export type NavLink = {
 
 export const navLinks: NavLink[] = [
   { label: 'Our Products', target: 'order' },
-  { label: 'Mangoes', target: 'order', filter: 'mango' },
   { label: 'Honey', target: 'order', filter: 'honey' },
+  { label: 'Mangoes', target: 'order', filter: 'mango' },
   { label: 'Jackfruit', target: 'order', filter: 'jackfruit' },
   { label: 'Our Farm', target: '/our-farm' },
   { label: 'Contact', target: 'contact' },

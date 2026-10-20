@@ -15,7 +15,7 @@ import { useCart } from '@/features/cart/CartContext';
 import { useReveal } from '@/hooks/useReveal';
 import { ORDER_FILTER_EVENT } from '@/hooks/useSmoothNavigate';
 
-const preferredCategories = ['mango', 'honey', 'jackfruit'];
+const preferredCategories = ['honey', 'mango', 'jackfruit'];
 
 function normalizeFilter(value: string) {
   const id = value.trim().toLowerCase();
@@ -25,8 +25,18 @@ function normalizeFilter(value: string) {
   return id || 'all';
 }
 
-function sortCategoryIds(ids: string[]) {
+function isCategoryOutOfStock(categoryId: string, catalog: ShopProduct[]): boolean {
+  const items = catalog.filter((product) => product.category === categoryId);
+  return items.length > 0 && items.every((product) => product.stockStatus === 'out_of_stock');
+}
+
+function sortCategoryIds(ids: string[], catalog: ShopProduct[] = []) {
   return [...ids].sort((a, b) => {
+    const aOos = isCategoryOutOfStock(a, catalog) ? 1 : 0;
+    const bOos = isCategoryOutOfStock(b, catalog) ? 1 : 0;
+    // Available categories first, completely out-of-stock categories pushed to the bottom
+    if (aOos !== bOos) return aOos - bOos;
+
     const ai = preferredCategories.indexOf(a);
     const bi = preferredCategories.indexOf(b);
     if (ai === -1 && bi === -1) return a.localeCompare(b);
@@ -83,12 +93,31 @@ const OrderSection: FC = () => {
     };
   }, []);
 
-  const filters = useMemo(() => {
-    const ids = sortCategoryIds([...new Set(catalog.map((product) => product.category))]);
-    return [{ id: 'all', label: 'All' }, ...ids.map((id) => ({ id, label: categoryLabel(id) }))];
+  const categoryOosMap = useMemo(() => {
+    const map = new Map<string, boolean>();
+    const allCategories = new Set(catalog.map((p) => p.category));
+    allCategories.forEach((cat) => {
+      map.set(cat, isCategoryOutOfStock(cat, catalog));
+    });
+    return map;
   }, [catalog]);
 
-  const activeFilter = filter !== 'all' && filters.some((item) => item.id === filter) ? filter : 'all';
+  const filters = useMemo(() => {
+    const ids = sortCategoryIds([...new Set(catalog.map((product) => product.category))], catalog);
+    return [
+      { id: 'all', label: 'All', disabled: false },
+      ...ids.map((id) => ({
+        id,
+        label: categoryLabel(id),
+        disabled: Boolean(categoryOosMap.get(id)),
+      })),
+    ];
+  }, [catalog, categoryOosMap]);
+
+  const activeFilter =
+    filter !== 'all' && filters.some((item) => item.id === filter && !item.disabled)
+      ? filter
+      : 'all';
 
   const products = useMemo(() => {
     const needle = query.trim().toLowerCase();
@@ -100,15 +129,16 @@ const OrderSection: FC = () => {
   }, [activeFilter, catalog, query]);
 
   const groups = useMemo(() => {
-    const ids = sortCategoryIds([...new Set(products.map((product) => product.category))]);
+    const ids = sortCategoryIds([...new Set(products.map((product) => product.category))], catalog);
     const outOfStockLast = (a: ShopProduct, b: ShopProduct) =>
       Number(a.stockStatus === 'out_of_stock') - Number(b.stockStatus === 'out_of_stock');
     return ids.map((id) => ({
       id,
       label: categoryLabel(id),
+      isOutOfStock: Boolean(categoryOosMap.get(id)),
       items: products.filter((product) => product.category === id).sort(outOfStockLast),
     }));
-  }, [products]);
+  }, [products, catalog, categoryOosMap]);
 
   const cartIndex = (product: ShopProduct) =>
     items.findIndex((item) => item.productName === product.name && item.unit === product.unit);
@@ -215,27 +245,77 @@ const OrderSection: FC = () => {
               key={item.id}
               size="small"
               variant={activeFilter === item.id ? 'contained' : 'outlined'}
-              onClick={() => setFilter(item.id)}
-              sx={{ borderRadius: 5, px: 2 }}
+              onClick={() => {
+                if (!item.disabled) setFilter(item.id);
+              }}
+              disabled={item.disabled}
+              sx={{
+                borderRadius: 5,
+                px: 2,
+                transition: 'all 200ms ease',
+                ...(item.disabled && {
+                  opacity: 0.55,
+                  cursor: 'not-allowed !important',
+                  pointerEvents: 'auto !important',
+                  borderColor: 'rgba(23, 59, 40, 0.15)',
+                  color: '#788267 !important',
+                  bgcolor: '#F5EFE6',
+                }),
+              }}
             >
               {item.label}
+              {item.disabled && (
+                <Box
+                  component="span"
+                  sx={{
+                    ml: 0.8,
+                    fontSize: '0.68rem',
+                    fontWeight: 700,
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.04em',
+                    color: '#8A5A36',
+                  }}
+                >
+                  (Out of Stock)
+                </Box>
+              )}
             </Button>
           ))}
         </Box>
 
         {groups.map((group) => (
           <Box key={group.id} sx={{ mb: { xs: 4, md: 5 } }}>
-            <Typography
-              sx={{
-                fontFamily: '"Cormorant Garamond", serif',
-                fontSize: { xs: '1.7rem', md: '2.1rem' },
-                fontWeight: 600,
-                color: '#173B28',
-                mb: { xs: 1.5, md: 2 },
-              }}
-            >
-              {group.label}:
-            </Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5, mb: { xs: 1.5, md: 2 } }}>
+              <Typography
+                sx={{
+                  fontFamily: '"Cormorant Garamond", serif',
+                  fontSize: { xs: '1.7rem', md: '2.1rem' },
+                  fontWeight: 600,
+                  color: group.isOutOfStock ? '#788267' : '#173B28',
+                }}
+              >
+                {group.label}:
+              </Typography>
+              {group.isOutOfStock && (
+                <Box
+                  component="span"
+                  sx={{
+                    fontSize: '0.74rem',
+                    fontWeight: 700,
+                    px: 1.25,
+                    py: 0.35,
+                    borderRadius: 99,
+                    bgcolor: '#F3EBE1',
+                    color: '#8A5A36',
+                    letterSpacing: '0.04em',
+                    textTransform: 'uppercase',
+                    border: '1px solid rgba(138, 90, 54, 0.2)',
+                  }}
+                >
+                  Season Ended • Out of Stock
+                </Box>
+              )}
+            </Box>
             <Box
               sx={{
                 display: 'grid',
